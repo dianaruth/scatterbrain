@@ -1,50 +1,45 @@
 <!--
-  Scatterbrain PR template. Fill in each section; delete any that genuinely don't apply.
-  Keep it honest — if something wasn't tested or was skipped, say so.
+  PR title format:  [SB-N] Short summary
+  e.g.  [SB-2] Scaffold Expo app with CI
+  The SB ticket number comes first, then a concise summary. Ticket numbers live in
+  plans/features/README.md.
 -->
 
-## What
-
-<!-- A short description of the change and the user-facing outcome. -->
-
-## Why
-
-<!-- The problem this solves or the need it addresses. Link the issue if there is one. -->
-
-## Related plan
+## Description
 
 <!--
-  Link the feature plan this work belongs to, e.g. plans/features/01-scaffold-ci.md
-  Update that plan's Status + Changelog as part of this PR.
+  A deeper dive than the title. Explain WHAT changed and, importantly, the MOTIVATION / CONTEXT
+  behind it — the problem being solved, why now, and any decisions or tradeoffs made.
 -->
-- Plan: `plans/features/NN-...md`
 
-## Changes
+## Type of change
 
-<!-- Bullet the notable changes: files/areas touched, new components, schema/migrations, deps added. -->
+- [ ] Feature
+- [ ] Bug fix
+- [ ] Refactor
+- [ ] Docs
+- [ ] Chore / tooling
+- [ ] Breaking change
+
+## Related links
+
+<!-- Feature plan, spec section, prior PRs, anything that gives context. -->
+- Feature plan: `plans/features/NN-...md` (SB-N)
+- Related:
+
+## Screenshots
+
+<!-- For UI changes: before/after, light + dark mode. Remove if not a UI change. -->
+
+## Testing & verification
+
+<!-- How you verified this works — be specific (commands, manual steps, what you observed). -->
 -
 
-## Screenshots / recordings
+## Quality gates
 
-<!-- For any UI change, include before/after screenshots or a short clip. Note light + dark mode. -->
-
-## Testing
-
-<!-- How you verified this works. Be specific. -->
-- [ ] `tsc --noEmit` passes (strict)
+- [ ] `tsc --noEmit` passes (strict; no `any` / `unknown` / `as` escape hatches)
 - [ ] Lint passes
-- [ ] Unit/component tests added or updated and passing
-- [ ] E2E (Playwright) passing, if applicable
-- [ ] Manual verification (describe steps):
-
-## Checklist
-
-- [ ] Strictly typed — no `any` / `unknown` / `object` / `as` escape hatches (or explicitly justified)
-- [ ] No `@ts-ignore` / `@ts-expect-error` / `eslint-disable` without an inline justification
-- [ ] No secrets or keys committed; client bundle stays free of server-only secrets
-- [ ] Relevant feature plan file updated (Status / Outcome / Changelog)
-- [ ] Scope is focused — unrelated changes split into their own PR
-
-## Notes for reviewer
-
-<!-- Anything that needs context: tradeoffs, follow-ups, known gaps, things you want eyes on. -->
+- [ ] Tests added/updated and passing (unit / component / E2E as applicable)
+- [ ] No secrets committed; server-only keys kept out of the client bundle
+- [ ] Feature plan updated (Status / Outcome / Changelog)

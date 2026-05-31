@@ -1,5 +1,6 @@
 # 00 — UI Mockups (look-and-feel gate)
 
+**Ticket:** SB-1
 **Status:** In Progress
 **Phase:** 0
 **Owner:** Diana / Claude

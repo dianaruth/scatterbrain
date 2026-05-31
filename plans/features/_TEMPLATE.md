@@ -1,5 +1,6 @@
 # NN — Feature Name
 
+**Ticket:** SB-N (sequential, from the index in README.md)
 **Status:** Planned | In Progress | Done | Deferred | Dropped
 **Phase:** (build-sequence number from master plan)
 **Owner:** Diana / Claude

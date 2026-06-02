@@ -29,8 +29,14 @@ order. The high-level roadmap lives in the master plan
 | SB-8 | 07 | Calendar + Note Editor (notes/checklists) | Planned | _tbd_ |
 | SB-9 | 08 | Claude enrichment (opt-in) | Planned | _tbd_ |
 | SB-10 | 09 | Settings + polish | Planned | _tbd_ |
+| SB-11 | — | "Bold" theme (gradient style) — expand after Keep | Backlog | _tbd_ |
 
 > New features added later continue the sequence (SB-11, SB-12, …).
+
+### Backlog / future
+- **SB-11 — Bold theme**: vibrant gradient style (variant C from `mockups/variants.html`), light +
+  dark. Deferred; v1 ships **Keep** (primary) + **Calm** (baseline). Themes are token sets behind the
+  ThemeProvider, so adding Bold later needs no structural change.
 
 > A feature file is created when we start that feature — not all upfront — so each reflects real
 > decisions made at build time.

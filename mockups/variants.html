@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scatterbrain — Style Variants</title>
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+           background:#15101b; color:#eee; padding:28px; display:flex; flex-wrap:wrap; gap:34px; justify-content:center; -webkit-font-smoothing:antialiased; }
+    .col { display:flex; flex-direction:column; align-items:center; gap:12px; }
+    .vlabel { font-size:13px; font-weight:600; color:#cbb9d6; text-align:center; max-width:300px; }
+    .vlabel small { display:block; font-weight:400; color:#8d7d99; font-size:11px; margin-top:3px; line-height:1.4; }
+    .phone { width:300px; height:640px; border-radius:26px; overflow:hidden; position:relative; display:flex; flex-direction:column; border:1px solid #000; }
+    .h { padding:40px 18px 14px; display:flex; align-items:flex-start; justify-content:space-between; }
+    .h .g { font-size:20px; font-weight:600; }
+    .h .s { font-size:10px; margin-top:2px; opacity:.8; }
+    .av { width:30px; height:30px; border-radius:99px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; }
+    .cap { margin:12px 14px; padding:11px 12px; border-radius:10px; display:flex; align-items:center; gap:8px; font-size:11px; }
+    .body { flex:1; overflow:hidden; padding:0 14px; }
+    .sl { font-size:9px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; margin:14px 0 7px; opacity:.65; }
+    .card { display:flex; align-items:center; gap:10px; padding:10px; margin-bottom:7px; }
+    .tile { width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .it { font-size:12px; font-weight:500; }
+    .mt { font-size:9px; opacity:.7; margin-top:2px; }
+    .nav { display:flex; justify-content:space-around; padding:9px 0 18px; }
+    .nav div { display:flex; flex-direction:column; align-items:center; gap:2px; font-size:8px; }
+    .ic, .ic-s { stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .ic { width:22px; height:22px; }
+    .ic-s { width:16px; height:16px; }
+    .dot { width:6px; height:6px; border-radius:99px; flex-shrink:0; }
+    .pill { font-size:9px; font-weight:600; padding:2px 8px; border-radius:99px; }
+
+    /* ============ V1 — SPEC CALM (current) ============ */
+    .v1 { background:#FBF8FC; color:#3D2645; }
+    .v1 .h { background:#3D2645; }
+    .v1 .h .g, .v1 .h .title { color:#EEE2F2; }
+    .v1 .h .s { color:#C4A8BF; }
+    .v1 .av { background:#2A1530; color:#D0B8CC; }
+    .v1 .cap { background:#EEE2F2; color:#A07D96; border:.5px solid #D0B8CC; }
+    .v1 .sl { color:#A07D96; }
+    .v1 .card { background:#fff; border:.5px solid #EEE2F2; border-radius:8px; }
+    .v1 .it { color:#3D2645; } .v1 .mt { color:#A07D96; }
+    .v1 .nav { background:#fff; border-top:.5px solid #EEE2F2; color:#D0B8CC; }
+    .v1 .nav .on { color:#3D2645; }
+    .v1 .tile { background:#EEE2F2; color:#A07D96; border-radius:99px; width:26px; height:26px; }
+
+    /* ============ V2 — TYPE COLOR-CODED (spec base + colored type tiles) ============ */
+    .v2 { background:#FBF8FC; color:#3D2645; }
+    .v2 .h { background:#3D2645; }
+    .v2 .h .g, .v2 .h .title { color:#EEE2F2; } .v2 .h .s { color:#C4A8BF; }
+    .v2 .av { background:#2A1530; color:#D0B8CC; }
+    .v2 .cap { background:#EEE2F2; color:#A07D96; border:.5px solid #D0B8CC; }
+    .v2 .sl { color:#A07D96; }
+    .v2 .card { background:#fff; border:.5px solid #EEE2F2; border-radius:10px; }
+    .v2 .it { color:#3D2645; } .v2 .mt { color:#A07D96; }
+    .v2 .nav { background:#fff; border-top:.5px solid #EEE2F2; color:#D0B8CC; }
+    .v2 .nav .on { color:#3D2645; }
+    .v2 .t-rem  { background:#F6E7DA; color:#C0763E; }
+    .v2 .t-note { background:#ECE0F2; color:#8A5AA6; }
+    .v2 .t-list { background:#DCEDE6; color:#4F947E; }
+    .v2 .t-evt  { background:#E2E2F3; color:#5E63A8; }
+
+    /* ============ V3 — BOLD GRADIENT (vibrant, rounded, energetic) ============ */
+    .v3 { background:#F7F2FB; color:#2E1B3A; }
+    .v3 .h { background:linear-gradient(135deg,#5B2A6E 0%,#9B3E8C 60%,#E0648A 100%); border-radius:0 0 22px 22px; padding-bottom:22px; }
+    .v3 .h .g { color:#fff; font-size:22px; } .v3 .h .s { color:#F4D9EC; }
+    .v3 .av { background:rgba(255,255,255,.22); color:#fff; }
+    .v3 .cap { background:#fff; color:#9B3E8C; box-shadow:0 4px 14px rgba(91,42,110,.12); border-radius:14px; font-weight:500; margin-top:-14px; }
+    .v3 .sl { color:#9B3E8C; }
+    .v3 .card { background:#fff; border-radius:16px; box-shadow:0 3px 10px rgba(91,42,110,.07); }
+    .v3 .it { color:#2E1B3A; font-weight:600; } .v3 .mt { color:#9E7BA8; }
+    .v3 .nav { background:#fff; color:#CDBBD6; border-top:1px solid #F0E6F5; }
+    .v3 .nav .on { color:#9B3E8C; }
+    .v3 .t-rem  { background:linear-gradient(135deg,#FF9A6B,#FF6B9D); color:#fff; border-radius:13px; }
+    .v3 .t-note { background:linear-gradient(135deg,#A66BFF,#6B8BFF); color:#fff; border-radius:13px; }
+    .v3 .t-list { background:linear-gradient(135deg,#3FD0A0,#3FA8D0); color:#fff; border-radius:13px; }
+    .v3 .t-evt  { background:linear-gradient(135deg,#7B6BFF,#B36BFF); color:#fff; border-radius:13px; }
+
+    /* ============ V4 — KEEP-STYLE COLOR CARDS (each card a soft hue) ============ */
+    .v4 { background:#FFFDF7; color:#3A2E1B; }
+    .v4 .h { background:#2E2A3A; }
+    .v4 .h .g { color:#FBF6EC; } .v4 .h .s { color:#B9B2C8; }
+    .v4 .av { background:#46405A; color:#D9D2E8; }
+    .v4 .cap { background:#fff; color:#8A8194; border:1px solid #ECE6DC; border-radius:12px; }
+    .v4 .sl { color:#A89F8E; }
+    .v4 .card { border-radius:13px; border:1px solid rgba(0,0,0,.05); }
+    .v4 .it { font-weight:600; } .v4 .mt { opacity:.65; }
+    .v4 .c-amber { background:#FFF3D6; } .v4 .c-amber .it,.v4 .c-amber .mt { color:#7A5A12; }
+    .v4 .c-rose  { background:#FCE1E4; } .v4 .c-rose .it,.v4 .c-rose .mt { color:#8A2F45; }
+    .v4 .c-mint  { background:#DBF3E4; } .v4 .c-mint .it,.v4 .c-mint .mt { color:#1F6647; }
+    .v4 .c-sky   { background:#DCEBFB; } .v4 .c-sky .it,.v4 .c-sky .mt { color:#1F4E7A; }
+    .v4 .nav { background:#fff; color:#C9C2B6; border-top:1px solid #EFE9DD; }
+    .v4 .nav .on { color:#2E2A3A; }
+    .v4 .tile { background:rgba(255,255,255,.6); }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></symbol>
+    <symbol id="i-note" viewBox="0 0 24 24"><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18"/><path d="M13 8l2 0"/><path d="M13 12l2 0"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/></symbol>
+    <symbol id="i-check2" viewBox="0 0 24 24"><path d="M3.5 5.5l1.5 1.5l2.5 -2.5"/><path d="M3.5 11.5l1.5 1.5l2.5 -2.5"/><path d="M11 6l9 0"/><path d="M11 12l9 0"/></symbol>
+  </svg>
+
+  <!-- V1 -->
+  <div class="col">
+    <div class="vlabel">A · Spec Calm <small>The current minimal look — one plum hue, flat, monochrome icons</small></div>
+    <div class="phone v1">
+      <div class="h"><div><div class="g">Good morning</div><div class="s">3 things need your attention</div></div><div class="av">DR</div></div>
+      <div class="cap"><svg class="ic-s"><use href="#i-bolt"/></svg> Brain dump something…</div>
+      <div class="body">
+        <div class="sl">Overdue</div>
+        <div class="card"><span class="tile"><svg class="ic-s"><use href="#i-bell"/></svg></span><div><div class="it">Call the dentist</div><div class="mt">Reminder · was yesterday</div></div></div>
+        <div class="sl">Today</div>
+        <div class="card"><span class="tile"><svg class="ic-s"><use href="#i-cal"/></svg></span><div><div class="it">Team standup</div><div class="mt">Calendar · 10:00 AM</div></div></div>
+        <div class="card"><span class="tile"><svg class="ic-s"><use href="#i-bell"/></svg></span><div><div class="it">Pick up groceries</div><div class="mt">Before 6:00 PM</div></div></div>
+        <div class="sl">Notes</div>
+        <div class="card"><span class="tile"><svg class="ic-s"><use href="#i-note"/></svg></span><div><div class="it">Trip packing list</div><div class="mt">Checklist · 2h ago</div></div></div>
+      </div>
+      <div class="nav"><div class="on"><svg class="ic"><use href="#i-home"/></svg>Home</div><div><svg class="ic"><use href="#i-cal"/></svg>Cal</div><div><svg class="ic"><use href="#i-bell"/></svg>Remind</div><div><svg class="ic"><use href="#i-note"/></svg>Notes</div></div>
+    </div>
+  </div>
+
+  <!-- V2 -->
+  <div class="col">
+    <div class="vlabel">B · Type Color-Coded <small>Same calm base, but each item type gets its own colored icon tile</small></div>
+    <div class="phone v2">
+      <div class="h"><div><div class="g">Good morning</div><div class="s">3 things need your attention</div></div><div class="av">DR</div></div>
+      <div class="cap"><svg class="ic-s"><use href="#i-bolt"/></svg> Brain dump something…</div>
+      <div class="body">
+        <div class="sl">Overdue</div>
+        <div class="card"><span class="tile t-rem"><svg class="ic-s"><use href="#i-bell"/></svg></span><div><div class="it">Call the dentist</div><div class="mt">Reminder · was yesterday</div></div></div>
+        <div class="sl">Today</div>
+        <div class="card"><span class="tile t-evt"><svg class="ic-s"><use href="#i-cal"/></svg></span><div><div class="it">Team standup</div><div class="mt">Calendar · 10:00 AM</div></div></div>
+        <div class="card"><span class="tile t-list"><svg class="ic-s"><use href="#i-check2"/></svg></span><div><div class="it">Pick up groceries</div><div class="mt">2 of 5 items</div></div></div>
+        <div class="sl">Notes</div>
+        <div class="card"><span class="tile t-note"><svg class="ic-s"><use href="#i-note"/></svg></span><div><div class="it">Trip packing list</div><div class="mt">Checklist · 2h ago</div></div></div>
+      </div>
+      <div class="nav"><div class="on"><svg class="ic"><use href="#i-home"/></svg>Home</div><div><svg class="ic"><use href="#i-cal"/></svg>Cal</div><div><svg class="ic"><use href="#i-bell"/></svg>Remind</div><div><svg class="ic"><use href="#i-note"/></svg>Notes</div></div>
+    </div>
+  </div>
+
+  <!-- V3 -->
+  <div class="col">
+    <div class="vlabel">C · Bold Gradient <small>Vibrant gradient header, soft shadows, rounder cards, gradient type tiles</small></div>
+    <div class="phone v3">
+      <div class="h"><div><div class="g">Good morning</div><div class="s">3 things need your attention</div></div><div class="av">DR</div></div>
+      <div class="cap"><svg class="ic-s"><use href="#i-bolt"/></svg> Brain dump something…</div>
+      <div class="body">
+        <div class="sl">Overdue</div>
+        <div class="card"><span class="tile t-rem"><svg class="ic-s"><use href="#i-bell"/></svg></span><div><div class="it">Call the dentist</div><div class="mt">Reminder · was yesterday</div></div></div>
+        <div class="sl">Today</div>
+        <div class="card"><span class="tile t-evt"><svg class="ic-s"><use href="#i-cal"/></svg></span><div><div class="it">Team standup</div><div class="mt">Calendar · 10:00 AM</div></div></div>
+        <div class="card"><span class="tile t-list"><svg class="ic-s"><use href="#i-check2"/></svg></span><div><div class="it">Pick up groceries</div><div class="mt">2 of 5 items</div></div></div>
+        <div class="sl">Notes</div>
+        <div class="card"><span class="tile t-note"><svg class="ic-s"><use href="#i-note"/></svg></span><div><div class="it">Trip packing list</div><div class="mt">Checklist · 2h ago</div></div></div>
+      </div>
+      <div class="nav"><div class="on"><svg class="ic"><use href="#i-home"/></svg>Home</div><div><svg class="ic"><use href="#i-cal"/></svg>Cal</div><div><svg class="ic"><use href="#i-bell"/></svg>Remind</div><div><svg class="ic"><use href="#i-note"/></svg>Notes</div></div>
+    </div>
+  </div>
+
+  <!-- V4 -->
+  <div class="col">
+    <div class="vlabel">D · Keep-Style Color Cards <small>Warm cream bg, each card a soft pastel hue (like Google Keep)</small></div>
+    <div class="phone v4">
+      <div class="h"><div><div class="g">Good morning</div><div class="s">3 things need your attention</div></div><div class="av">DR</div></div>
+      <div class="cap"><svg class="ic-s"><use href="#i-bolt"/></svg> Brain dump something…</div>
+      <div class="body">
+        <div class="sl">Overdue</div>
+        <div class="card c-rose"><span class="tile"><svg class="ic-s"><use href="#i-bell"/></svg></span><div><div class="it">Call the dentist</div><div class="mt">Reminder · was yesterday</div></div></div>
+        <div class="sl">Today</div>
+        <div class="card c-sky"><span class="tile"><svg class="ic-s"><use href="#i-cal"/></svg></span><div><div class="it">Team standup</div><div class="mt">Calendar · 10:00 AM</div></div></div>
+        <div class="card c-amber"><span class="tile"><svg class="ic-s"><use href="#i-check2"/></svg></span><div><div class="it">Pick up groceries</div><div class="mt">2 of 5 items</div></div></div>
+        <div class="sl">Notes</div>
+        <div class="card c-mint"><span class="tile"><svg class="ic-s"><use href="#i-note"/></svg></span><div><div class="it">Trip packing list</div><div class="mt">Checklist · 2h ago</div></div></div>
+      </div>
+      <div class="nav"><div class="on"><svg class="ic"><use href="#i-home"/></svg>Home</div><div><svg class="ic"><use href="#i-cal"/></svg>Cal</div><div><svg class="ic"><use href="#i-bell"/></svg>Remind</div><div><svg class="ic"><use href="#i-note"/></svg>Notes</div></div>
+    </div>
+  </div>
+
+</body>
+</html>

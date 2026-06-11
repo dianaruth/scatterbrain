@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scatterbrain — Theme Picker</title>
+  <style>
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+           background:#15101b; color:#eee; padding:28px; display:flex; flex-wrap:wrap; gap:34px; justify-content:center; -webkit-font-smoothing:antialiased; }
+    .col { display:flex; flex-direction:column; align-items:center; gap:12px; }
+    .vlabel { font-size:13px; font-weight:600; color:#cbb9d6; text-align:center; }
+    .vlabel small { display:block; font-weight:400; color:#8d7d99; font-size:11px; margin-top:3px; }
+    .phone { width:320px; height:680px; border-radius:26px; overflow:hidden; position:relative; display:flex; flex-direction:column; border:1px solid #000; }
+    .ic { width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+    .ic-s { width:16px; height:16px; }
+
+    /* Settings screen scaffold */
+    .h { padding:42px 20px 16px; display:flex; align-items:center; gap:12px; }
+    .h .ttl { font-size:18px; font-weight:600; }
+    .body { flex:1; padding:18px 18px 0; overflow:hidden; }
+    .sl { font-size:9px; font-weight:600; letter-spacing:.07em; text-transform:uppercase; margin:6px 0 12px; opacity:.6; }
+
+    /* Theme option card */
+    .opt { border-radius:14px; padding:12px; margin-bottom:12px; display:flex; align-items:center; gap:14px; position:relative; }
+    .swatch { width:64px; height:64px; border-radius:12px; overflow:hidden; flex-shrink:0; display:flex; flex-direction:column; }
+    .sw-h { height:26px; } .sw-b { flex:1; display:flex; align-items:center; gap:4px; padding:0 8px; }
+    .chip { width:12px; height:12px; border-radius:99px; }
+    .opt .name { font-size:14px; font-weight:600; } .opt .desc { font-size:11px; opacity:.7; margin-top:2px; }
+    .radio { width:20px; height:20px; border-radius:99px; border:2px solid currentColor; margin-left:auto; flex-shrink:0; display:flex; align-items:center; justify-content:center; opacity:.4; }
+    .opt.sel .radio { opacity:1; } .opt.sel .radio::after { content:""; width:10px; height:10px; border-radius:99px; background:currentColor; }
+
+    /* appearance toggle */
+    .seg { display:flex; border-radius:10px; overflow:hidden; border:1px solid; margin-top:4px; }
+    .seg div { flex:1; text-align:center; padding:9px 0; font-size:12px; font-weight:500; }
+
+    /* ===== CALM theme chrome ===== */
+    .calm { background:#FBF8FC; color:#3D2645; }
+    .calm .h { background:#3D2645; color:#EEE2F2; }
+    .calm .sl { color:#A07D96; }
+    .calm .opt { background:#fff; border:.5px solid #EEE2F2; }
+    .calm .opt.sel { border:1.5px solid #A07D96; }
+    .calm .radio { color:#A07D96; }
+    .calm .seg { border-color:#D0B8CC; color:#A07D96; }
+    .calm .seg .on { background:#3D2645; color:#EEE2F2; }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute"><symbol id="i-back" viewBox="0 0 24 24"><path d="M5 12l14 0"/><path d="M5 12l6 6"/><path d="M5 12l6 -6"/></symbol></svg>
+
+  <div class="col">
+    <div class="vlabel">Settings → Appearance <small>User picks a theme style; each has light + dark</small></div>
+    <div class="phone calm">
+      <div class="h"><svg class="ic"><use href="#i-back"/></svg><span class="ttl">Appearance</span></div>
+      <div class="body">
+        <div class="sl">Theme</div>
+
+        <!-- Calm (selected) -->
+        <div class="opt sel">
+          <div class="swatch">
+            <div class="sw-h" style="background:#3D2645"></div>
+            <div class="sw-b" style="background:#FBF8FC">
+              <span class="chip" style="background:#C0763E"></span>
+              <span class="chip" style="background:#8A5AA6"></span>
+              <span class="chip" style="background:#4F947E"></span>
+            </div>
+          </div>
+          <div><div class="name">Calm</div><div class="desc">Minimal plum, color as quiet signal</div></div>
+          <div class="radio"></div>
+        </div>
+
+        <!-- Bold -->
+        <div class="opt">
+          <div class="swatch">
+            <div class="sw-h" style="background:linear-gradient(135deg,#5B2A6E,#E0648A)"></div>
+            <div class="sw-b" style="background:#F7F2FB">
+              <span class="chip" style="background:linear-gradient(135deg,#FF9A6B,#FF6B9D)"></span>
+              <span class="chip" style="background:linear-gradient(135deg,#A66BFF,#6B8BFF)"></span>
+              <span class="chip" style="background:linear-gradient(135deg,#3FD0A0,#3FA8D0)"></span>
+            </div>
+          </div>
+          <div><div class="name">Bold</div><div class="desc">Vibrant gradients, soft depth, energetic</div></div>
+          <div class="radio"></div>
+        </div>
+
+        <!-- Keep -->
+        <div class="opt">
+          <div class="swatch">
+            <div class="sw-h" style="background:#2E2A3A"></div>
+            <div class="sw-b" style="background:#FFFDF7">
+              <span class="chip" style="background:#FCE1E4"></span>
+              <span class="chip" style="background:#DCEBFB"></span>
+              <span class="chip" style="background:#DBF3E4"></span>
+            </div>
+          </div>
+          <div><div class="name">Keep</div><div class="desc">Warm cream, soft pastel color cards</div></div>
+          <div class="radio"></div>
+        </div>
+
+        <div class="sl" style="margin-top:20px;">Appearance</div>
+        <div class="seg"><div class="on">Light</div><div>Dark</div><div>System</div></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

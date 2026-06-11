@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Scatterbrain — Typography & Logo Concepts</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500&family=Syne:wght@400;500;600;700;800&family=Nunito:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    :root {
+      --bg:    #F7F5FF;
+      --card:  #FFFFFF;
+      --card2: #EDE9FA;
+      --bg2:   #E4F5EE;
+      --border: rgba(110,90,170,.09);
+      --text:  #1E1832;
+      --text2: #7868A0;
+      --text3: #B0A8CC;
+      --rem:   #C8607A; --rem-bg: #FFF0F3; --rem-dim: #FFF6F8; --rem-b: #F2C0CC;
+      --evt:   #5278CC; --evt-bg: #EFF4FF; --evt-dim: #F5F8FF; --evt-b: #C0CCEF;
+      --lst:   #BE8030; --lst-bg: #FFF8EE; --lst-dim: #FFFBF5; --lst-b: #EED8AC;
+      --note:  #38966A; --note-bg: #EDF9F3; --note-dim: #F4FBF7; --note-b: #B0DCC8;
+    }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    body {
+      font-family:'DM Sans',system-ui,sans-serif;
+      background: radial-gradient(ellipse at 14% 8%, rgba(230,160,175,.45) 0%, transparent 48%),
+                  radial-gradient(ellipse at 84% 6%, rgba(160,140,235,.35) 0%, transparent 48%),
+                  radial-gradient(ellipse at 8% 88%, rgba(130,210,175,.35) 0%, transparent 48%),
+                  radial-gradient(ellipse at 87% 86%, rgba(240,190,130,.30) 0%, transparent 44%),
+                  #F6F4FF;
+      padding:40px 32px;
+      display:flex; flex-direction:column; align-items:center; gap:48px;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* ── Section headers ── */
+    .sh {
+      width:100%; display:flex; align-items:center; gap:14px;
+      font-size:10px; color:#9890B8; letter-spacing:.1em; text-transform:uppercase; font-weight:700;
+    }
+    .sh-l { flex:1; height:1px; background:rgba(110,90,170,.18); }
+
+    /* ── Font specimen row ── */
+    .specimen-row { display:flex; gap:28px; justify-content:center; flex-wrap:wrap; }
+
+    .specimen {
+      display:flex; flex-direction:column; align-items:center; gap:10px;
+    }
+    .spec-label {
+      font-family:'DM Sans',sans-serif;
+      font-size:11px; color:#9890B8; letter-spacing:.05em; text-transform:uppercase; font-weight:600;
+    }
+    .spec-sub {
+      font-family:'DM Sans',sans-serif;
+      font-size:9px; color:#B0A8CC; margin-top:-6px;
+    }
+
+    /* ── Phone crop (top portion only) ── */
+    .phone-crop {
+      width:300px; height:360px;
+      border-radius:36px 36px 24px 24px; overflow:hidden;
+      display:flex; flex-direction:column;
+      background: linear-gradient(160deg, #FFE2EE 0%, #EDE8FF 48%, #DFF5EC 100%);
+      border:1px solid rgba(110,90,170,.12);
+      box-shadow:0 8px 40px rgba(80,60,140,.12);
+      position:relative; color:var(--text);
+    }
+
+    /* header */
+    .hdr { padding:40px 18px 12px; display:flex; justify-content:space-between; align-items:flex-start; }
+    .hdr-date { font-size:10px; color:var(--text3); font-weight:500; letter-spacing:.04em; margin-bottom:4px; }
+    .hdr-greeting { font-size:22px; font-weight:800; line-height:1.15; letter-spacing:-.02em; color:var(--text); }
+    .hdr-sub { font-size:11px; color:var(--text2); margin-top:4px; font-weight:400; }
+    .av {
+      width:34px; height:34px; border-radius:11px; flex-shrink:0;
+      background:linear-gradient(135deg,#C4A8F0,#8EB0F0);
+      color:#fff; font-size:11px; font-weight:700;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    /* brain dump */
+    .cap {
+      margin:0 14px 10px; padding:10px 14px;
+      background:var(--card); border:1px solid var(--border); border-radius:13px;
+      display:flex; gap:8px; align-items:center;
+      font-size:11px; color:var(--text3);
+      box-shadow:0 1px 4px rgba(80,60,140,.06);
+    }
+    .cap iconify-icon { color:var(--rem); font-size:15px; }
+
+    /* bento cards */
+    .mini-bento {
+      flex:1; display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:0 14px 10px;
+    }
+    .bc {
+      border-radius:14px; border:1px solid var(--border); background:var(--card);
+      padding:12px; display:flex; flex-direction:column;
+      box-shadow:0 1px 3px rgba(80,60,140,.06);
+    }
+    .bc.wide  { grid-column:1/3; }
+    .bc.rem   { background:var(--rem-dim); border-color:var(--rem-b); }
+    .bc.evt   { background:var(--evt-dim); border-color:var(--evt-b); }
+    .bc.lst   { background:var(--lst-dim); border-color:var(--lst-b); }
+    .bc-row   { display:flex; align-items:center; gap:9px; }
+    .bc-icon  { width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .bc.rem .bc-icon { background:var(--rem-bg); color:var(--rem); }
+    .bc.evt .bc-icon { background:var(--evt-bg); color:var(--evt); }
+    .bc.lst .bc-icon { background:var(--lst-bg); color:var(--lst); }
+    .bc-type  { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:.07em; margin-bottom:3px; }
+    .bc.rem .bc-type { color:var(--rem); }
+    .bc.evt .bc-type { color:var(--evt); }
+    .bc.lst .bc-type { color:var(--lst); }
+    .bc-title { font-size:12px; font-weight:700; color:var(--text); line-height:1.3; }
+    .bc-meta  { font-size:10px; color:var(--text2); margin-top:3px; }
+    .bc-num   { font-size:42px; font-weight:800; line-height:1; letter-spacing:-.04em; color:var(--rem); margin-left:auto; }
+
+    /* font overrides per specimen */
+    .f-space  { font-family:'Space Grotesk', sans-serif; }
+    .f-fraunces .hdr-greeting { font-family:'Fraunces', Georgia, serif; font-weight:700; letter-spacing:-.01em; }
+    .f-fraunces .bc-title { font-family:'Fraunces', Georgia, serif; font-weight:600; }
+    .f-fraunces .bc-num   { font-family:'Fraunces', Georgia, serif; }
+    .f-syne   { font-family:'Syne', sans-serif; }
+    .f-syne .hdr-greeting { letter-spacing:-.04em; }
+    .f-nunito { font-family:'Nunito', sans-serif; }
+    .f-nunito .hdr-greeting { letter-spacing:-.02em; }
+
+    /* ── Logo concepts ── */
+    .logo-row { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
+
+    .logo-box {
+      display:flex; flex-direction:column; gap:10px; align-items:center;
+    }
+    .logo-name { font-family:'DM Sans',sans-serif; font-size:10px; color:#9890B8; letter-spacing:.05em; text-transform:uppercase; font-weight:600; }
+
+    .logo-tile {
+      width:280px; height:130px; border-radius:20px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .logo-tile.light { background:var(--card); border:1px solid var(--border); box-shadow:0 2px 12px rgba(80,60,140,.08); }
+    .logo-tile.dark  { background:linear-gradient(160deg,#28102A 0%,#1A1040 48%,#0C2218 100%); }
+
+    /* Logo type styles */
+    .logo-wordmark {
+      font-family:'Space Grotesk', sans-serif;
+      font-size:22px; font-weight:600; letter-spacing:-.02em;
+      color:var(--text);
+    }
+    .logo-wordmark em { font-style:normal; color:var(--rem); font-weight:800; }
+    .logo-tile.dark .logo-wordmark { color:#EEE8F8; }
+    .logo-tile.dark .logo-wordmark em { color:#E07090; }
+
+    .logo-split { display:flex; flex-direction:column; align-items:center; line-height:1; gap:2px; }
+    .logo-split-top {
+      font-family:'Space Grotesk', sans-serif;
+      font-size:14px; font-weight:300; letter-spacing:.12em; text-transform:uppercase;
+      color:var(--text3);
+    }
+    .logo-split-bot {
+      font-family:'Space Grotesk', sans-serif;
+      font-size:28px; font-weight:800; letter-spacing:-.04em;
+      color:var(--text);
+    }
+    .logo-tile.dark .logo-split-top { color:#625878; }
+    .logo-tile.dark .logo-split-bot { color:#EEE8F8; }
+
+    .logo-serif {
+      display:flex; flex-direction:column; align-items:center; line-height:1; gap:4px;
+    }
+    .logo-serif-top {
+      font-family:'DM Sans', sans-serif;
+      font-size:10px; font-weight:500; letter-spacing:.14em; text-transform:uppercase;
+      color:var(--text3);
+    }
+    .logo-serif-name {
+      font-family:'Fraunces', Georgia, serif;
+      font-size:28px; font-weight:700; letter-spacing:-.01em;
+      color:var(--text);
+    }
+    .logo-serif-name em { font-style:italic; color:var(--rem); }
+    .logo-tile.dark .logo-serif-top { color:#625878; }
+    .logo-tile.dark .logo-serif-name { color:#EEE8F8; }
+    .logo-tile.dark .logo-serif-name em { color:#E07090; }
+
+    .logo-mark-row { display:flex; align-items:center; gap:12px; }
+    .logo-mark-text {
+      font-family:'Space Grotesk', sans-serif;
+      font-size:20px; font-weight:700; letter-spacing:-.02em;
+      color:var(--text);
+    }
+    .logo-tile.dark .logo-mark-text { color:#EEE8F8; }
+
+    .logo-icon-row { display:flex; align-items:center; gap:10px; }
+    .logo-icon-text {
+      display:flex; flex-direction:column; line-height:1.2;
+    }
+    .logo-icon-name {
+      font-family:'Syne', sans-serif;
+      font-size:20px; font-weight:800; letter-spacing:-.03em;
+      color:var(--text);
+    }
+    .logo-icon-sub {
+      font-family:'Syne', sans-serif;
+      font-size:9px; font-weight:500; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--text3); margin-top:1px;
+    }
+    .logo-tile.dark .logo-icon-name { color:#EEE8F8; }
+    .logo-tile.dark .logo-icon-sub  { color:#625878; }
+
+    .app-icon {
+      width:52px; height:52px; border-radius:14px; flex-shrink:0;
+      background:linear-gradient(135deg,#E080A0,#B858A0);
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 4px 14px rgba(200,96,130,.35);
+    }
+    .app-icon-text {
+      font-family:'Space Grotesk', sans-serif;
+      font-size:20px; font-weight:800; color:#fff; letter-spacing:-.04em;
+    }
+
+    .logo-wavy { display:flex; flex-direction:column; align-items:center; gap:5px; }
+    .logo-wavy-name {
+      font-family:'Space Grotesk', sans-serif;
+      font-size:22px; font-weight:700; letter-spacing:-.02em;
+      color:var(--text);
+    }
+    .logo-tile.dark .logo-wavy-name { color:#EEE8F8; }
+
+    .logo-pair { display:flex; gap:1px; }
+    .lp-a { width:136px; }
+    .lp-a .logo-tile { border-radius:20px 4px 4px 20px; }
+    .lp-b { width:136px; }
+    .lp-b .logo-tile { border-radius:4px 20px 20px 4px; }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════ FONT EXPLORATIONS ══════════ -->
+  <div style="width:100%;">
+    <div class="sh"><div class="sh-l"></div>Font Explorations<div class="sh-l"></div></div>
+  </div>
+
+  <div class="specimen-row">
+
+    <!-- Space Grotesk -->
+    <div class="specimen">
+      <div class="spec-label">Space Grotesk</div>
+      <div class="spec-sub">Smart · Technical · Quirky</div>
+      <div class="phone-crop f-space">
+        <div class="hdr">
+          <div>
+            <div class="hdr-date">Wednesday · Jun 3</div>
+            <div class="hdr-greeting">Good morning,<br>Diana.</div>
+            <div class="hdr-sub">3 things need your attention</div>
+          </div>
+          <div class="av">DR</div>
+        </div>
+        <div class="cap"><iconify-icon icon="solar:bolt-bold-duotone"></iconify-icon>Brain dump something…</div>
+        <div class="mini-bento">
+          <div class="bc rem wide">
+            <div class="bc-row">
+              <div class="bc-icon"><iconify-icon icon="solar:bell-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+              <div style="flex:1;">
+                <div class="bc-type">Overdue</div>
+                <div class="bc-title">Call the dentist</div>
+                <div class="bc-meta">was due yesterday</div>
+              </div>
+              <div class="bc-num">1</div>
+            </div>
+          </div>
+          <div class="bc evt">
+            <div class="bc-icon" style="margin-bottom:8px;"><iconify-icon icon="solar:calendar-minimalistic-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+            <div class="bc-type">Event</div>
+            <div class="bc-title">Team standup</div>
+            <div class="bc-meta">10:00 AM</div>
+          </div>
+          <div class="bc lst">
+            <div class="bc-icon" style="margin-bottom:8px;"><iconify-icon icon="solar:checklist-minimalistic-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+            <div class="bc-type">Checklist</div>
+            <div class="bc-title">Pick up groceries</div>
+            <div class="bc-meta">2 of 5 · 6pm</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fraunces (display serif for headings) -->
+    <div class="specimen">
+      <div class="spec-label">Fraunces</div>
+      <div class="spec-sub">Warm · Editorial · Expressive</div>
+      <div class="phone-crop f-fraunces">
+        <div class="hdr">
+          <div>
+            <div class="hdr-date">Wednesday · Jun 3</div>
+            <div class="hdr-greeting">Good morning,<br>Diana.</div>
+            <div class="hdr-sub">3 things need your attention</div>
+          </div>
+          <div class="av">DR</div>
+        </div>
+        <div class="cap"><iconify-icon icon="solar:bolt-bold-duotone"></iconify-icon>Brain dump something…</div>
+        <div class="mini-bento">
+          <div class="bc rem wide">
+            <div class="bc-row">
+              <div class="bc-icon"><iconify-icon icon="solar:bell-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+              <div style="flex:1;">
+                <div class="bc-type">Overdue</div>
+                <div class="bc-title">Call the dentist</div>
+                <div class="bc-meta">was due yesterday</div>
+              </div>
+              <div class="bc-num">1</div>
+            </div>
+          </div>
+          <div class="bc evt">
+            <div class="bc-icon" style="margin-bottom:8px;"><iconify-icon icon="solar:calendar-minimalistic-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+            <div class="bc-type">Event</div>
+            <div class="bc-title">Team standup</div>
+            <div class="bc-meta">10:00 AM</div>
+          </div>
+          <div class="bc lst">
+            <div class="bc-icon" style="margin-bottom:8px;"><iconify-icon icon="solar:checklist-minimalistic-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+            <div class="bc-type">Checklist</div>
+            <div class="bc-title">Pick up groceries</div>
+            <div class="bc-meta">2 of 5 · 6pm</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Syne -->
+    <div class="specimen">
+      <div class="spec-label">Syne</div>
+      <div class="spec-sub">Bold · Design-forward · Distinctive</div>
+      <div class="phone-crop f-syne">
+        <div class="hdr">
+          <div>
+            <div class="hdr-date">Wednesday · Jun 3</div>
+            <div class="hdr-greeting">Good morning,<br>Diana.</div>
+            <div class="hdr-sub">3 things need your attention</div>
+          </div>
+          <div class="av">DR</div>
+        </div>
+        <div class="cap"><iconify-icon icon="solar:bolt-bold-duotone"></iconify-icon>Brain dump something…</div>
+        <div class="mini-bento">
+          <div class="bc rem wide">
+            <div class="bc-row">
+              <div class="bc-icon"><iconify-icon icon="solar:bell-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+              <div style="flex:1;">
+                <div class="bc-type">Overdue</div>
+                <div class="bc-title">Call the dentist</div>
+                <div class="bc-meta">was due yesterday</div>
+              </div>
+              <div class="bc-num">1</div>
+            </div>
+          </div>
+          <div class="bc evt">
+            <div class="bc-icon" style="margin-bottom:8px;"><iconify-icon icon="solar:calendar-minimalistic-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+            <div class="bc-type">Event</div>
+            <div class="bc-title">Team standup</div>
+            <div class="bc-meta">10:00 AM</div>
+          </div>
+          <div class="bc lst">
+            <div class="bc-icon" style="margin-bottom:8px;"><iconify-icon icon="solar:checklist-minimalistic-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+            <div class="bc-type">Checklist</div>
+            <div class="bc-title">Pick up groceries</div>
+            <div class="bc-meta">2 of 5 · 6pm</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nunito -->
+    <div class="specimen">
+      <div class="spec-label">Nunito</div>
+      <div class="spec-sub">Rounded · Friendly · Approachable</div>
+      <div class="phone-crop f-nunito">
+        <div class="hdr">
+          <div>
+            <div class="hdr-date">Wednesday · Jun 3</div>
+            <div class="hdr-greeting">Good morning,<br>Diana.</div>
+            <div class="hdr-sub">3 things need your attention</div>
+          </div>
+          <div class="av">DR</div>
+        </div>
+        <div class="cap"><iconify-icon icon="solar:bolt-bold-duotone"></iconify-icon>Brain dump something…</div>
+        <div class="mini-bento">
+          <div class="bc rem wide">
+            <div class="bc-row">
+              <div class="bc-icon"><iconify-icon icon="solar:bell-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+              <div style="flex:1;">
+                <div class="bc-type">Overdue</div>
+                <div class="bc-title">Call the dentist</div>
+                <div class="bc-meta">was due yesterday</div>
+              </div>
+              <div class="bc-num">1</div>
+            </div>
+          </div>
+          <div class="bc evt">
+            <div class="bc-icon" style="margin-bottom:8px;"><iconify-icon icon="solar:calendar-minimalistic-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+            <div class="bc-type">Event</div>
+            <div class="bc-title">Team standup</div>
+            <div class="bc-meta">10:00 AM</div>
+          </div>
+          <div class="bc lst">
+            <div class="bc-icon" style="margin-bottom:8px;"><iconify-icon icon="solar:checklist-minimalistic-bold-duotone" style="font-size:16px;"></iconify-icon></div>
+            <div class="bc-type">Checklist</div>
+            <div class="bc-title">Pick up groceries</div>
+            <div class="bc-meta">2 of 5 · 6pm</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════ LOGO CONCEPTS ══════════ -->
+  <div style="width:100%;">
+    <div class="sh"><div class="sh-l"></div>Logo Concepts<div class="sh-l"></div></div>
+  </div>
+
+  <div class="logo-row">
+
+    <!-- 1: Color-split wordmark -->
+    <div class="logo-box">
+      <div class="logo-name">01 · Color split</div>
+      <div class="logo-pair">
+        <div class="lp-a"><div class="logo-tile light" style="width:136px;">
+          <div class="logo-wordmark">Scatter<em>brain</em></div>
+        </div></div>
+        <div class="lp-b"><div class="logo-tile dark" style="width:136px;">
+          <div class="logo-wordmark">Scatter<em>brain</em></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- 2: Thin/heavy contrast stack -->
+    <div class="logo-box">
+      <div class="logo-name">02 · Weight contrast</div>
+      <div class="logo-pair">
+        <div class="lp-a"><div class="logo-tile light" style="width:136px;">
+          <div class="logo-split">
+            <div class="logo-split-top">scatter</div>
+            <div class="logo-split-bot">BRAIN</div>
+          </div>
+        </div></div>
+        <div class="lp-b"><div class="logo-tile dark" style="width:136px;">
+          <div class="logo-split">
+            <div class="logo-split-top">scatter</div>
+            <div class="logo-split-bot">BRAIN</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- 3: Serif display -->
+    <div class="logo-box">
+      <div class="logo-name">03 · Serif wordmark</div>
+      <div class="logo-pair">
+        <div class="lp-a"><div class="logo-tile light" style="width:136px;">
+          <div class="logo-serif">
+            <div class="logo-serif-top">your second brain</div>
+            <div class="logo-serif-name">Scatter<em>brain</em></div>
+          </div>
+        </div></div>
+        <div class="lp-b"><div class="logo-tile dark" style="width:136px;">
+          <div class="logo-serif">
+            <div class="logo-serif-top">your second brain</div>
+            <div class="logo-serif-name">Scatter<em>brain</em></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- 4: Scatter dots mark -->
+    <div class="logo-box">
+      <div class="logo-name">04 · Scatter mark</div>
+      <div class="logo-pair">
+        <div class="lp-a"><div class="logo-tile light" style="width:136px;">
+          <div class="logo-mark-row">
+            <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+              <circle cx="10" cy="26" r="9" fill="#C8607A" opacity=".9"/>
+              <circle cx="26" cy="14" r="7" fill="#5278CC" opacity=".85"/>
+              <circle cx="32" cy="30" r="5" fill="#BE8030" opacity=".8"/>
+              <circle cx="18" cy="8"  r="5" fill="#38966A" opacity=".8"/>
+              <circle cx="36" cy="10" r="3" fill="#C8607A" opacity=".4"/>
+              <circle cx="6"  cy="12" r="3" fill="#5278CC" opacity=".35"/>
+            </svg>
+            <div class="logo-mark-text">Scatterbrain</div>
+          </div>
+        </div></div>
+        <div class="lp-b"><div class="logo-tile dark" style="width:136px;">
+          <div class="logo-mark-row">
+            <svg width="32" height="32" viewBox="0 0 40 40" fill="none">
+              <circle cx="10" cy="26" r="9" fill="#E07090" opacity=".9"/>
+              <circle cx="26" cy="14" r="7" fill="#7090E0" opacity=".85"/>
+              <circle cx="32" cy="30" r="5" fill="#D0923C" opacity=".8"/>
+              <circle cx="18" cy="8"  r="5" fill="#52B282" opacity=".8"/>
+              <circle cx="36" cy="10" r="3" fill="#E07090" opacity=".4"/>
+              <circle cx="6"  cy="12" r="3" fill="#7090E0" opacity=".35"/>
+            </svg>
+            <div class="logo-mark-text">Scatterbrain</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- 5: App icon + Syne wordmark -->
+    <div class="logo-box">
+      <div class="logo-name">05 · Icon + Syne</div>
+      <div class="logo-pair">
+        <div class="lp-a"><div class="logo-tile light" style="width:136px;">
+          <div class="logo-icon-row">
+            <div class="app-icon">
+              <div class="app-icon-text">sb</div>
+            </div>
+            <div class="logo-icon-text">
+              <div class="logo-icon-name">Scatter<br>brain</div>
+            </div>
+          </div>
+        </div></div>
+        <div class="lp-b"><div class="logo-tile dark" style="width:136px;">
+          <div class="logo-icon-row">
+            <div class="app-icon">
+              <div class="app-icon-text">sb</div>
+            </div>
+            <div class="logo-icon-text">
+              <div class="logo-icon-name">Scatter<br>brain</div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- 6: Bolt + wavy wordmark -->
+    <div class="logo-box">
+      <div class="logo-name">06 · Bolt + wave</div>
+      <div class="logo-pair">
+        <div class="lp-a"><div class="logo-tile light" style="width:136px;">
+          <div class="logo-wavy">
+            <div style="display:flex;align-items:center;gap:7px;">
+              <svg width="16" height="26" viewBox="0 0 18 30" fill="none">
+                <path d="M12 2L2 17H9L6 28L18 11H11L12 2Z" fill="#C8607A"/>
+              </svg>
+              <div class="logo-wavy-name">Scatterbrain</div>
+            </div>
+            <svg width="130" height="8" viewBox="0 0 130 8" fill="none">
+              <path d="M0 4 Q16 0 32 4 Q48 8 64 4 Q80 0 96 4 Q112 8 130 4" stroke="url(#wg)" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="wg" x1="0" y1="0" x2="130" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   stop-color="#C8607A"/>
+                  <stop offset="33%"  stop-color="#5278CC"/>
+                  <stop offset="66%"  stop-color="#BE8030"/>
+                  <stop offset="100%" stop-color="#38966A"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div></div>
+        <div class="lp-b"><div class="logo-tile dark" style="width:136px;">
+          <div class="logo-wavy">
+            <div style="display:flex;align-items:center;gap:7px;">
+              <svg width="16" height="26" viewBox="0 0 18 30" fill="none">
+                <path d="M12 2L2 17H9L6 28L18 11H11L12 2Z" fill="#E07090"/>
+              </svg>
+              <div class="logo-wavy-name">Scatterbrain</div>
+            </div>
+            <svg width="130" height="8" viewBox="0 0 130 8" fill="none">
+              <path d="M0 4 Q16 0 32 4 Q48 8 64 4 Q80 0 96 4 Q112 8 130 4" stroke="url(#wgd)" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="wgd" x1="0" y1="0" x2="130" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   stop-color="#E07090"/>
+                  <stop offset="33%"  stop-color="#7090E0"/>
+                  <stop offset="66%"  stop-color="#D0923C"/>
+                  <stop offset="100%" stop-color="#52B282"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scatterbrain — Mockups</title>
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    /* page-specific bits not in the shared token sheet */
+    .month-strip { display:flex; gap:6px; padding:12px 16px; overflow-x:auto; }
+    .day { min-width:40px; text-align:center; font-size:13px; color:var(--color-text-primary); padding:6px 0; }
+    .day .num { display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:99px; margin:4px auto 0; }
+    .day.selected .num { background:var(--color-primary); color:var(--color-surface); }
+    .day.today .num { color:var(--color-accent); font-weight:500; }
+    .day.today::after { content:""; display:block; width:5px; height:5px; border-radius:99px; background:var(--color-accent); margin:3px auto 0; }
+    .timeslot { display:flex; gap:10px; padding:10px 16px; }
+    .timeslot .t { font-size:12px; color:var(--color-border); width:54px; flex-shrink:0; }
+    .event-pill { background:var(--color-tint); color:var(--color-primary); border-left:2px solid var(--color-primary); border-radius:8px; padding:8px 10px; font-size:12px; flex:1; }
+    .event-pill .ev-note { font-size:10px; color:var(--color-accent); margin-top:3px; display:flex; align-items:center; gap:4px; }
+    .search { background:var(--color-tint); border-radius:8px; margin:12px 16px; padding:10px 12px; font-size:12px; color:var(--color-accent); display:flex; gap:8px; align-items:center; }
+    .filter-row { display:flex; gap:8px; padding:0 16px 8px; }
+    .note-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 16px; }
+    .note-card { background:var(--color-white); border:0.5px solid var(--color-tint); border-radius:12px; padding:12px; }
+    .note-card .nc-title { font-size:13px; font-weight:500; color:var(--color-text-primary); }
+    .note-card .nc-preview { font-size:11px; color:var(--color-accent); margin-top:6px; line-height:1.5; }
+    .note-card .nc-date { font-size:10px; color:var(--color-border); margin-top:8px; }
+    .checkline { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--color-text-primary); padding:5px 0; }
+    .checkline.done span { text-decoration:line-through; color:var(--color-accent); }
+    .cbox { width:16px; height:16px; border-radius:4px; border:1.5px solid var(--color-border); flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .cbox.on { background:var(--color-accent); border-color:var(--color-accent); color:#fff; }
+    .toolbar { background:var(--color-tint); border-bottom:0.5px solid var(--color-border); padding:10px 16px; display:flex; gap:18px; color:var(--color-accent); align-items:center; }
+    .toolbar .tb-text { font-size:15px; font-weight:600; width:15px; text-align:center; }
+    .editor-body { flex:1; padding:14px 16px; overflow-y:auto; }
+    .editor-meta { font-size:10px; color:var(--color-accent); margin-bottom:10px; }
+    .editor-note-body { font-size:13px; color:var(--color-text-secondary); line-height:1.8; margin-bottom:14px; }
+    .tag-row { border-top:0.5px solid var(--color-tint); padding:12px 16px; display:flex; gap:6px; }
+    .sheet-overlay { position:absolute; inset:0; background:rgba(45,20,55,0.85); display:flex; align-items:flex-end; }
+    .sheet { width:100%; background:var(--color-surface); border-radius:14px 14px 0 0; overflow:hidden; }
+    .sheet-head { background:var(--header-bg); padding:14px 16px; display:flex; justify-content:space-between; align-items:center; color:var(--header-text); font-size:13px; font-weight:500; }
+    .sheet-head .header-icon { color:var(--header-sub); }
+    .sheet-body { padding:16px; }
+    .sheet-textarea { font-size:13px; color:var(--color-text-primary); line-height:1.7; min-height:70px; }
+    .smart-tags { display:flex; gap:6px; margin:14px 0; }
+    .sheet-actions { display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+    .note-affordance { font-size:10px; color:var(--color-accent); display:flex; align-items:center; gap:4px; margin-top:3px; }
+    .add-line { color:var(--color-accent); }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Icon sprite (Tabler-style) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="ic-home" viewBox="0 0 24 24"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></symbol>
+    <symbol id="ic-calendar" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/></symbol>
+    <symbol id="ic-bell" viewBox="0 0 24 24"><path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></symbol>
+    <symbol id="ic-notebook" viewBox="0 0 24 24"><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18"/><path d="M13 8l2 0"/><path d="M13 12l2 0"/></symbol>
+    <symbol id="ic-bolt" viewBox="0 0 24 24"><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/></symbol>
+    <symbol id="ic-search" viewBox="0 0 24 24"><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></symbol>
+    <symbol id="ic-plus" viewBox="0 0 24 24"><path d="M12 5l0 14"/><path d="M5 12l14 0"/></symbol>
+    <symbol id="ic-dots" viewBox="0 0 24 24"><path d="M5 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M17 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></symbol>
+    <symbol id="ic-back" viewBox="0 0 24 24"><path d="M5 12l14 0"/><path d="M5 12l6 6"/><path d="M5 12l6 -6"/></symbol>
+    <symbol id="ic-x" viewBox="0 0 24 24"><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 24 24"><path d="M5 12l5 5l9 -9"/></symbol>
+    <symbol id="ic-note" viewBox="0 0 24 24"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/><path d="M9 9l1 0"/><path d="M9 13l6 0"/><path d="M9 17l6 0"/></symbol>
+    <symbol id="ic-checklist" viewBox="0 0 24 24"><path d="M3.5 5.5l1.5 1.5l2.5 -2.5"/><path d="M3.5 11.5l1.5 1.5l2.5 -2.5"/><path d="M3.5 17.5l1.5 1.5l2.5 -2.5"/><path d="M11 6l9 0"/><path d="M11 12l9 0"/><path d="M11 18l9 0"/></symbol>
+    <symbol id="ic-list" viewBox="0 0 24 24"><path d="M9 6l11 0"/><path d="M9 12l11 0"/><path d="M9 18l11 0"/><path d="M5 6l0 .01"/><path d="M5 12l0 .01"/><path d="M5 18l0 .01"/></symbol>
+    <symbol id="ic-tag" viewBox="0 0 24 24"><path d="M7.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M3 6v5.172a2 2 0 0 0 .586 1.414l7.71 7.71a2.41 2.41 0 0 0 3.408 0l5.592 -5.592a2.41 2.41 0 0 0 0 -3.408l-7.71 -7.71a2 2 0 0 0 -1.414 -.586h-5.172a3 3 0 0 0 -3 3z"/></symbol>
+    <symbol id="ic-camera" viewBox="0 0 24 24"><path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"/><path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/></symbol>
+  </svg>
+
+  <!-- 1. TODAY -->
+  <div class="phone"><span class="phone-label">1 · Today</span>
+    <div class="header">
+      <div><div class="greeting">Good morning</div><div class="sub">3 things need your attention</div></div>
+      <div class="avatar">DR</div>
+    </div>
+    <div class="capture-bar"><svg class="icon icon-14"><use href="#ic-bolt"/></svg> Brain dump something…</div>
+    <div class="content">
+      <div class="section-label">Overdue</div>
+      <div class="card done"><span class="checkbox"></span><div class="item-body"><div class="item-title">Call the dentist</div><div class="item-meta">Reminder · was yesterday</div></div></div>
+      <div class="section-label">Today</div>
+      <div class="card"><span class="dot event"></span><div class="item-body"><div class="item-title">Team standup</div><div class="item-meta">Calendar · 10:00 AM</div><div class="note-affordance"><svg class="icon icon-14"><use href="#ic-note"/></svg> has a note</div></div></div>
+      <div class="card"><span class="checkbox"></span><div class="item-body"><div class="item-title">Pick up groceries</div><div class="item-meta">Reminder · before 6:00 PM</div><div class="note-affordance"><svg class="icon icon-14"><use href="#ic-checklist"/></svg> 2 of 5 items</div></div></div>
+      <div class="section-label">Notes</div>
+      <div class="card"><span class="dot note"></span><div class="item-body"><div class="item-title">Trip packing list</div><div class="item-meta">Checklist · updated 2h ago</div></div></div>
+    </div>
+    <div class="nav">
+      <div class="tab active"><svg class="icon"><use href="#ic-home"/></svg><span class="lbl">Home</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-calendar"/></svg><span class="lbl">Cal</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-bell"/></svg><span class="lbl">Remind</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-notebook"/></svg><span class="lbl">Notes</span></div>
+    </div>
+  </div>
+
+  <!-- 2. CALENDAR -->
+  <div class="phone"><span class="phone-label">2 · The Big Picture</span>
+    <div class="header"><div class="title">The Big Picture</div><div class="header-icon"><svg class="icon"><use href="#ic-dots"/></svg></div></div>
+    <div class="month-strip">
+      <div class="day"><div>M</div><div class="num">26</div></div>
+      <div class="day"><div>T</div><div class="num">27</div></div>
+      <div class="day today"><div>W</div><div class="num">28</div></div>
+      <div class="day selected"><div>T</div><div class="num">29</div></div>
+      <div class="day"><div>F</div><div class="num">30</div></div>
+      <div class="day"><div>S</div><div class="num">31</div></div>
+      <div class="day"><div>S</div><div class="num">1</div></div>
+    </div>
+    <div class="content" style="padding:0;">
+      <div class="timeslot"><div class="t">9 AM</div><div class="event-pill">Dentist appointment<div class="ev-note"><svg class="icon icon-14"><use href="#ic-note"/></svg> Bring insurance card</div></div></div>
+      <div class="timeslot"><div class="t">10 AM</div><div class="event-pill">Team standup</div></div>
+      <div class="timeslot"><div class="t">1 PM</div><div class="event-pill">Lunch with Sam<div class="ev-note"><svg class="icon icon-14"><use href="#ic-note"/></svg> Try the new ramen place</div></div></div>
+      <div class="timeslot"><div class="t">4 PM</div><div class="event-pill">Focus block</div></div>
+    </div>
+    <div class="nav">
+      <div class="tab"><svg class="icon"><use href="#ic-home"/></svg><span class="lbl">Home</span></div>
+      <div class="tab active"><svg class="icon"><use href="#ic-calendar"/></svg><span class="lbl">Cal</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-bell"/></svg><span class="lbl">Remind</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-notebook"/></svg><span class="lbl">Notes</span></div>
+    </div>
+  </div>
+
+  <!-- 3. REMINDERS -->
+  <div class="phone"><span class="phone-label">3 · Don't Forget</span>
+    <div class="header"><div><div class="title">Reminders</div><div class="sub">4 active · 2 completed</div></div><div class="header-icon"><svg class="icon"><use href="#ic-plus"/></svg></div></div>
+    <div class="content" style="padding-top:8px;">
+      <div class="section-label">Pinned</div>
+      <div class="card"><span class="checkbox"></span><div class="item-body"><div class="item-title">Call the dentist</div><div class="item-meta">Was yesterday · tap to reschedule</div></div><span class="badge">Overdue</span></div>
+      <div class="section-label">Today</div>
+      <div class="card"><span class="checkbox"></span><div class="item-body"><div class="item-title">Pick up groceries</div><div class="item-meta">Before 6:00 PM</div><div class="note-affordance"><svg class="icon icon-14"><use href="#ic-checklist"/></svg> 2 of 5 items</div></div></div>
+      <div class="card"><span class="checkbox"></span><div class="item-body"><div class="item-title">Water the plants</div><div class="item-meta">Anytime today</div><div class="note-affordance"><svg class="icon icon-14"><use href="#ic-note"/></svg> has a note</div></div></div>
+      <div class="section-label">Upcoming</div>
+      <div class="card"><span class="checkbox"></span><div class="item-body"><div class="item-title">Renew passport</div><div class="item-meta">Fri · every 5 years</div></div></div>
+      <div class="section-label">Done</div>
+      <div class="card done"><span class="checkbox checked"><svg class="icon icon-sm"><use href="#ic-check"/></svg></span><div class="item-body"><div class="item-title">Reply to Sam</div><div class="item-meta">Completed</div></div></div>
+    </div>
+    <div class="nav">
+      <div class="tab"><svg class="icon"><use href="#ic-home"/></svg><span class="lbl">Home</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-calendar"/></svg><span class="lbl">Cal</span></div>
+      <div class="tab active"><svg class="icon"><use href="#ic-bell"/></svg><span class="lbl">Remind</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-notebook"/></svg><span class="lbl">Notes</span></div>
+    </div>
+  </div>
+
+  <!-- 4. THE PILE -->
+  <div class="phone"><span class="phone-label">4 · The Pile</span>
+    <div class="header"><div><div class="title">The Pile</div><div class="sub">6 notes</div></div><div class="header-icon"><svg class="icon"><use href="#ic-plus"/></svg></div></div>
+    <div class="search"><svg class="icon icon-sm"><use href="#ic-search"/></svg> Search your pile…</div>
+    <div class="filter-row"><span class="chip">All</span><span class="chip dashed">Recent</span><span class="chip dashed">Tagged</span><span class="chip dashed">Checklists</span></div>
+    <div class="content" style="padding:8px 0;">
+      <div class="note-grid">
+        <div class="note-card"><div class="nc-title">Trip packing list</div>
+          <div class="checkline done"><span class="cbox on"><svg class="icon icon-14"><use href="#ic-check"/></svg></span><span>Passport</span></div>
+          <div class="checkline done"><span class="cbox on"><svg class="icon icon-14"><use href="#ic-check"/></svg></span><span>Chargers</span></div>
+          <div class="checkline"><span class="cbox"></span><span>Sunscreen</span></div>
+          <div class="nc-date">2h ago</div></div>
+        <div class="note-card"><div class="nc-title">Book ideas</div><div class="nc-preview">That one about the lighthouse keeper who…</div><div class="nc-date">Yesterday</div><div style="margin-top:6px;"><span class="chip">writing</span></div></div>
+        <div class="note-card"><div class="nc-title">Groceries</div>
+          <div class="checkline"><span class="cbox"></span><span>Oat milk</span></div>
+          <div class="checkline"><span class="cbox"></span><span>Eggs</span></div>
+          <div class="nc-date">3d ago</div></div>
+        <div class="note-card"><div class="nc-title">Therapist notes</div><div class="nc-preview">Remember to mention the sleep thing.</div><div class="nc-date">Last week</div></div>
+      </div>
+    </div>
+    <div class="nav">
+      <div class="tab"><svg class="icon"><use href="#ic-home"/></svg><span class="lbl">Home</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-calendar"/></svg><span class="lbl">Cal</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-bell"/></svg><span class="lbl">Remind</span></div>
+      <div class="tab active"><svg class="icon"><use href="#ic-notebook"/></svg><span class="lbl">Notes</span></div>
+    </div>
+  </div>
+
+  <!-- 5. NOTE EDITOR -->
+  <div class="phone"><span class="phone-label">5 · Note Editor (Keep-style)</span>
+    <div class="header"><div class="header-icon"><svg class="icon"><use href="#ic-back"/></svg></div><div class="title" style="font-size:13px;">Trip packing list</div><div class="header-icon"><svg class="icon"><use href="#ic-dots"/></svg></div></div>
+    <div class="toolbar"><span class="tb-text">B</span><span class="tb-text" style="font-style:italic;">I</span><svg class="icon icon-sm"><use href="#ic-list"/></svg><svg class="icon icon-sm"><use href="#ic-checklist"/></svg><svg class="icon icon-sm"><use href="#ic-tag"/></svg><svg class="icon icon-sm"><use href="#ic-camera"/></svg></div>
+    <div class="editor-body">
+      <div class="editor-meta">12 items · updated 2h ago</div>
+      <div class="editor-note-body">Two weeks in Portugal. Don't overpack like last time.</div>
+      <div class="checkline done"><span class="cbox on"><svg class="icon icon-14"><use href="#ic-check"/></svg></span><span>Passport</span></div>
+      <div class="checkline done"><span class="cbox on"><svg class="icon icon-14"><use href="#ic-check"/></svg></span><span>Chargers + adapter</span></div>
+      <div class="checkline"><span class="cbox"></span><span>Sunscreen</span></div>
+      <div class="checkline"><span class="cbox"></span><span>Walking shoes</span></div>
+      <div class="checkline add-line"><svg class="icon icon-sm"><use href="#ic-plus"/></svg><span>List item</span></div>
+    </div>
+    <div class="tag-row"><span class="chip">travel</span><span class="chip">summer</span><span class="chip dashed">＋ tag</span></div>
+    <div class="nav">
+      <div class="tab"><svg class="icon"><use href="#ic-home"/></svg><span class="lbl">Home</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-calendar"/></svg><span class="lbl">Cal</span></div>
+      <div class="tab"><svg class="icon"><use href="#ic-bell"/></svg><span class="lbl">Remind</span></div>
+      <div class="tab active"><svg class="icon"><use href="#ic-notebook"/></svg><span class="lbl">Notes</span></div>
+    </div>
+  </div>
+
+  <!-- 6. BRAIN DUMP SHEET -->
+  <div class="phone"><span class="phone-label">6 · Brain Dump</span>
+    <div class="header"><div><div class="greeting">Good morning</div><div class="sub">3 things need your attention</div></div><div class="avatar">DR</div></div>
+    <div class="capture-bar"><svg class="icon icon-14"><use href="#ic-bolt"/></svg> Brain dump something…</div>
+    <div class="content"></div>
+    <div class="sheet-overlay">
+      <div class="sheet">
+        <div class="sheet-head"><span>Brain dump</span><span class="header-icon"><svg class="icon"><use href="#ic-x"/></svg></span></div>
+        <div class="sheet-body">
+          <div class="sheet-textarea">Call dentist tomorrow at 2pm — bring insurance card</div>
+          <div class="smart-tags"><span class="chip">reminder</span><span class="chip">tomorrow 2pm</span><span class="chip dashed">＋ note</span></div>
+          <div class="sheet-actions">
+            <button class="btn btn-primary">Save to reminders</button>
+            <button class="btn btn-outline">Save as note</button>
+            <button class="btn btn-outline">Add to calendar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

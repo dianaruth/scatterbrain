@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Scatterbrain — Alt C: Warm Bold</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    :root {
+      --white: #FFFFFF;
+      --off:   #FAFAF8;
+      --ink:   #1A1816;
+      --ink2:  #4A4640;
+      --ink3:  #9A9690;
+      --sep:   rgba(0,0,0,.08);
+
+      /* Type color blocks */
+      --rem-block:  #C93040;
+      --rem-light:  #FEF0F1;
+      --rem-mid:    #FBDADC;
+      --evt-block:  #1B5AB8;
+      --evt-light:  #EFF4FD;
+      --evt-mid:    #D0DFFA;
+      --lst-block:  #9A6800;
+      --lst-light:  #FFF7E6;
+      --lst-mid:    #FEEBBF;
+      --note-block: #1A7A50;
+      --note-light: #F0FAF5;
+      --note-mid:   #C8EFD9;
+    }
+
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+
+    body {
+      font-family:'DM Sans',system-ui,sans-serif;
+      background:#1E1A14;
+      padding:32px 24px;
+      display:flex; flex-wrap:wrap; gap:32px; justify-content:center;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .col { display:flex; flex-direction:column; align-items:center; gap:10px; }
+    .lab { font-size:11px; color:#6A6050; letter-spacing:.05em; text-transform:uppercase; font-weight:500; }
+
+    .phone {
+      width:300px; height:650px;
+      border-radius:36px; overflow:hidden;
+      display:flex; flex-direction:column;
+      background:var(--white);
+      border:1px solid rgba(0,0,0,.25);
+      position:relative;
+      color:var(--ink);
+    }
+
+    /* ── Status bar space ── */
+    .status { height:44px; flex-shrink:0; }
+
+    /* ── Big greeting header ── */
+    .hdr {
+      padding:4px 20px 16px;
+      display:flex; justify-content:space-between; align-items:flex-end;
+      border-bottom:1.5px solid var(--ink);
+    }
+    .hdr-greeting {
+      font-family:'Newsreader',Georgia,serif;
+      font-size:32px; font-weight:500;
+      color:var(--ink); line-height:1.0;
+      letter-spacing:-.01em;
+    }
+    .hdr-sub { font-size:11px; color:var(--ink3); margin-top:5px; }
+    .av {
+      width:34px; height:34px; border-radius:8px;
+      background:var(--ink); color:var(--white);
+      font-size:11px; font-weight:700;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    /* ── Brain dump bar ── */
+    .cap {
+      margin:12px 16px;
+      padding:10px 14px;
+      border:1.5px solid var(--sep);
+      border-radius:10px;
+      background:var(--off);
+      display:flex; gap:8px; align-items:center;
+      font-size:12px; color:var(--ink3);
+    }
+    .cap iconify-icon { font-size:15px; color:var(--rem-block); }
+
+    /* ── Scrollable content ── */
+    .body { flex:1; overflow:hidden; }
+
+    /* ── Section band ── */
+    .section { margin-bottom:0; }
+    .section-hdr {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:8px 16px 6px;
+      border-top:1px solid var(--sep);
+    }
+    .section-title {
+      font-family:'Newsreader',Georgia,serif;
+      font-size:16px; font-weight:500; font-style:italic;
+      color:var(--ink);
+    }
+    .section-count {
+      font-size:11px; color:var(--ink3); font-weight:600;
+    }
+
+    /* ── Row items ── */
+    .row {
+      display:flex; align-items:center; gap:11px;
+      padding:9px 16px;
+      border-bottom:1px solid var(--sep);
+    }
+    .row:last-child { border-bottom:none; }
+
+    .row-dot {
+      width:8px; height:8px; border-radius:99px; flex-shrink:0;
+    }
+    .row-dot.rem  { background:var(--rem-block); }
+    .row-dot.evt  { background:var(--evt-block); }
+    .row-dot.lst  { background:var(--lst-block); }
+    .row-dot.note { background:var(--note-block);}
+
+    .row-body { flex:1; min-width:0; }
+    .row-title { font-size:13px; font-weight:600; color:var(--ink); line-height:1.3; }
+    .row-meta  { font-size:10px; color:var(--ink3); margin-top:2px; }
+    .row-time  { font-size:10px; color:var(--ink3); flex-shrink:0; font-weight:500; }
+
+    .row-badge {
+      font-size:9px; font-weight:700; padding:2px 7px; border-radius:4px;
+      flex-shrink:0; text-transform:uppercase; letter-spacing:.04em;
+    }
+    .row-badge.overdue { background:var(--rem-mid); color:var(--rem-block); }
+
+    /* done row */
+    .row.done .row-title { text-decoration:line-through; opacity:.4; }
+    .row.done .row-dot   { opacity:.3; }
+
+    /* overdue banner */
+    .overdue-bar {
+      background:var(--rem-light);
+      border-top:2px solid var(--rem-block);
+      padding:10px 16px;
+      display:flex; gap:12px; align-items:center;
+    }
+    .overdue-n {
+      font-family:'Newsreader',serif;
+      font-size:42px; font-weight:500; color:var(--rem-block); line-height:1;
+    }
+    .overdue-info { }
+    .overdue-label { font-size:11px; font-weight:700; color:var(--rem-block); text-transform:uppercase; letter-spacing:.05em; }
+    .overdue-sub   { font-size:10px; color:var(--rem-block); opacity:.7; margin-top:2px; }
+
+    /* ── Checklist note inline ── */
+    .row-checklist { padding:0 16px 10px; }
+    .cl-item { display:flex; gap:7px; align-items:center; padding:3px 0; }
+    .cl-cb { width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink3); flex-shrink:0; }
+    .cl-cb.on { background:var(--lst-block); border-color:var(--lst-block); }
+    .cl-t  { font-size:11px; color:var(--ink2); }
+    .cl-t.done { text-decoration:line-through; opacity:.5; }
+
+    /* ── Notes mosaic ── */
+    .notes-wrap { padding:8px 12px 0; flex:1; overflow:hidden; }
+    .notes-mosaic {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:auto auto;
+      gap:7px;
+    }
+    .nc {
+      border-radius:10px; padding:12px;
+      border:1px solid var(--sep);
+    }
+    .nc.wide { grid-column:1/3; }
+    .nc.rem  { background:var(--rem-light);  border-left:3px solid var(--rem-block); }
+    .nc.evt  { background:var(--evt-light);  border-left:3px solid var(--evt-block); }
+    .nc.lst  { background:var(--lst-light);  border-left:3px solid var(--lst-block); }
+    .nc.note { background:var(--note-light); border-left:3px solid var(--note-block);}
+    .nc-type  { font-size:8px; text-transform:uppercase; letter-spacing:.08em; font-weight:700; margin-bottom:4px; }
+    .nc.rem  .nc-type { color:var(--rem-block); }
+    .nc.evt  .nc-type { color:var(--evt-block); }
+    .nc.lst  .nc-type { color:var(--lst-block); }
+    .nc.note .nc-type { color:var(--note-block);}
+    .nc-title { font-size:12px; font-weight:600; color:var(--ink); line-height:1.3; }
+    .nc-body  { font-size:10px; color:var(--ink3); margin-top:4px; line-height:1.4; }
+    .nc-date  { font-size:9px; color:var(--ink3); margin-top:6px; }
+    .nc-cl    { margin-top:4px; }
+    .nc-cl-item { display:flex; gap:5px; align-items:center; font-size:10px; color:var(--ink2); padding:2px 0; }
+    .nc-cb { width:10px; height:10px; border-radius:2px; border:1.5px solid currentColor; flex-shrink:0; }
+
+    /* ── Calendar ── */
+    .strip {
+      display:flex; gap:0; padding:10px 14px 8px;
+      border-bottom:1.5px solid var(--ink);
+    }
+    .d { flex:1; text-align:center; padding:4px 2px; }
+    .d-dow { font-size:8px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink3); }
+    .d-num {
+      font-family:'Newsreader',serif;
+      font-size:20px; color:var(--ink2); margin-top:2px; line-height:1;
+    }
+    .d.sel .d-num { color:var(--ink); font-weight:600; border-bottom:2px solid var(--rem-block); }
+    .d.tod .d-num { color:var(--rem-block); }
+
+    .slot { display:flex; gap:11px; padding:7px 16px; border-bottom:1px solid var(--sep); }
+    .slot-t { font-size:10px; color:var(--ink3); width:38px; flex-shrink:0; padding-top:3px; font-weight:500; }
+    .ev { flex:1; border-radius:8px; padding:7px 10px; font-size:11px; font-weight:600; }
+    .ev.evt { background:var(--evt-light); color:var(--evt-block); border-left:2px solid var(--evt-block); }
+    .ev.rem { background:var(--rem-light); color:var(--rem-block); border-left:2px solid var(--rem-block); }
+    .ev-sub { font-size:9px; font-weight:400; margin-top:2px; opacity:.7; }
+
+    /* ── FAB ── */
+    .fab {
+      position:absolute; right:16px; bottom:64px;
+      width:50px; height:50px;
+      background:var(--ink); color:var(--white);
+      border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow:0 6px 20px rgba(0,0,0,.22);
+      z-index:10;
+    }
+
+    /* ── Nav ── */
+    .nav {
+      display:flex; padding:10px 8px 20px;
+      background:var(--white);
+      border-top:1.5px solid var(--ink);
+      z-index:5;
+    }
+    .nav > div {
+      flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+      font-size:9px; color:var(--ink3); font-weight:600;
+      text-transform:uppercase; letter-spacing:.04em;
+    }
+    .nav > div iconify-icon { font-size:22px; }
+    .nav > div.on { color:var(--ink); }
+
+    /* Reminders screen */
+    .rcount {
+      display:flex; align-items:baseline; gap:8px;
+      padding:12px 16px 10px;
+      border-bottom:1.5px solid var(--ink);
+    }
+    .rcount-n {
+      font-family:'Newsreader',serif;
+      font-size:52px; line-height:1; color:var(--ink); font-weight:500;
+    }
+    .rcount-label { font-size:14px; color:var(--ink2); }
+    .rcount-done  { font-size:11px; color:var(--ink3); font-weight:600; margin-left:auto; align-self:center; }
+
+    /* Search */
+    .search-bar {
+      margin:10px 16px 6px;
+      padding:10px 14px;
+      background:var(--off);
+      border:1px solid var(--sep);
+      border-radius:10px;
+      display:flex; gap:8px; align-items:center;
+      font-size:12px; color:var(--ink3);
+    }
+    .chips { display:flex; gap:6px; padding:0 16px 8px; }
+    .chip {
+      font-size:10px; font-weight:600; padding:4px 10px; border-radius:5px;
+      background:var(--off); border:1px solid var(--sep); color:var(--ink3);
+    }
+    .chip.on { background:var(--note-mid); color:var(--note-block); border-color:var(--note-mid); }
+  </style>
+</head>
+<body>
+
+  <!-- ── TODAY ── -->
+  <div class="col"><div class="lab">C · Today</div>
+    <div class="phone">
+      <div class="status"></div>
+      <div class="hdr">
+        <div>
+          <div class="hdr-greeting">Good morning,<br>Diana.</div>
+          <div class="hdr-sub">3 things need your attention</div>
+        </div>
+        <div class="av">DR</div>
+      </div>
+      <div class="cap"><iconify-icon icon="solar:bolt-bold-duotone"></iconify-icon>Brain dump something…</div>
+
+      <div class="body">
+        <!-- Overdue -->
+        <div class="overdue-bar">
+          <div class="overdue-n">1</div>
+          <div class="overdue-info">
+            <div class="overdue-label">Overdue</div>
+            <div class="overdue-sub">Was due yesterday</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="row-dot rem"></div>
+          <div class="row-body">
+            <div class="row-title">Call the dentist</div>
+            <div class="row-meta">Reminder · was yesterday</div>
+          </div>
+          <div class="row-badge overdue">Due</div>
+        </div>
+
+        <!-- Today section -->
+        <div class="section-hdr">
+          <div class="section-title">Today</div>
+          <div class="section-count">2 items</div>
+        </div>
+        <div class="row">
+          <div class="row-dot evt"></div>
+          <div class="row-body">
+            <div class="row-title">Team standup</div>
+            <div class="row-meta">Calendar · has note</div>
+          </div>
+          <div class="row-time">10 AM</div>
+        </div>
+        <div class="row">
+          <div class="row-dot lst"></div>
+          <div class="row-body">
+            <div class="row-title">Pick up groceries</div>
+            <div class="row-meta">Checklist · 2 of 5 items</div>
+          </div>
+          <div class="row-time">6 PM</div>
+        </div>
+
+        <!-- Notes section -->
+        <div class="section-hdr">
+          <div class="section-title">Recent notes</div>
+          <div class="section-count">See all</div>
+        </div>
+        <div class="row">
+          <div class="row-dot note"></div>
+          <div class="row-body">
+            <div class="row-title">Trip packing list</div>
+            <div class="row-meta">Checklist · updated 2h ago</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fab"><iconify-icon icon="solar:bolt-bold-duotone" style="font-size:22px;"></iconify-icon></div>
+      <div class="nav">
+        <div class="on"><iconify-icon icon="solar:home-2-bold-duotone"></iconify-icon>Home</div>
+        <div><iconify-icon icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div>
+        <div><iconify-icon icon="solar:bell-bold-duotone"></iconify-icon>Remind</div>
+        <div><iconify-icon icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── REMINDERS ── -->
+  <div class="col"><div class="lab">C · Reminders</div>
+    <div class="phone">
+      <div class="status"></div>
+      <div class="hdr">
+        <div>
+          <div class="hdr-greeting">Reminders</div>
+        </div>
+        <iconify-icon icon="solar:add-circle-bold-duotone" style="font-size:26px; color:var(--ink2);"></iconify-icon>
+      </div>
+
+      <div class="rcount">
+        <div class="rcount-n">4</div>
+        <div class="rcount-label">active</div>
+        <div class="rcount-done">2 done ↓</div>
+      </div>
+
+      <div class="body">
+        <div class="section-hdr">
+          <div class="section-title">Pinned</div>
+        </div>
+        <div class="row">
+          <div class="row-dot rem"></div>
+          <div class="row-body">
+            <div class="row-title">Call the dentist</div>
+            <div class="row-meta">Was yesterday · tap to reschedule</div>
+          </div>
+          <div class="row-badge overdue">Due</div>
+        </div>
+
+        <div class="section-hdr">
+          <div class="section-title">Today</div>
+          <div class="section-count">2 items</div>
+        </div>
+        <div class="row">
+          <div class="row-dot lst"></div>
+          <div class="row-body">
+            <div class="row-title">Pick up groceries</div>
+            <div class="row-meta">Checklist · before 6:00 PM · 2 of 5</div>
+          </div>
+          <div class="row-time">6 PM</div>
+        </div>
+        <div class="row">
+          <div class="row-dot rem"></div>
+          <div class="row-body">
+            <div class="row-title">Water the plants</div>
+            <div class="row-meta">Anytime today · has note</div>
+          </div>
+        </div>
+
+        <div class="section-hdr">
+          <div class="section-title">Upcoming</div>
+        </div>
+        <div class="row">
+          <div class="row-dot rem"></div>
+          <div class="row-body">
+            <div class="row-title">Renew passport</div>
+            <div class="row-meta">Friday · every 5 years</div>
+          </div>
+          <div class="row-time">Fri</div>
+        </div>
+
+        <div class="section-hdr">
+          <div class="section-title" style="opacity:.4;">Done</div>
+        </div>
+        <div class="row done">
+          <div class="row-dot rem"></div>
+          <div class="row-body">
+            <div class="row-title">Reply to Sam</div>
+            <div class="row-meta">Completed</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav">
+        <div><iconify-icon icon="solar:home-2-bold-duotone"></iconify-icon>Home</div>
+        <div><iconify-icon icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div>
+        <div class="on"><iconify-icon icon="solar:bell-bold-duotone"></iconify-icon>Remind</div>
+        <div><iconify-icon icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── THE PILE ── -->
+  <div class="col"><div class="lab">C · The Pile</div>
+    <div class="phone">
+      <div class="status"></div>
+      <div class="hdr">
+        <div>
+          <div class="hdr-greeting">The Pile</div>
+          <div class="hdr-sub">6 notes</div>
+        </div>
+        <iconify-icon icon="solar:add-circle-bold-duotone" style="font-size:26px; color:var(--ink2);"></iconify-icon>
+      </div>
+      <div class="search-bar"><iconify-icon icon="solar:magnifer-bold-duotone"></iconify-icon>Search your pile…</div>
+      <div class="chips">
+        <div class="chip on">All</div>
+        <div class="chip">Recent</div>
+        <div class="chip">Tagged</div>
+        <div class="chip">Lists</div>
+      </div>
+
+      <div class="notes-wrap">
+        <div class="notes-mosaic">
+          <div class="nc note wide">
+            <div class="nc-type">Checklist</div>
+            <div class="nc-title">Trip packing list</div>
+            <div class="nc-cl">
+              <div class="nc-cl-item" style="color:var(--note-block);"><div class="nc-cb" style="background:var(--note-block);"></div><span style="text-decoration:line-through;opacity:.5;">Passport</span></div>
+              <div class="nc-cl-item" style="color:var(--note-block);"><div class="nc-cb"></div><span>Sunscreen</span></div>
+            </div>
+            <div class="nc-date">2h ago</div>
+          </div>
+
+          <div class="nc lst">
+            <div class="nc-type">List</div>
+            <div class="nc-title">Book ideas</div>
+            <div class="nc-body">That one about the lighthouse keeper…</div>
+            <div class="nc-date">Yesterday</div>
+          </div>
+
+          <div class="nc rem">
+            <div class="nc-type">List</div>
+            <div class="nc-title">Groceries</div>
+            <div class="nc-cl">
+              <div class="nc-cl-item" style="color:var(--rem-block);"><div class="nc-cb"></div><span>Oat milk</span></div>
+              <div class="nc-cl-item" style="color:var(--rem-block);"><div class="nc-cb"></div><span>Eggs</span></div>
+            </div>
+            <div class="nc-date">3d ago</div>
+          </div>
+
+          <div class="nc evt">
+            <div class="nc-type">Note</div>
+            <div class="nc-title">Therapist notes</div>
+            <div class="nc-body">Remember to mention the sleep thing.</div>
+            <div class="nc-date">Last week</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fab"><iconify-icon icon="solar:bolt-bold-duotone" style="font-size:22px;"></iconify-icon></div>
+      <div class="nav">
+        <div><iconify-icon icon="solar:home-2-bold-duotone"></iconify-icon>Home</div>
+        <div><iconify-icon icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div>
+        <div><iconify-icon icon="solar:bell-bold-duotone"></iconify-icon>Remind</div>
+        <div class="on"><iconify-icon icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

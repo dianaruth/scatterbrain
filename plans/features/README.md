@@ -19,7 +19,7 @@ order. The high-level roadmap lives in the master plan
 
 | Ticket | # | Feature | Status | Plan |
 |---|---|---|---|---|
-| SB-1 | 00 | UI mockups (look-and-feel gate) | In Progress | [00-ui-mockups.md](./00-ui-mockups.md) |
+| SB-1 | 00 | UI mockups (look-and-feel gate) | Done | [00-ui-mockups.md](./00-ui-mockups.md) |
 | SB-2 | 01 | Scaffold + CI/CD | Planned | _tbd_ |
 | SB-3 | 02 | Theme + static Today | Planned | _tbd_ |
 | SB-4 | 03 | Local data layer (SQLite + store) | Planned | _tbd_ |

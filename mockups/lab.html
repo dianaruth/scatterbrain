@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scatterbrain — Font & Icon Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Space+Grotesk:wght@500;600;700&family=Bricolage+Grotesque:wght@600;700;800&family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    :root{
+      --surface:#FFFDF7; --text:#3A2E1B; --muted:#9A8F7E; --faint:#C9C2B6; --accent:#C77B8B;
+      --rem:#F9C7D0; --rem-ink:#8A2F45; --evt:#C7DEFA; --evt-ink:#1F4E7A;
+      --lst:#FBE6A8; --lst-ink:#7A5A12; --note:#C2E9CF; --note-ink:#1F6647;
+      --card-border:rgba(0,0,0,.05); --shadow:0 4px 14px rgba(70,50,40,.10);
+      --hero:linear-gradient(178deg,#F8D9E0 0%,#FBE7DA 30%,var(--surface) 75%);
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',system-ui,sans-serif;background:#0e0c12;color:#e8e2d8;padding:30px;}
+    h2{font-size:15px;font-weight:600;color:#cdbfd6;margin:8px 0 4px;}
+    .note{font-size:12px;color:#8d8398;margin-bottom:18px;}
+    .grid{display:flex;flex-wrap:wrap;gap:18px;margin-bottom:40px;}
+    .card{width:280px;background:var(--hero);border-radius:20px;padding:18px 16px 16px;border:1px solid #000;box-shadow:0 10px 30px rgba(0,0,0,.4);}
+    .lab{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--accent);text-transform:uppercase;margin-bottom:12px;}
+    .lab small{color:var(--muted);font-weight:500;text-transform:none;letter-spacing:0;}
+
+    .hd{font-size:27px;line-height:1.05;letter-spacing:-.02em;color:var(--text);}
+    .sub{font-size:11px;color:var(--muted);margin-top:5px;margin-bottom:14px;}
+
+    .row{display:flex;align-items:center;gap:11px;padding:11px;border-radius:15px;background:var(--rem);box-shadow:var(--shadow);margin-bottom:9px;}
+    .row.evt{background:var(--evt);} .row.lst{background:var(--lst);} .row.note{background:var(--note);}
+    .badge{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--rem-ink);box-shadow:0 3px 8px rgba(0,0,0,.16);}
+    .row.evt .badge{background:var(--evt-ink);} .row.lst .badge{background:var(--lst-ink);} .row.note .badge{background:var(--note-ink);}
+    .badge iconify-icon{color:#fff;font-size:21px;}
+    .ct{font-size:14px;font-weight:700;color:var(--rem-ink);}
+    .row.evt .ct{color:var(--evt-ink);} .row.lst .ct{color:var(--lst-ink);} .row.note .ct{color:var(--note-ink);}
+    .cm{font-size:10px;margin-top:2px;color:var(--rem-ink);opacity:.8;}
+    .row.evt .cm{color:var(--evt-ink);} .row.lst .cm{color:var(--lst-ink);}
+
+    /* icon comparison extras */
+    .navx{display:flex;justify-content:space-around;align-items:center;margin-top:14px;padding-top:13px;border-top:1px solid var(--card-border);}
+    .navx iconify-icon{font-size:25px;color:var(--faint);}
+    .navx .on iconify-icon{color:var(--accent);}
+    .navx .on{background:#FCE1E4;border-radius:99px;padding:4px 14px;}
+    .chipsx{display:flex;gap:6px;margin-top:12px;}
+    .chipx{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:4px 10px;border-radius:99px;background:#F1EADF;color:#6E6353;}
+    .chipx.on{background:var(--accent);color:#fff;}
+    .chipx iconify-icon{font-size:13px;}
+    .fab{width:46px;height:46px;border-radius:15px;background:linear-gradient(135deg,#D98EA0,#BE6E80);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 9px 22px rgba(190,110,128,.42);margin-top:14px;}
+    .fab iconify-icon{color:#fff;font-size:24px;}
+  </style>
+</head>
+<body>
+
+  <h2>① Heading font — pick the personality</h2>
+  <div class="note">Same Keep card; body text is Inter, headline + card titles use the named font. Icons are Phosphor throughout.</div>
+  <div class="grid" id="fonts"></div>
+
+  <h2>② Icon set — pick the family</h2>
+  <div class="note">Same Keep card; font fixed. Each shows a card badge, a tab bar (Home active), filter chips, and a FAB so you can judge the set in context.</div>
+  <div class="grid" id="icons"></div>
+
+  <script>
+    // ---- Font options ----
+    const fonts = [
+      ['Manrope', "'Manrope'", '800', 'current — clean but plain'],
+      ['Fraunces', "'Fraunces'", '600', 'serif, lots of warmth/character'],
+      ['Clash Display', "'Clash Display'", '600', 'bold geometric display'],
+      ['Space Grotesk', "'Space Grotesk'", '700', 'distinctive, techy'],
+      ['Bricolage Grotesque', "'Bricolage Grotesque'", '700', 'trendy, characterful'],
+      ['Sora', "'Sora'", '700', 'modern, slightly futuristic'],
+    ];
+    const fhtml = fonts.map(([name,fam,wt,desc])=>`
+      <div class="card">
+        <div class="lab">${name} <small>· ${desc}</small></div>
+        <div class="hd" style="font-family:${fam};font-weight:${wt}">Good morning</div>
+        <div class="sub">3 things need your attention</div>
+        <div class="row"><span class="badge"><iconify-icon icon="ph:bell-duotone"></iconify-icon></span>
+          <div><div class="ct" style="font-family:${fam};font-weight:${wt}">Call the dentist</div><div class="cm">Reminder · was yesterday</div></div></div>
+        <div class="row evt"><span class="badge"><iconify-icon icon="ph:calendar-blank-duotone"></iconify-icon></span>
+          <div><div class="ct" style="font-family:${fam};font-weight:${wt}">Team standup</div><div class="cm">Calendar · 10:00 AM</div></div></div>
+      </div>`).join('');
+    document.getElementById('fonts').innerHTML = fhtml;
+
+    // ---- Icon set options ---- [name, desc, bell, home, calendar, notebook, search, tag, check, bolt]
+    const sets = [
+      ['Phosphor duotone','current', 'ph:bell-duotone','ph:house-duotone','ph:calendar-blank-duotone','ph:notebook-duotone','ph:magnifying-glass-duotone','ph:tag-duotone','ph:check-bold','ph:lightning-fill'],
+      ['Solar bold-duotone','rich two-tone, very trendy', 'solar:bell-bold-duotone','solar:home-2-bold-duotone','solar:calendar-bold-duotone','solar:notebook-bold-duotone','solar:magnifer-bold-duotone','solar:tag-horizontal-bold-duotone','solar:check-read-line-duotone','solar:bolt-bold'],
+      ['Material Symbols Rounded','filled, soft, Google', 'material-symbols:notifications-rounded','material-symbols:home-rounded','material-symbols:calendar-month-rounded','material-symbols:sticky-note-2-rounded','material-symbols:search-rounded','material-symbols:label-rounded','material-symbols:check-rounded','material-symbols:bolt-rounded'],
+      ['Lucide','clean line, friendly', 'lucide:bell','lucide:house','lucide:calendar','lucide:notebook-pen','lucide:search','lucide:tag','lucide:check','lucide:zap'],
+      ['Iconoir','minimal, geometric', 'iconoir:bell','iconoir:home-simple','iconoir:calendar','iconoir:notes','iconoir:search','iconoir:price-tag','iconoir:check','iconoir:flash'],
+      ['Remix fill','solid, punchy', 'ri:notification-3-fill','ri:home-5-fill','ri:calendar-fill','ri:sticky-note-fill','ri:search-line','ri:price-tag-3-fill','ri:check-line','ri:flashlight-fill'],
+    ];
+    const ihtml = sets.map(([name,desc,bell,home,cal,note,search,tag,check,bolt])=>`
+      <div class="card">
+        <div class="lab">${name} <small>· ${desc}</small></div>
+        <div class="row"><span class="badge"><iconify-icon icon="${bell}"></iconify-icon></span>
+          <div><div class="ct">Call the dentist</div><div class="cm">Reminder · was yesterday</div></div></div>
+        <div class="row note"><span class="badge"><iconify-icon icon="${note}"></iconify-icon></span>
+          <div><div class="ct">Trip packing list</div><div class="cm">Checklist · 2 of 5</div></div></div>
+        <div class="chipsx">
+          <span class="chipx on"><iconify-icon icon="${note}"></iconify-icon> All</span>
+          <span class="chipx"><iconify-icon icon="${search}"></iconify-icon> Search</span>
+          <span class="chipx"><iconify-icon icon="${tag}"></iconify-icon> Tagged</span>
+        </div>
+        <div class="navx">
+          <span class="on"><iconify-icon icon="${home}"></iconify-icon></span>
+          <iconify-icon icon="${cal}"></iconify-icon>
+          <iconify-icon icon="${bell}"></iconify-icon>
+          <iconify-icon icon="${note}"></iconify-icon>
+        </div>
+        <div class="fab"><iconify-icon icon="${bolt}"></iconify-icon></div>
+      </div>`).join('');
+    document.getElementById('icons').innerHTML = ihtml;
+  </script>
+</body>
+</html>

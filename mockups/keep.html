@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scatterbrain — Keep Theme (light + dark)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <style>
+    /* ===== Keep theme token sets ===== */
+    .keep {
+      --surface:#FFFDF7; --header:#2E2A3A; --header-text:#FBF6EC; --header-sub:#B9B2C8;
+      --avatar-bg:#46405A; --avatar-text:#D9D2E8;
+      --text:#3A2E1B; --muted:#9A8F7E; --faint:#C9C2B6;
+      --capture-bg:#FFFFFF; --capture-border:#ECE6DC; --capture-text:#8A8194;
+      --card-border:rgba(0,0,0,.05);
+      --nav-bg:#FFFFFF; --nav-border:#EFE9DD; --nav-inactive:#C9C2B6; --nav-active:#2E2A3A;
+      --chip-bg:#F1EADF; --chip-text:#6E6353;
+      /* per-type pastel cards (bg / ink) */
+      --rem:#F9C7D0;  --rem-ink:#8A2F45;   /* reminder — rose  */
+      --evt:#C7DEFA;  --evt-ink:#1F4E7A;   /* event    — sky   */
+      --lst:#FBE6A8;  --lst-ink:#7A5A12;   /* list     — amber */
+      --note:#C2E9CF; --note-ink:#1F6647;  /* note     — mint  */
+      --accent:#C77B8B;
+      --shadow:0 4px 14px rgba(70,50,40,.10); --shadow-cta:0 9px 22px rgba(190,110,128,.42);
+      --hero:linear-gradient(178deg,#F8D9E0 0%,#FBE7DA 13%,var(--surface) 33%);
+      --navpill:#FCE1E4;
+      --cta-grad:linear-gradient(135deg,#D98EA0,#BE6E80);
+    }
+    .keep.dark {
+      --surface:#16141C; --header:#211E2B; --header-text:#F1ECF7; --header-sub:#9A93AC;
+      --avatar-bg:#383248; --avatar-text:#CFC7DF;
+      --text:#ECE6DC; --muted:#8C8499; --faint:#5A5468;
+      --capture-bg:#231F2E; --capture-border:#332E40; --capture-text:#9A93AC;
+      --card-border:rgba(255,255,255,.06);
+      --nav-bg:#1B1825; --nav-border:#2A2636; --nav-inactive:#5A5468; --nav-active:#F1ECF7;
+      --chip-bg:#2C2838; --chip-text:#BFB6CC;
+      /* deeper, muted pastel cards for dark */
+      --rem:#43232E;  --rem-ink:#F2B3C1;
+      --evt:#1E3247;  --evt-ink:#A6CBEE;
+      --lst:#41381E;  --lst-ink:#EBCE83;
+      --note:#1C4130; --note-ink:#95DCB2;
+      --accent:#D89BA8;
+      --shadow:0 4px 14px rgba(0,0,0,.42); --shadow-cta:0 9px 22px rgba(216,155,168,.26);
+      --hero:linear-gradient(178deg,#2B2233 0%,#241F2D 14%,var(--surface) 34%);
+      --navpill:#3A2730;
+      --cta-grad:linear-gradient(135deg,#E4AEBA,#CE8C9B);
+    }
+
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:"Manrope",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+           background:#0e0c12; padding:28px; display:flex; flex-wrap:wrap; gap:30px; justify-content:center; -webkit-font-smoothing:antialiased; }
+    .col { display:flex; flex-direction:column; align-items:center; gap:10px; }
+    .lab { font-size:12px; font-weight:600; color:#9a8fb0; }
+    .phone { width:300px; height:650px; border-radius:26px; overflow:hidden; position:relative; display:flex; flex-direction:column; border:1px solid #000; background:var(--hero); color:var(--text); }
+
+    .ic { font-size:22px; line-height:1; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; }
+    .ic-s { font-size:16px; line-height:1; flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; }
+
+    .h { background:transparent; padding:42px 18px 6px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .h .g { font-size:26px; font-weight:800; letter-spacing:-.025em; color:var(--text); }
+    .h .s { font-size:11px; margin-top:4px; color:var(--muted); }
+    .h .ttl { font-size:24px; font-weight:800; letter-spacing:-.025em; color:var(--text); }
+    .h .ic, .h .ic-s { color:var(--text); }
+    .h > .ic { background:var(--capture-bg); border-radius:12px; padding:7px; box-sizing:content-box; box-shadow:var(--shadow); }
+    .av { width:38px; height:38px; border-radius:99px; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; background:var(--cta-grad); color:#fff; box-shadow:var(--shadow-cta); }
+
+    .cap { margin:12px 14px; padding:13px 16px; border-radius:99px; display:flex; align-items:center; gap:8px; font-size:11px; background:var(--capture-bg); border:1px solid var(--capture-border); color:var(--capture-text); box-shadow:var(--shadow); }
+    .cap .ic-s { color:var(--accent); }
+    .body { flex:1; overflow:hidden; padding:0 14px; }
+    .sl { font-size:9px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; margin:15px 0 8px; color:var(--muted); display:flex; align-items:center; gap:7px; }
+    .sl::before { content:''; width:5px; height:5px; border-radius:99px; background:var(--accent); flex-shrink:0; }
+
+    .card { display:flex; align-items:center; gap:11px; padding:12px; margin-bottom:9px; border-radius:16px; border:1px solid var(--card-border); box-shadow:var(--shadow); }
+    .card.c-rem  { background:var(--rem); }  .card.c-rem .it,.card.c-rem .mt,.card.c-rem .ic-s   { color:var(--rem-ink); }
+    .card.c-evt  { background:var(--evt); }  .card.c-evt .it,.card.c-evt .mt,.card.c-evt .ic-s   { color:var(--evt-ink); }
+    .card.c-lst  { background:var(--lst); }  .card.c-lst .it,.card.c-lst .mt,.card.c-lst .ic-s   { color:var(--lst-ink); }
+    .card.c-note { background:var(--note); } .card.c-note .it,.card.c-note .mt,.card.c-note .ic-s { color:var(--note-ink); }
+    .tile { width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; flex-shrink:0; background:rgba(255,255,255,.5); box-shadow:0 3px 8px rgba(0,0,0,.14); }
+    .dark .tile { background:rgba(255,255,255,.08); }
+    .card.c-rem .tile{background:var(--rem-ink);} .card.c-evt .tile{background:var(--evt-ink);}
+    .card.c-lst .tile{background:var(--lst-ink);} .card.c-note .tile{background:var(--note-ink);}
+    .card .tile .ic-s{color:#fff; font-size:20px;} .dark .card .tile .ic-s{color:var(--surface);}
+    .it { font-size:12px; font-weight:600; }
+    .mt { font-size:9px; margin-top:2px; opacity:.85; }
+    /* Completed items fade to neutral — drop the type color, go muted grey + strikethrough */
+    .card.done { background:transparent; border-color:var(--card-border); }
+    .card.done .it, .card.done .mt, .card.done .ic-s { color:var(--muted); }
+    .card.done .it { text-decoration:line-through; }
+    .card.done .tile { background:transparent; }
+
+    .nav { display:flex; justify-content:space-around; padding:9px 0 16px; background:var(--nav-bg); border-top:1px solid var(--nav-border); color:var(--nav-inactive); box-shadow:0 -6px 20px rgba(0,0,0,.06); }
+    .nav div { display:flex; flex-direction:column; align-items:center; gap:2px; font-size:8px; }
+    .nav .on { color:var(--accent); }
+    .nav .on .ic { background:var(--navpill); border-radius:99px; padding:3px 14px; box-sizing:content-box; }
+
+    /* calendar */
+    .strip { display:flex; gap:5px; padding:11px 14px; }
+    .d { flex:1; text-align:center; font-size:11px; color:var(--text); }
+    .d .n { width:26px; height:26px; line-height:26px; border-radius:99px; margin:3px auto 0; }
+    .d.sel .n { background:var(--accent); color:#fff; }
+    .d.tod .n { color:var(--accent); font-weight:700; }
+    .slot { display:flex; gap:9px; padding:8px 14px; }
+    .slot .t { font-size:11px; color:var(--faint); width:46px; flex-shrink:0; padding-top:9px; }
+    .ev { flex:1; border-radius:11px; padding:9px 11px; font-size:11px; font-weight:600; }
+    .ev.c-evt { background:var(--evt); color:var(--evt-ink); }
+    .ev.c-rem { background:var(--rem); color:var(--rem-ink); }
+    .ev .sub { font-size:9px; font-weight:400; opacity:.8; margin-top:3px; display:flex; gap:4px; align-items:center; }
+
+    /* notes grid */
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:9px; padding:4px 0; }
+    .nc { border-radius:16px; padding:12px; border:1px solid var(--card-border); box-shadow:var(--shadow); }
+    .nc.c-rem{background:var(--rem);} .nc.c-evt{background:var(--evt);} .nc.c-lst{background:var(--lst);} .nc.c-note{background:var(--note);}
+    .nc.c-rem,.nc.c-rem *{color:var(--rem-ink);} .nc.c-evt,.nc.c-evt *{color:var(--evt-ink);}
+    .nc.c-lst,.nc.c-lst *{color:var(--lst-ink);} .nc.c-note,.nc.c-note *{color:var(--note-ink);}
+    .nc .t2 { font-size:12px; font-weight:700; } .nc .p { font-size:10px; margin-top:5px; opacity:.85; line-height:1.45; } .nc .dt { font-size:9px; margin-top:7px; opacity:.7; }
+    .line { display:flex; align-items:center; gap:6px; font-size:10px; margin-top:5px; }
+    .cb { width:13px; height:13px; border-radius:4px; border:1.5px solid currentColor; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .cb.on { background:currentColor; }
+    .cb.on .ic-s { color:var(--surface); }
+    .line.done span { text-decoration:line-through; opacity:.6; }
+    .search { margin:11px 14px 4px; padding:11px 15px; border-radius:99px; background:var(--capture-bg); border:1px solid var(--capture-border); color:var(--capture-text); font-size:11px; display:flex; gap:7px; align-items:center; box-shadow:var(--shadow); }
+    .chips { display:flex; gap:6px; padding:2px 14px 6px; }
+    .chip { font-size:10px; font-weight:500; padding:3px 9px; border-radius:99px; background:var(--chip-bg); color:var(--chip-text); display:inline-flex; align-items:center; gap:4px; }
+    .chip .ic-s { width:12px; height:12px; }
+    .chips .chip.on { background:var(--accent); color:#fff; }
+
+    /* editor */
+    .tb { display:flex; gap:16px; padding:9px 16px; border-bottom:1px solid var(--card-border); color:var(--muted); align-items:center; }
+    .tb b { font-size:14px; } .tb i { font-size:14px; }
+    .eb { flex:1; padding:13px 16px; }
+    .em { font-size:9px; color:var(--muted); margin-bottom:9px; }
+    .ebody { font-size:12px; color:var(--text); opacity:.85; line-height:1.7; margin-bottom:12px; }
+    .eline { display:flex; align-items:center; gap:8px; font-size:12px; padding:5px 0; color:var(--text); }
+    .eline .cb { width:15px; height:15px; }
+    .eline.done span { text-decoration:line-through; opacity:.55; }
+    .trow { padding:11px 16px; border-top:1px solid var(--card-border); display:flex; gap:6px; }
+
+    /* brain dump */
+    .ov { position:absolute; inset:0; background:rgba(20,16,26,.82); display:flex; align-items:flex-end; }
+    .sheet { width:100%; background:var(--surface); border-radius:16px 16px 0 0; overflow:hidden; }
+    .sh { background:var(--header); color:var(--header-text); padding:13px 16px; display:flex; justify-content:space-between; align-items:center; font-size:12px; font-weight:600; }
+    .sh .ic { color:var(--header-sub); }
+    .sb { padding:15px 16px; }
+    .ta { font-size:12px; color:var(--text); line-height:1.6; min-height:54px; }
+    .st { display:flex; gap:6px; margin:13px 0; }
+    .btn { border:none; border-radius:14px; padding:13px; font-size:13px; font-weight:700; width:100%; margin-top:8px; }
+    .btn-p { background:var(--cta-grad); color:#fff; box-shadow:var(--shadow-cta); }
+    .btn-o { background:var(--chip-bg); border:none; color:var(--text); }
+    .fab { position:absolute; right:16px; bottom:74px; width:54px; height:54px; border-radius:18px; background:var(--cta-grad); color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-cta); z-index:5; }
+    .fab .ic { width:24px; height:24px; }
+
+    /* settings */
+    .row { display:flex; align-items:center; gap:11px; padding:11px 2px; border-bottom:1px solid var(--card-border); }
+    .row:last-child { border-bottom:none; }
+    .row .rl { flex:1; min-width:0; }
+    .row .rt { font-size:12px; font-weight:600; color:var(--text); }
+    .row .rs { font-size:9px; color:var(--muted); margin-top:2px; }
+    .row .rv { font-size:10px; color:var(--muted); display:flex; align-items:center; gap:3px; flex-shrink:0; }
+    .row .rv .ic-s { color:var(--faint); width:14px; height:14px; }
+    .row.danger .rt { color:var(--rem-ink); }
+    .row.danger .tile .ic-s { color:var(--rem-ink); }
+    .toggle { width:34px; height:20px; border-radius:99px; background:var(--faint); position:relative; flex-shrink:0; }
+    .toggle::after { content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:99px; background:#fff; }
+    .toggle.on { background:var(--accent); }
+    .toggle.on::after { left:16px; }
+
+    /* segmented control */
+    .seg { display:flex; border-radius:10px; overflow:hidden; border:1px solid var(--capture-border); margin-top:8px; }
+    .seg div { flex:1; text-align:center; padding:9px 0; font-size:11px; font-weight:500; color:var(--muted); }
+    .seg .on { background:var(--header); color:var(--header-text); }
+
+    /* theme picker cards */
+    .opt { border-radius:14px; padding:11px; margin-bottom:9px; display:flex; align-items:center; gap:12px; border:1px solid var(--capture-border); }
+    .opt.sel { border:1.5px solid var(--accent); }
+    .swatch { width:54px; height:54px; border-radius:11px; overflow:hidden; flex-shrink:0; display:flex; flex-direction:column; border:1px solid var(--card-border); }
+    .sw-h { height:21px; } .sw-b { flex:1; display:flex; align-items:center; gap:4px; padding:0 7px; }
+    .sw-c { width:11px; height:11px; border-radius:99px; }
+    .opt .name { font-size:13px; font-weight:600; color:var(--text); } .opt .desc { font-size:10px; color:var(--muted); margin-top:2px; }
+    .radio { width:19px; height:19px; border-radius:99px; border:2px solid var(--faint); margin-left:auto; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+    .opt.sel .radio { border-color:var(--accent); } .opt.sel .radio::after { content:""; width:9px; height:9px; border-radius:99px; background:var(--accent); }
+
+    /* empty state */
+    .empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:0 30px 40px; gap:14px; }
+    .empty .ei { font-size:48px; color:var(--faint); line-height:1; }
+    .empty .et { font-size:13px; font-style:italic; color:var(--muted); line-height:1.5; }
+
+    /* toast */
+    .toast { position:absolute; left:14px; right:14px; bottom:64px; background:var(--header); color:var(--header-text); border-radius:12px; padding:11px 14px; font-size:12px; display:flex; align-items:center; gap:9px; box-shadow:0 8px 24px rgba(0,0,0,.35); }
+    .toast .ic-s { color:var(--accent); }
+    .toast.confirm { flex-direction:column; align-items:stretch; gap:11px; }
+    .toast .tq { font-size:12px; font-weight:500; }
+    .toast .ta2 { display:flex; gap:8px; }
+    .toast .tb2 { flex:1; text-align:center; border-radius:9px; padding:8px; font-size:11px; font-weight:600; }
+    .toast .tb-keep { background:var(--accent); color:#fff; }
+    .toast .tb-disc { background:transparent; border:1px solid var(--header-sub); color:var(--header-sub); }
+      .cb .ic-s{ font-size:11px; } .eline .cb .ic-s{ font-size:13px; }
+    i.ph-duotone{ }
+    .h .g, .h .ttl, .it, .nc .t2, .ev, .sh span, .rt, .opt .name, .btn, .empty .et, .lab2 { font-family:'Bricolage Grotesque','Manrope',system-ui,sans-serif; }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="k-home" viewBox="0 0 24 24"><path d="M5 12l-2 0l9 -9l9 9l-2 0"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></symbol>
+    <symbol id="k-cal" viewBox="0 0 24 24"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z"/><path d="M16 3v4"/><path d="M8 3v4"/><path d="M4 11h16"/></symbol>
+    <symbol id="k-bell" viewBox="0 0 24 24"><path d="M10 5a2 2 0 0 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></symbol>
+    <symbol id="k-note" viewBox="0 0 24 24"><path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18"/><path d="M13 8l2 0"/><path d="M13 12l2 0"/></symbol>
+    <symbol id="k-bolt" viewBox="0 0 24 24"><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/></symbol>
+    <symbol id="k-search" viewBox="0 0 24 24"><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></symbol>
+    <symbol id="k-plus" viewBox="0 0 24 24"><path d="M12 5l0 14"/><path d="M5 12l14 0"/></symbol>
+    <symbol id="k-dots" viewBox="0 0 24 24"><path d="M5 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M17 12a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/></symbol>
+    <symbol id="k-back" viewBox="0 0 24 24"><path d="M5 12l14 0"/><path d="M5 12l6 6"/><path d="M5 12l6 -6"/></symbol>
+    <symbol id="k-x" viewBox="0 0 24 24"><path d="M18 6l-12 12"/><path d="M6 6l12 12"/></symbol>
+    <symbol id="k-check" viewBox="0 0 24 24"><path d="M5 12l5 5l9 -9"/></symbol>
+    <symbol id="k-chk" viewBox="0 0 24 24"><path d="M3.5 5.5l1.5 1.5l2.5 -2.5"/><path d="M3.5 11.5l1.5 1.5l2.5 -2.5"/><path d="M11 6l9 0"/><path d="M11 12l9 0"/></symbol>
+    <symbol id="k-list" viewBox="0 0 24 24"><path d="M9 6l11 0"/><path d="M9 12l11 0"/><path d="M9 18l11 0"/><path d="M5 6l0 .01"/><path d="M5 12l0 .01"/><path d="M5 18l0 .01"/></symbol>
+    <symbol id="k-tag" viewBox="0 0 24 24"><path d="M7.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0"/><path d="M3 6v5.172a2 2 0 0 0 .586 1.414l7.71 7.71a2.41 2.41 0 0 0 3.408 0l5.592 -5.592a2.41 2.41 0 0 0 0 -3.408l-7.71 -7.71a2 2 0 0 0 -1.414 -.586h-5.172a3 3 0 0 0 -3 3z"/></symbol>
+    <symbol id="k-cam" viewBox="0 0 24 24"><path d="M5 7h1a2 2 0 0 0 2 -2a1 1 0 0 1 1 -1h6a1 1 0 0 1 1 1a2 2 0 0 0 2 2h1a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"/><path d="M9 13a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"/></symbol>
+    <symbol id="k-chev" viewBox="0 0 24 24"><path d="M9 6l6 6l-6 6"/></symbol>
+    <symbol id="k-sun" viewBox="0 0 24 24"><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/><path d="M3 12h1"/><path d="M20 12h1"/><path d="M12 3v1"/><path d="M12 20v1"/><path d="M5.6 5.6l.7 .7"/><path d="M17.7 17.7l.7 .7"/><path d="M18.4 5.6l-.7 .7"/><path d="M6.3 17.7l-.7 .7"/></symbol>
+    <symbol id="k-moon" viewBox="0 0 24 24"><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/></symbol>
+    <symbol id="k-device" viewBox="0 0 24 24"><path d="M3 5a1 1 0 0 1 1 -1h16a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-16a1 1 0 0 1 -1 -1z"/><path d="M7 20h10"/><path d="M9 16v4"/><path d="M15 16v4"/></symbol>
+    <symbol id="k-download" viewBox="0 0 24 24"><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"/><path d="M7 11l5 5l5 -5"/><path d="M12 4l0 12"/></symbol>
+    <symbol id="k-trash" viewBox="0 0 24 24"><path d="M4 7l16 0"/><path d="M10 11l0 6"/><path d="M14 11l0 6"/><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"/><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"/></symbol>
+    <symbol id="k-user" viewBox="0 0 24 24"><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/></symbol>
+    <symbol id="k-spark" viewBox="0 0 24 24"><path d="M16 18a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2zm0 -12a2 2 0 0 1 2 2a2 2 0 0 1 2 -2a2 2 0 0 1 -2 -2a2 2 0 0 1 -2 2zm-7 12a6 6 0 0 1 6 -6a6 6 0 0 1 -6 -6a6 6 0 0 1 -6 6a6 6 0 0 1 6 6z"/></symbol>
+  </svg>
+
+  <!-- ============ LIGHT ROW ============ -->
+  <div class="col"><div class="lab">Today — light</div>
+    <div class="phone keep">
+      <div class="h"><div><div class="g">Good morning</div><div class="s">3 things need your attention</div></div><div class="av">DR</div></div>
+      <div class="cap"><iconify-icon class="ic-s" icon="solar:bolt-bold-duotone"></iconify-icon> Brain dump something…</div>
+      <div class="body">
+        <div class="sl">Overdue</div>
+        <div class="card c-rem"><span class="tile"><iconify-icon class="ic-s" icon="solar:bell-bold-duotone"></iconify-icon></span><div><div class="it">Call the dentist</div><div class="mt">Reminder · was yesterday</div></div></div>
+        <div class="sl">Today</div>
+        <div class="card c-evt"><span class="tile"><iconify-icon class="ic-s" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon></span><div><div class="it">Team standup</div><div class="mt">Calendar · 10:00 AM · 🗒 note</div></div></div>
+        <div class="card c-lst"><span class="tile"><iconify-icon class="ic-s" icon="solar:checklist-minimalistic-bold-duotone"></iconify-icon></span><div><div class="it">Pick up groceries</div><div class="mt">Before 6:00 PM · 2 of 5 items</div></div></div>
+        <div class="sl">Notes</div>
+        <div class="card c-note"><span class="tile"><iconify-icon class="ic-s" icon="solar:notebook-bold-duotone"></iconify-icon></span><div><div class="it">Trip packing list</div><div class="mt">Checklist · updated 2h ago</div></div></div>
+      </div>
+      <div class="fab"><iconify-icon class="ic" icon="solar:bolt-bold-duotone"></iconify-icon></div>
+      <div class="nav"><div class="on"><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">Reminders — light</div>
+    <div class="phone keep">
+      <div class="h"><div><div class="ttl">Reminders</div><div class="s">4 active · 2 completed</div></div><iconify-icon class="ic" icon="solar:add-circle-bold-duotone"></iconify-icon></div>
+      <div class="body">
+        <div class="sl">Pinned</div>
+        <div class="card c-rem"><span class="tile"><iconify-icon class="ic-s" icon="solar:bell-bold-duotone"></iconify-icon></span><div><div class="it">Call the dentist</div><div class="mt">Was yesterday · tap to reschedule</div></div></div>
+        <div class="sl">Today</div>
+        <div class="card c-lst"><span class="tile"><iconify-icon class="ic-s" icon="solar:checklist-minimalistic-bold-duotone"></iconify-icon></span><div><div class="it">Pick up groceries</div><div class="mt">Before 6:00 PM · 2 of 5</div></div></div>
+        <div class="card c-rem"><span class="tile"><iconify-icon class="ic-s" icon="solar:bell-bold-duotone"></iconify-icon></span><div><div class="it">Water the plants</div><div class="mt">Anytime today · 🗒 note</div></div></div>
+        <div class="sl">Upcoming</div>
+        <div class="card c-rem"><span class="tile"><iconify-icon class="ic-s" icon="solar:bell-bold-duotone"></iconify-icon></span><div><div class="it">Renew passport</div><div class="mt">Fri · every 5 years</div></div></div>
+        <div class="sl">Done</div>
+        <div class="card c-rem done"><span class="tile"><iconify-icon class="ic-s" icon="solar:check-circle-bold"></iconify-icon></span><div><div class="it">Reply to Sam</div><div class="mt">Completed</div></div></div>
+      </div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div class="on"><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">The Pile — light</div>
+    <div class="phone keep">
+      <div class="h"><div><div class="ttl">The Pile</div><div class="s">6 notes</div></div><iconify-icon class="ic" icon="solar:add-circle-bold-duotone"></iconify-icon></div>
+      <div class="search"><iconify-icon class="ic-s" icon="solar:magnifer-bold-duotone"></iconify-icon> Search your pile…</div>
+      <div class="chips"><span class="chip on"><iconify-icon class="ic-s" icon="solar:notebook-bold-duotone"></iconify-icon>All</span><span class="chip"><iconify-icon class="ic-s" icon="solar:bolt-bold-duotone"></iconify-icon>Recent</span><span class="chip"><iconify-icon class="ic-s" icon="solar:tag-horizontal-bold-duotone"></iconify-icon>Tagged</span><span class="chip"><iconify-icon class="ic-s" icon="solar:checklist-minimalistic-bold-duotone"></iconify-icon>Lists</span></div>
+      <div class="body">
+        <div class="grid">
+          <div class="nc c-note"><div class="t2">Trip packing list</div><div class="line done"><span class="cb on"><iconify-icon class="ic-s" icon="solar:check-circle-bold"></iconify-icon></span><span>Passport</span></div><div class="line"><span class="cb"></span><span>Sunscreen</span></div><div class="dt">2h ago</div></div>
+          <div class="nc c-lst"><div class="t2">Book ideas</div><div class="p">That one about the lighthouse keeper who…</div><div class="dt">Yesterday</div></div>
+          <div class="nc c-rem"><div class="t2">Groceries</div><div class="line"><span class="cb"></span><span>Oat milk</span></div><div class="line"><span class="cb"></span><span>Eggs</span></div><div class="dt">3d ago</div></div>
+          <div class="nc c-evt"><div class="t2">Therapist notes</div><div class="p">Remember to mention the sleep thing.</div><div class="dt">Last week</div></div>
+        </div>
+      </div>
+      <div class="fab"><iconify-icon class="ic" icon="solar:bolt-bold-duotone"></iconify-icon></div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div class="on"><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <!-- ============ DARK ROW ============ -->
+  <div class="col"><div class="lab">Calendar — dark</div>
+    <div class="phone keep dark">
+      <div class="h"><div class="ttl">The Big Picture</div><iconify-icon class="ic" icon="solar:menu-dots-bold"></iconify-icon></div>
+      <div class="strip">
+        <div class="d"><div>M</div><div class="n">26</div></div><div class="d"><div>T</div><div class="n">27</div></div>
+        <div class="d tod"><div>W</div><div class="n">28</div></div><div class="d sel"><div>T</div><div class="n">29</div></div>
+        <div class="d"><div>F</div><div class="n">30</div></div><div class="d"><div>S</div><div class="n">31</div></div><div class="d"><div>S</div><div class="n">1</div></div>
+      </div>
+      <div class="body" style="padding:0;">
+        <div class="slot"><div class="t">9 AM</div><div class="ev c-evt">Dentist appointment<div class="sub">🗒 Bring insurance card</div></div></div>
+        <div class="slot"><div class="t">10 AM</div><div class="ev c-evt">Team standup</div></div>
+        <div class="slot"><div class="t">1 PM</div><div class="ev c-rem">Lunch with Sam<div class="sub">🗒 Try the new ramen place</div></div></div>
+        <div class="slot"><div class="t">4 PM</div><div class="ev c-evt">Focus block</div></div>
+      </div>
+      <div class="fab"><iconify-icon class="ic" icon="solar:bolt-bold-duotone"></iconify-icon></div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div class="on"><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">Note Editor — dark</div>
+    <div class="phone keep dark">
+      <div class="h"><iconify-icon class="ic" icon="solar:arrow-left-linear"></iconify-icon><div class="ttl" style="font-size:14px;">Trip packing list</div><iconify-icon class="ic" icon="solar:menu-dots-bold"></iconify-icon></div>
+      <div class="tb"><b>B</b><i>I</i><iconify-icon class="ic-s" icon="solar:list-bold-duotone"></iconify-icon><iconify-icon class="ic-s" icon="solar:checklist-minimalistic-bold-duotone"></iconify-icon><iconify-icon class="ic-s" icon="solar:tag-horizontal-bold-duotone"></iconify-icon><iconify-icon class="ic-s" icon="solar:camera-bold-duotone"></iconify-icon></div>
+      <div class="eb">
+        <div class="em">12 items · updated 2h ago</div>
+        <div class="ebody">Two weeks in Portugal. Don't overpack like last time.</div>
+        <div class="eline done"><span class="cb on"><iconify-icon class="ic-s" icon="solar:check-circle-bold"></iconify-icon></span><span>Passport</span></div>
+        <div class="eline done"><span class="cb on"><iconify-icon class="ic-s" icon="solar:check-circle-bold"></iconify-icon></span><span>Chargers + adapter</span></div>
+        <div class="eline"><span class="cb"></span><span>Sunscreen</span></div>
+        <div class="eline"><span class="cb"></span><span>Walking shoes</span></div>
+        <div class="eline" style="opacity:.6;"><iconify-icon class="ic-s" icon="solar:add-circle-bold-duotone"></iconify-icon><span>List item</span></div>
+      </div>
+      <div class="trow"><span class="chip">travel</span><span class="chip">summer</span><span class="chip">＋ tag</span></div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div class="on"><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">Brain Dump — dark</div>
+    <div class="phone keep dark">
+      <div class="h"><div><div class="g">Good morning</div><div class="s">3 things need your attention</div></div><div class="av">DR</div></div>
+      <div class="cap"><iconify-icon class="ic-s" icon="solar:bolt-bold-duotone"></iconify-icon> Brain dump something…</div>
+      <div class="body"></div>
+      <div class="ov">
+        <div class="sheet">
+          <div class="sh"><span>Brain dump</span><iconify-icon class="ic" icon="solar:close-circle-bold-duotone"></iconify-icon></div>
+          <div class="sb">
+            <div class="ta">Call dentist tomorrow at 2pm — bring insurance card</div>
+            <div class="st"><span class="chip">reminder</span><span class="chip">tomorrow 2pm</span><span class="chip">＋ note</span></div>
+            <button class="btn btn-p">Save to reminders</button>
+            <button class="btn btn-o">Save as note</button>
+            <button class="btn btn-o">Add to calendar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SETTINGS + THEME PICKER ============ -->
+  <div class="col"><div class="lab">Settings — light</div>
+    <div class="phone keep">
+      <div class="h"><iconify-icon class="ic" icon="solar:arrow-left-linear"></iconify-icon><div class="ttl">Settings</div><span style="width:22px"></span></div>
+      <div class="body">
+        <div class="sl">Appearance</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:sun-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Theme &amp; dark mode</div><div class="rs">How Scatterbrain looks</div></div><div class="rv">Keep · Light <iconify-icon class="ic-s" icon="solar:alt-arrow-right-linear"></iconify-icon></div></div>
+        <div class="sl">Notifications</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:bell-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Reminder nudges</div><div class="rs">Let reminders resurface</div></div><span class="toggle on"></span></div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:moon-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Quiet hours</div></div><div class="rv">10 PM – 8 AM <iconify-icon class="ic-s" icon="solar:alt-arrow-right-linear"></iconify-icon></div></div>
+        <div class="sl">Brain Dump</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:magic-stick-3-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Smart enrichment</div><div class="rs">$0 unless you turn this on</div></div><span class="toggle"></span></div>
+        <div class="sl">Account</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:user-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">dianaruth40@gmail.com</div><div class="rs">Signed in</div></div><div class="rv">Sign out</div></div>
+        <div class="sl">Data</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:download-minimalistic-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Export your data</div></div><div class="rv"><iconify-icon class="ic-s" icon="solar:alt-arrow-right-linear"></iconify-icon></div></div>
+        <div class="row danger"><span class="tile"><iconify-icon class="ic-s" icon="solar:trash-bin-trash-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Delete account</div></div></div>
+      </div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">Settings — dark</div>
+    <div class="phone keep dark">
+      <div class="h"><iconify-icon class="ic" icon="solar:arrow-left-linear"></iconify-icon><div class="ttl">Settings</div><span style="width:22px"></span></div>
+      <div class="body">
+        <div class="sl">Appearance</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:sun-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Theme &amp; dark mode</div><div class="rs">How Scatterbrain looks</div></div><div class="rv">Keep · Dark <iconify-icon class="ic-s" icon="solar:alt-arrow-right-linear"></iconify-icon></div></div>
+        <div class="sl">Notifications</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:bell-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Reminder nudges</div><div class="rs">Let reminders resurface</div></div><span class="toggle on"></span></div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:moon-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Quiet hours</div></div><div class="rv">10 PM – 8 AM <iconify-icon class="ic-s" icon="solar:alt-arrow-right-linear"></iconify-icon></div></div>
+        <div class="sl">Brain Dump</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:magic-stick-3-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Smart enrichment</div><div class="rs">$0 unless you turn this on</div></div><span class="toggle"></span></div>
+        <div class="sl">Account</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:user-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">dianaruth40@gmail.com</div><div class="rs">Signed in</div></div><div class="rv">Sign out</div></div>
+        <div class="sl">Data</div>
+        <div class="row"><span class="tile"><iconify-icon class="ic-s" icon="solar:download-minimalistic-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Export your data</div></div><div class="rv"><iconify-icon class="ic-s" icon="solar:alt-arrow-right-linear"></iconify-icon></div></div>
+        <div class="row danger"><span class="tile"><iconify-icon class="ic-s" icon="solar:trash-bin-trash-bold-duotone"></iconify-icon></span><div class="rl"><div class="rt">Delete account</div></div></div>
+      </div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">Appearance — light</div>
+    <div class="phone keep">
+      <div class="h"><iconify-icon class="ic" icon="solar:arrow-left-linear"></iconify-icon><div class="ttl">Appearance</div><span style="width:22px"></span></div>
+      <div class="body">
+        <div class="sl">Theme</div>
+        <div class="opt sel">
+          <div class="swatch"><div class="sw-h" style="background:#2E2A3A"></div><div class="sw-b" style="background:#FFFDF7"><span class="sw-c" style="background:#FCE1E4"></span><span class="sw-c" style="background:#DCEBFB"></span><span class="sw-c" style="background:#DBF3E4"></span></div></div>
+          <div><div class="name">Keep</div><div class="desc">Warm cream, soft pastel cards</div></div>
+          <div class="radio"></div>
+        </div>
+        <div class="opt">
+          <div class="swatch"><div class="sw-h" style="background:#3D2645"></div><div class="sw-b" style="background:#FBF8FC"><span class="sw-c" style="background:#C0763E"></span><span class="sw-c" style="background:#8A5AA6"></span><span class="sw-c" style="background:#4F947E"></span></div></div>
+          <div><div class="name">Calm</div><div class="desc">Minimal plum, quiet color</div></div>
+          <div class="radio"></div>
+        </div>
+        <div class="opt">
+          <div class="swatch"><div class="sw-h" style="background:linear-gradient(135deg,#5B2A6E,#E0648A)"></div><div class="sw-b" style="background:#F7F2FB"><span class="sw-c" style="background:linear-gradient(135deg,#FF9A6B,#FF6B9D)"></span><span class="sw-c" style="background:linear-gradient(135deg,#A66BFF,#6B8BFF)"></span><span class="sw-c" style="background:linear-gradient(135deg,#3FD0A0,#3FA8D0)"></span></div></div>
+          <div><div class="name">Bold <span style="font-weight:400;color:var(--muted)">· soon</span></div><div class="desc">Vibrant gradients, soft depth</div></div>
+          <div class="radio"></div>
+        </div>
+        <div class="sl" style="margin-top:16px">Mode</div>
+        <div class="seg"><div class="on">Light</div><div>Dark</div><div>System</div></div>
+      </div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">Appearance — dark</div>
+    <div class="phone keep dark">
+      <div class="h"><iconify-icon class="ic" icon="solar:arrow-left-linear"></iconify-icon><div class="ttl">Appearance</div><span style="width:22px"></span></div>
+      <div class="body">
+        <div class="sl">Theme</div>
+        <div class="opt sel">
+          <div class="swatch"><div class="sw-h" style="background:#2E2A3A"></div><div class="sw-b" style="background:#FFFDF7"><span class="sw-c" style="background:#FCE1E4"></span><span class="sw-c" style="background:#DCEBFB"></span><span class="sw-c" style="background:#DBF3E4"></span></div></div>
+          <div><div class="name">Keep</div><div class="desc">Warm cream, soft pastel cards</div></div>
+          <div class="radio"></div>
+        </div>
+        <div class="opt">
+          <div class="swatch"><div class="sw-h" style="background:#3D2645"></div><div class="sw-b" style="background:#FBF8FC"><span class="sw-c" style="background:#C0763E"></span><span class="sw-c" style="background:#8A5AA6"></span><span class="sw-c" style="background:#4F947E"></span></div></div>
+          <div><div class="name">Calm</div><div class="desc">Minimal plum, quiet color</div></div>
+          <div class="radio"></div>
+        </div>
+        <div class="opt">
+          <div class="swatch"><div class="sw-h" style="background:linear-gradient(135deg,#5B2A6E,#E0648A)"></div><div class="sw-b" style="background:#F7F2FB"><span class="sw-c" style="background:linear-gradient(135deg,#FF9A6B,#FF6B9D)"></span><span class="sw-c" style="background:linear-gradient(135deg,#A66BFF,#6B8BFF)"></span><span class="sw-c" style="background:linear-gradient(135deg,#3FD0A0,#3FA8D0)"></span></div></div>
+          <div><div class="name">Bold <span style="font-weight:400;color:var(--muted)">· soon</span></div><div class="desc">Vibrant gradients, soft depth</div></div>
+          <div class="radio"></div>
+        </div>
+        <div class="sl" style="margin-top:16px">Mode</div>
+        <div class="seg"><div>Light</div><div class="on">Dark</div><div>System</div></div>
+      </div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <!-- ============ EMPTY STATES ============ -->
+  <div class="col"><div class="lab">Today — empty (light)</div>
+    <div class="phone keep">
+      <div class="h"><div><div class="g">Good morning</div><div class="s">You're all caught up</div></div><div class="av">DR</div></div>
+      <div class="cap"><iconify-icon class="ic-s" icon="solar:bolt-bold-duotone"></iconify-icon> Brain dump something…</div>
+      <div class="empty"><iconify-icon class="ei" icon="solar:sun-bold-duotone"></iconify-icon><div class="et">Nothing here yet — but we both know that won't last long.</div></div>
+      <div class="nav"><div class="on"><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">The Pile — empty (dark)</div>
+    <div class="phone keep dark">
+      <div class="h"><div><div class="ttl">The Pile</div><div class="s">0 notes</div></div><iconify-icon class="ic" icon="solar:add-circle-bold-duotone"></iconify-icon></div>
+      <div class="search"><iconify-icon class="ic-s" icon="solar:magnifer-bold-duotone"></iconify-icon> Search your pile…</div>
+      <div class="empty"><iconify-icon class="ei" icon="solar:notebook-bold-duotone"></iconify-icon><div class="et">Your pile is empty. This never lasts.</div></div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div class="on"><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">Reminders — all done (light)</div>
+    <div class="phone keep">
+      <div class="h"><div><div class="ttl">Reminders</div><div class="s">0 active · 5 completed</div></div><iconify-icon class="ic" icon="solar:add-circle-bold-duotone"></iconify-icon></div>
+      <div class="empty"><iconify-icon class="ei" icon="solar:check-circle-bold"></iconify-icon><div class="et">Look at you, functioning like a person.</div></div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div class="on"><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">Calendar — empty day (dark)</div>
+    <div class="phone keep dark">
+      <div class="h"><div class="ttl">The Big Picture</div><iconify-icon class="ic" icon="solar:menu-dots-bold"></iconify-icon></div>
+      <div class="strip">
+        <div class="d"><div>M</div><div class="n">26</div></div><div class="d"><div>T</div><div class="n">27</div></div>
+        <div class="d tod"><div>W</div><div class="n">28</div></div><div class="d sel"><div>T</div><div class="n">29</div></div>
+        <div class="d"><div>F</div><div class="n">30</div></div><div class="d"><div>S</div><div class="n">31</div></div><div class="d"><div>S</div><div class="n">1</div></div>
+      </div>
+      <div class="empty"><iconify-icon class="ei" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon><div class="et">Nothing on the books. Enjoy it.</div></div>
+      <div class="nav"><div><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div class="on"><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+  <!-- ============ BRAIN DUMP GUARDS ============ -->
+  <div class="col"><div class="lab">Brain Dump — dismiss guard (dark)</div>
+    <div class="phone keep dark">
+      <div class="h"><div><div class="g">Good morning</div><div class="s">3 things need your attention</div></div><div class="av">DR</div></div>
+      <div class="cap"><iconify-icon class="ic-s" icon="solar:bolt-bold-duotone"></iconify-icon> Brain dump something…</div>
+      <div class="body"></div>
+      <div class="ov" style="background:rgba(20,16,26,.55)"></div>
+      <div class="toast confirm">
+        <div class="tq">Save it before you forget?</div>
+        <div class="ta2"><span class="tb2 tb-keep">Keep</span><span class="tb2 tb-disc">Discard</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col"><div class="lab">Brain Dump — saved toast (light)</div>
+    <div class="phone keep">
+      <div class="h"><div><div class="g">Good morning</div><div class="s">3 things need your attention</div></div><div class="av">DR</div></div>
+      <div class="cap"><iconify-icon class="ic-s" icon="solar:bolt-bold-duotone"></iconify-icon> Brain dump something…</div>
+      <div class="body">
+        <div class="sl">Overdue</div>
+        <div class="card c-rem"><span class="tile"><iconify-icon class="ic-s" icon="solar:bell-bold-duotone"></iconify-icon></span><div><div class="it">Call the dentist</div><div class="mt">Reminder · was yesterday</div></div></div>
+        <div class="sl">Today</div>
+        <div class="card c-rem"><span class="tile"><iconify-icon class="ic-s" icon="solar:bell-bold-duotone"></iconify-icon></span><div><div class="it">Call dentist</div><div class="mt">Tomorrow 2:00 PM · 🗒 note</div></div></div>
+        <div class="card c-evt"><span class="tile"><iconify-icon class="ic-s" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon></span><div><div class="it">Team standup</div><div class="mt">Calendar · 10:00 AM</div></div></div>
+      </div>
+      <div class="toast"><iconify-icon class="ic-s" icon="solar:check-circle-bold"></iconify-icon> Caught it.</div>
+      <div class="nav"><div class="on"><iconify-icon class="ic" icon="solar:home-2-bold-duotone"></iconify-icon>Home</div><div><iconify-icon class="ic" icon="solar:calendar-minimalistic-bold-duotone"></iconify-icon>Cal</div><div><iconify-icon class="ic" icon="solar:bell-bold-duotone"></iconify-icon>Remind</div><div><iconify-icon class="ic" icon="solar:notebook-bold-duotone"></iconify-icon>Notes</div></div>
+    </div>
+  </div>
+
+</body>
+</html>

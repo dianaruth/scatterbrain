@@ -38,16 +38,23 @@ approved.
 - Token-driven CSS → approved look ports cleanly into `theme/`; global restyles stay cheap.
 - Review by the user opening the mockup HTML directly (Playwright renders via `page.goto('file://…')`
   inside `browser_run_code_unsafe`; the plain `browser_navigate` blocks `file://`. No local server.)
-- **Typography (approved):** **Bricolage Grotesque** for display/headers + card/section titles;
-  **Manrope** for body/meta. (Explored Fraunces, Clash Display, Space Grotesk, Sora in `lab.html`.)
-- **Icons (approved):** **Solar bold-duotone**, loaded in mockups via the Iconify web component.
-  (Explored Tabler → Phosphor → Solar; also Material Symbols, Lucide, Iconoir, Remix in `lab.html`.)
-  Implementation note: in the Expo app, render Solar via SVG (e.g. `@iconify/react` on web / inlined
-  SVGs on native) — exact lib chosen at build time; tokens/usage are icon-set-agnostic.
-- **Visual language (approved):** soft top **gradient hero wash** (content layers on top for depth),
-  **bold colored icon badges** per item type, real **elevation/shadows**, **gradient** primary CTA +
-  avatar + FAB, pill nav with a colored active chip, deeper per-type card colors. Inspired by two
-  Dribbble refs (saved `ref1.png` notebook colors, `ref2.png` clean layered depth).
+- **Typography (approved 2026-06-25 · supersedes prior):** **Playfair Display** italic weight 400 for
+  headings/greeting; **Plus Jakarta Sans** 400/500/600 for body/meta/nav; **DM Mono** for section
+  counters and time chips. (Prior: Bricolage Grotesque + Manrope — rejected as AI-forward /
+  lacking personality. Also explored and rejected: Fraunces, Cormorant Garamond, Bodoni Moda, Big
+  Shoulders Display, Lexend, Outfit, Syne, Figtree, Newsreader, Crimson Pro.)
+- **Icons (approved 2026-06-25 · supersedes prior):** **Phosphor fill** (`ph:*-fill`) via Iconify
+  web component. (Prior: Solar bold-duotone — swapped out. Also explored: Tabler, Bubbly Soft.)
+- **Visual language (approved 2026-06-25):** dark editorial midnight-slate palette (#08101C base) +
+  warm lavender-white light palette (#F0EDF8 base). Animated gradient header + floating capture
+  card overlap. **Sharp corners**: phone frame 28px, cards 6px, icon badges 5px, capture 8px,
+  nav 18px (soft rect), avatar 6px, chips 3px. **Bold colored icon badges** per item type
+  (rose/indigo/amber/emerald). Animated background blobs. Bottom nav with iOS-native feel.
+- **Responsive breakpoints (approved):** Mobile 390px (single col + bottom nav) · Tablet 768px
+  (2-col card grid + bottom nav) · Desktop 1220px (sidebar 210px + 2-col feed + right panel 250px).
+- **Light + dark modes (both approved):** dark = deep midnight slate; light = warm lavender white.
+  Canonical renders: `section4-light.png` (light mode) · `composite-dark-light.png` (both modes
+  side by side, all three breakpoints).
 
 ## Verification
 - User opens `mockups/index.html` in a browser and reviews all six screens (light; dark via
@@ -55,11 +62,18 @@ approved.
 - Approval of visual direction = exit criteria for this phase.
 
 ## Outcome
-**Approved.** Final v1 look: **Keep** theme (light + dark) across all screens + states, with
-**Bricolage Grotesque** display type + **Manrope** body, **Solar bold-duotone** icons, gradient hero
-wash, colored icon badges, elevation, and gradient CTAs. Canonical render in `keep.png`; this is the
-token/visual contract to port into the Expo `theme/` in later phases. Look-and-feel gate satisfied —
-Phase 1 (SB-2 Scaffold + CI/CD) is unblocked.
+**Approved (final direction 2026-06-25).** Visual language: **Playfair Display** italic heading +
+**Plus Jakarta Sans** body + **DM Mono** mono + **Phosphor fill** icons. Dark editorial midnight-
+slate palette with warm lavender-white light mode. Sharp corners, animated blobs, floating capture
+card, per-type color badges (rose/indigo/amber/emerald). Responsive across mobile/tablet/desktop.
+Both light and dark modes fully designed and approved. Canonical renders in `composite-dark-light.png`
+(all 6 views) and `directions.html` (living mockup). This is the token/visual contract to port into
+the Expo `theme/` in later phases. Look-and-feel gate satisfied — Phase 1 (SB-2 Scaffold + CI/CD)
+is unblocked.
+
+> Prior approved direction (Bricolage Grotesque + Manrope + Solar bold-duotone, 2026-06-02) was
+> superseded after further iteration. The keep.html/keep.png files remain for reference but are no
+> longer the canonical direction.
 
 ## Changelog
 - 2026-05-30 — created mockups (`tokens.css`, `index.html`) for all six screens incl. notes/checklist
@@ -89,6 +103,12 @@ Phase 1 (SB-2 Scaffold + CI/CD) is unblocked.
   Reminders (all complete), and an empty calendar day, using spec §8 copy verbatim. (4) **Brain Dump
   guards** — "Save it before you forget?" dismiss confirmation + "Caught it." save toast (spec §7).
   Onboarding/sign-in intentionally deferred. Rendered + reviewed via Playwright (`keep.png`).
+- 2026-06-25 — **direction re-approved with new visual identity.** Extended exploration in
+  `directions.html`: iterated through 6+ heading/body font combos; user rejected all "AI-forward"
+  options. Settled on Playfair Display italic + Plus Jakarta Sans + DM Mono. Swapped Solar icons
+  for Phosphor fill. Sharpened all corner radii. Added full responsive coverage (mobile/tablet/
+  desktop) in both dark and light modes. Final composite render in `composite-dark-light.png`.
+  This supersedes the 2026-06-02 Bricolage Grotesque direction.
 - 2026-06-02 — **look-and-feel iteration to approval.** User feedback: too basic/boxy/no personality.
   Iterated `keep.html`: (1) dropped the flat dark header for big **Bricolage Grotesque** headlines on a
   soft **gradient hero wash**; (2) added **elevation** (cards, FAB, nav, header buttons), **gradient**

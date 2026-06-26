@@ -1,0 +1,1988 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=2000">
+<title>Scatterbrain â€” Design Exploration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,700;1,6..96,400&family=Big+Shoulders+Display:wght@700;900&family=Plus+Jakarta+Sans:wght@400;500;600&family=Outfit:wght@300;400;500&family=Lexend:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://code.iconify.design/iconify-icon/1.0.8/iconify-icon.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #060810;
+  min-height: 100vh;
+  padding: 60px 40px 120px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 56px;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   PAGE CHROME
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.page-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: #1C2840; text-align: center;
+}
+.page-heading {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 22px; color: #8090AC;
+  letter-spacing: -0.01em; margin-top: 6px; text-align: center;
+}
+.section-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: #1E3050;
+  padding: 7px 20px;
+  border: 1px solid #10203A;
+  border-radius: 99px;
+}
+.row { display: flex; gap: 52px; align-items: flex-start; justify-content: center; flex-wrap: wrap; }
+.col { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.col-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: #304060;
+}
+.col-sub {
+  font-family: 'Spectral', Georgia, serif;
+  font-style: italic; font-size: 12px; color: #1A2840;
+  text-align: center; max-width: 240px; line-height: 1.6; margin-top: -4px;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   ANIMATIONS
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+@keyframes headerGrad {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes overdueGlow {
+  0%, 100% { box-shadow: none; }
+  50%       { box-shadow: -3px 0 14px rgba(248,113,113,.35), 0 4px 20px rgba(248,113,113,.1); }
+}
+@keyframes blob1 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33%       { transform: translate(28px,-18px) scale(1.12); }
+  66%       { transform: translate(-18px,12px) scale(0.88); }
+}
+@keyframes blob2 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  40%       { transform: translate(-22px,16px) scale(1.08); }
+  70%       { transform: translate(14px,-20px) scale(0.92); }
+}
+@keyframes blob3 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50%       { transform: translate(16px,20px) scale(1.1); }
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   DARK THEME TOKENS
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.dark {
+  --bg:           #08101C;
+  --hdr-a:        #0A1428;
+  --hdr-b:        #141E3C;
+  --hdr-c:        #0E1830;
+  --greeting:     #EAF0FF;
+  --sub:          rgba(140,160,210,.45);
+  --date-c:       rgba(140,160,210,.4);
+  --cap-bg:       #0E1628;
+  --cap-bdr:      #1C2840;
+  --cap-ph:       #2A3850;
+  --card-bg:      #0C1420;
+  --card-bdr:     #182030;
+  --card-title:   #D0DCF0;
+  --card-meta:    #304050;
+  --sec-line:     #1C2840;
+  --sec-ov:       rgba(248,113,113,.5);
+  --sec-td:       rgba(140,160,210,.35);
+  --sec-em:       rgba(52,211,153,.4);
+  --nav-bg:       #0C1420;
+  --nav-bdr:      #182030;
+  --nav-on:       #7EB0E8;
+  --nav-off:      rgba(160,175,205,.45);
+  --blob1:        rgba(99,60,200,.2);
+  --blob2:        rgba(200,60,90,.14);
+  --blob3:        rgba(30,160,210,.1);
+  --av-a:         #3B82F6;
+  --av-b:         #22D3EE;
+  --input-ico:    #2A3850;
+  --ib-ov:        rgba(248,113,113,.14);
+  --ib-cal:       rgba(129,140,248,.14);
+  --ib-rem:       rgba(251,191,36,.13);
+  --ib-note:      rgba(52,211,153,.13);
+  --card-shadow:  none;
+  --cap-shadow:   0 10px 30px rgba(0,0,0,.5), 0 2px 6px rgba(0,0,0,.25);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   LIGHT THEME TOKENS
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.light {
+  --bg:           #F0EDF8;
+  --hdr-a:        #EAE0F8;
+  --hdr-b:        #DED4F2;
+  --hdr-c:        #EAE4F8;
+  --greeting:     #1A1430;
+  --sub:          rgba(80,60,120,.5);
+  --date-c:       rgba(80,60,120,.45);
+  --cap-bg:       #FFFFFF;
+  --cap-bdr:      #E0D8F0;
+  --cap-ph:       #B0A0CC;
+  --card-bg:      #FFFFFF;
+  --card-bdr:     #EAE4F2;
+  --card-title:   #1A1430;
+  --card-meta:    #9080B0;
+  --sec-line:     #E0D8EE;
+  --sec-ov:       rgba(210,70,70,.55);
+  --sec-td:       rgba(90,100,200,.45);
+  --sec-em:       rgba(20,160,110,.5);
+  --nav-bg:       #FFFFFF;
+  --nav-bdr:      #E8E0F2;
+  --nav-on:       #4060C0;
+  --nav-off:      #C0B4D8;
+  --blob1:        rgba(129,140,248,.09);
+  --blob2:        rgba(248,113,113,.07);
+  --blob3:        rgba(52,211,153,.06);
+  --av-a:         #3B82F6;
+  --av-b:         #22D3EE;
+  --input-ico:    #B0A0CC;
+  --ib-ov:        rgba(248,113,113,.1);
+  --ib-cal:       rgba(129,140,248,.1);
+  --ib-rem:       rgba(251,191,36,.1);
+  --ib-note:      rgba(52,211,153,.1);
+  --card-shadow:  0 2px 12px rgba(80,60,120,.06), 0 1px 3px rgba(0,0,0,.04);
+  --cap-shadow:   0 8px 24px rgba(80,60,120,.12), 0 2px 6px rgba(0,0,0,.06);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   BODY FONT CLASSES
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.bf-v1 { --head: 'Playfair Display', Georgia, serif; --head-style: italic; --head-wt: 400; --body: 'Plus Jakarta Sans', system-ui, sans-serif; }
+.bf-v2 { --head: 'Bodoni Moda', Georgia, serif;    --head-style: normal; --head-wt: 700; --body: 'Outfit', system-ui, sans-serif; }
+.bf-v3 { --head: 'Big Shoulders Display', system-ui, sans-serif; --head-style: normal; --head-wt: 900; --body: 'Lexend', system-ui, sans-serif; }
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   PHONE FRAME
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.phone {
+  width: 390px; height: 844px;
+  border-radius: 28px; overflow: hidden;
+  position: relative;
+  box-shadow: 0 48px 120px rgba(0,0,0,.9), 0 0 0 8px #0C0E14, 0 0 0 9px rgba(255,255,255,.04);
+}
+.ph-bg { position: absolute; inset: 0; background: var(--bg); }
+.blob-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.blob { position: absolute; border-radius: 50%; filter: blur(50px); }
+.blob-a {
+  width: 200px; height: 200px; background: var(--blob1);
+  top: -40px; right: -30px; animation: blob1 14s ease-in-out infinite;
+}
+.blob-b {
+  width: 160px; height: 160px; background: var(--blob2);
+  top: 240px; left: -50px; animation: blob2 18s ease-in-out infinite 2s;
+}
+.blob-c {
+  width: 140px; height: 140px; background: var(--blob3);
+  bottom: 140px; right: 0; animation: blob3 12s ease-in-out infinite 5s;
+}
+.ph-stack {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; height: 100%;
+}
+
+/* Header */
+.ph-header {
+  background: linear-gradient(135deg, var(--hdr-a) 0%, var(--hdr-b) 40%, var(--hdr-a) 70%, var(--hdr-c) 100%);
+  background-size: 300% 300%;
+  animation: headerGrad 8s ease-in-out infinite;
+  padding: 52px 24px 28px; flex-shrink: 0;
+}
+.ph-date {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--date-c); margin-bottom: 10px;
+}
+.ph-head-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.ph-greeting {
+  font-family: var(--head, 'Playfair Display', Georgia, serif);
+  font-style: var(--head-style, italic);
+  font-size: 48px; font-weight: var(--head-wt, 700);
+  color: var(--greeting); line-height: 0.96; letter-spacing: -0.02em;
+}
+.ph-sub {
+  font-family: var(--body, 'Spectral', Georgia, serif);
+  font-size: 14px; color: var(--sub); margin-top: 8px;
+}
+.ph-avatar {
+  width: 44px; height: 44px; border-radius: 6px;
+  background: linear-gradient(135deg, var(--av-a) 0%, var(--av-b) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; color: #EAF0FF;
+  font-size: 13px; font-weight: 500; flex-shrink: 0;
+}
+
+/* Capture bar */
+.ph-cap-wrap { padding: 0 20px; margin-top: -22px; position: relative; z-index: 10; flex-shrink: 0; }
+.ph-capture {
+  background: var(--cap-bg); border: 1px solid var(--cap-bdr);
+  border-radius: 8px; padding: 13px 16px;
+  display: flex; align-items: center; gap: 10px;
+  color: var(--cap-ph);
+  font-family: var(--body, 'Spectral', Georgia, serif); font-size: 14px;
+  box-shadow: var(--cap-shadow);
+}
+
+/* Body */
+.ph-body { flex: 1; overflow: hidden; padding: 6px 20px 0; }
+
+/* Section row */
+.sec-row { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; }
+.sec-num {
+  font-family: 'DM Mono', monospace; font-size: 10px; flex-shrink: 0;
+}
+.sec-txt {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; white-space: nowrap;
+}
+.sec-line { flex: 1; height: 1px; background: var(--sec-line); }
+.sec-num.ov, .sec-txt.ov { color: var(--sec-ov); }
+.sec-num.td, .sec-txt.td { color: var(--sec-td); }
+.sec-num.em, .sec-txt.em { color: var(--sec-em); }
+
+/* Cards */
+.card {
+  background: var(--card-bg); border: 1px solid var(--card-bdr);
+  border-radius: 6px; padding: 11px 13px;
+  display: flex; align-items: flex-start;
+  margin-bottom: 7px;
+  animation: slideUp .5s cubic-bezier(.22,1,.36,1) both;
+  box-shadow: var(--card-shadow);
+}
+.card.t-ov {
+  animation: slideUp .5s cubic-bezier(.22,1,.36,1) both,
+             overdueGlow 3s ease-in-out infinite .6s;
+}
+
+/* Type bar */
+.type-bar {
+  width: 2.5px; border-radius: 99px;
+  align-self: stretch; flex-shrink: 0; margin-right: 11px;
+}
+.t-ov   .type-bar { background: #F87171; box-shadow: 0 0 7px rgba(248,113,113,.7); }
+.t-cal  .type-bar { background: #818CF8; box-shadow: 0 0 5px rgba(129,140,248,.5); }
+.t-rem  .type-bar { background: #FBBF24; box-shadow: 0 0 5px rgba(251,191,36,.5); }
+.t-note .type-bar { background: #34D399; box-shadow: 0 0 5px rgba(52,211,153,.5); }
+
+/* Icon badges */
+.ib {
+  width: 34px; height: 34px; border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-right: 11px;
+}
+.ib-ov   { background: var(--ib-ov);   color: #F87171; }
+.ib-cal  { background: var(--ib-cal);  color: #818CF8; }
+.ib-rem  { background: var(--ib-rem);  color: #FBBF24; }
+.ib-note { background: var(--ib-note); color: #34D399; }
+
+/* Card content */
+.card-content { flex: 1; min-width: 0; }
+.card-title {
+  font-family: var(--body, 'Spectral', Georgia, serif);
+  font-size: 17px; font-weight: 500;
+  color: var(--card-title); line-height: 1.3;
+}
+.card-meta {
+  font-family: var(--body, 'Spectral', Georgia, serif);
+  font-size: 14px; color: var(--card-meta); margin-top: 2px;
+}
+.t-ov   .type-label { color: #F87171; }
+.t-cal  .type-label { color: #818CF8; }
+.t-rem  .type-label { color: #FBBF24; }
+.t-note .type-label { color: #34D399; }
+
+/* Chips */
+.chip {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  padding: 3px 7px; border-radius: 3px;
+  align-self: center; margin-left: 8px; flex-shrink: 0;
+}
+.chip.ov  { background: rgba(248,113,113,.12); color: #F87171; }
+.chip.cal { background: rgba(129,140,248,.12); color: #818CF8; }
+.chip.rem { background: rgba(251,191,36,.12);  color: #FBBF24; }
+.chip.em  { background: rgba(52,211,153,.12);  color: #34D399; }
+
+/* Bottom nav */
+.ph-nav-outer { padding: 10px 20px 40px; flex-shrink: 0; }
+.ph-nav {
+  background: var(--nav-bg); border: 1px solid var(--nav-bdr);
+  border-radius: 18px; padding: 14px 20px;
+  display: flex; justify-content: space-around;
+}
+.ph-tab {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  font-family: -apple-system, system-ui, sans-serif; font-size: 10px;
+  font-weight: 500; letter-spacing: 0;
+}
+.ph-tab.on  { color: var(--nav-on); }
+.ph-tab.off { color: var(--nav-off); }
+
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   TABLET FRAME
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.tablet {
+  width: 768px; height: 1024px;
+  border-radius: 40px; overflow: hidden;
+  position: relative;
+  box-shadow: 0 48px 120px rgba(0,0,0,.9), 0 0 0 8px #0C0E14, 0 0 0 9px rgba(255,255,255,.04);
+  zoom: 0.6;
+}
+.tab-stack {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; height: 100%;
+}
+.tab-header {
+  background: linear-gradient(135deg, var(--hdr-a) 0%, var(--hdr-b) 40%, var(--hdr-a) 70%, var(--hdr-c) 100%);
+  background-size: 300% 300%; animation: headerGrad 8s ease-in-out infinite .5s;
+  padding: 52px 36px 32px; flex-shrink: 0;
+}
+.tab-date {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--date-c); margin-bottom: 12px;
+}
+.tab-head-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.tab-greeting {
+  font-family: var(--head, 'Playfair Display', Georgia, serif);
+  font-style: var(--head-style, italic); font-size: 58px; color: var(--greeting); line-height: 0.96; letter-spacing: -0.02em;
+}
+.tab-sub {
+  font-family: var(--body, 'Spectral', Georgia, serif);
+  font-size: 16px; color: var(--sub); margin-top: 10px;
+}
+.tab-avatar {
+  width: 52px; height: 52px; border-radius: 6px;
+  background: linear-gradient(135deg, var(--av-a) 0%, var(--av-b) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; color: #EAF0FF; font-size: 15px; flex-shrink: 0;
+}
+.tab-cap-wrap { padding: 0 28px; margin-top: -26px; position: relative; z-index: 10; flex-shrink: 0; }
+.tab-capture {
+  background: var(--cap-bg); border: 1px solid var(--cap-bdr);
+  border-radius: 8px; padding: 15px 20px;
+  display: flex; align-items: center; gap: 12px;
+  color: var(--cap-ph);
+  font-family: var(--body, 'Spectral', Georgia, serif); font-size: 16px;
+  box-shadow: var(--cap-shadow);
+}
+.tab-body { flex: 1; overflow: hidden; padding: 8px 28px 0; }
+.tab-sec-row { display: flex; align-items: center; gap: 10px; margin: 24px 0 12px; }
+.tab-sec-num {
+  font-family: 'DM Mono', monospace; font-size: 11px; flex-shrink: 0;
+}
+.tab-sec-txt {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.12em; white-space: nowrap;
+}
+.tab-sec-line { flex: 1; height: 1px; background: var(--sec-line); }
+.tab-sec-num.ov, .tab-sec-txt.ov { color: var(--sec-ov); }
+.tab-sec-num.td, .tab-sec-txt.td { color: var(--sec-td); }
+.tab-sec-num.em, .tab-sec-txt.em { color: var(--sec-em); }
+.tab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tab-card {
+  background: var(--card-bg); border: 1px solid var(--card-bdr);
+  border-radius: 6px; padding: 14px 15px;
+  display: flex; align-items: flex-start;
+  animation: slideUp .5s cubic-bezier(.22,1,.36,1) both;
+  box-shadow: var(--card-shadow);
+}
+.tab-card.t-ov {
+  animation: slideUp .5s cubic-bezier(.22,1,.36,1) both,
+             overdueGlow 3s ease-in-out infinite .6s;
+}
+.tab-card .type-bar { margin-right: 12px; }
+.tab-card .ib { width: 38px; height: 38px; border-radius: 5px; margin-right: 12px; }
+.tab-card .card-title { font-size: 18px; }
+.tab-card .card-meta  { font-size: 13px; margin-top: 3px; }
+.tab-card .chip { font-size: 11px; }
+.tab-full { grid-column: 1 / -1; }
+.tab-nav-outer { padding: 12px 28px 38px; flex-shrink: 0; }
+.tab-nav {
+  background: var(--nav-bg); border: 1px solid var(--nav-bdr);
+  border-radius: 18px; padding: 16px 40px;
+  display: flex; justify-content: space-around;
+}
+.tab-tab {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  font-family: -apple-system, system-ui, sans-serif; font-size: 11px;
+  font-weight: 500; letter-spacing: 0;
+}
+.tab-tab.on  { color: var(--nav-on); }
+.tab-tab.off { color: var(--nav-off); }
+
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   DESKTOP FRAME
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.desktop {
+  width: 1220px; height: 820px;
+  border-radius: 18px; overflow: hidden;
+  display: flex; flex-direction: row;
+  position: relative;
+  box-shadow: 0 48px 120px rgba(0,0,0,.9), 0 0 0 8px #0C0E14, 0 0 0 9px rgba(255,255,255,.04);
+  zoom: 0.53;
+}
+
+/* Sidebar */
+.desk-sidebar {
+  width: 210px; flex-shrink: 0;
+  background: var(--card-bg); border-right: 1px solid var(--card-bdr);
+  display: flex; flex-direction: column;
+  padding: 28px 14px 22px; position: relative; z-index: 2;
+}
+.desk-logo {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 19px; color: var(--greeting);
+  letter-spacing: -0.01em; margin-bottom: 28px; padding: 0 8px;
+}
+.desk-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 11px; border-radius: 5px; margin-bottom: 2px;
+  font-family: var(--body, 'Spectral', Georgia, serif);
+  font-size: 14px; font-weight: 500; cursor: pointer;
+}
+.desk-nav-item.on  { background: rgba(129,140,248,.1); color: var(--nav-on); border-radius: 5px; }
+.desk-nav-item.off { color: var(--card-meta); }
+.desk-sidebar-btm {
+  margin-top: auto; padding: 14px 8px 0;
+  display: flex; align-items: center; gap: 10px;
+  border-top: 1px solid var(--card-bdr);
+}
+.desk-avatar {
+  width: 34px; height: 34px; border-radius: 5px;
+  background: linear-gradient(135deg, var(--av-a) 0%, var(--av-b) 100%);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; color: #EAF0FF; font-size: 11px; flex-shrink: 0;
+}
+.desk-user { display: flex; flex-direction: column; }
+.desk-uname {
+  font-family: var(--body, 'Spectral', Georgia, serif);
+  font-size: 13px; font-weight: 500; color: var(--card-title);
+}
+.desk-umail {
+  font-family: 'DM Mono', monospace; font-size: 10px; color: var(--card-meta);
+}
+
+/* Main area */
+.desk-main { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+.desk-main-bg { position: absolute; inset: 0; background: var(--bg); z-index: 0; }
+.desk-blob-wrap { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.desk-blob-a {
+  position: absolute; border-radius: 50%; filter: blur(70px);
+  width: 300px; height: 300px; background: var(--blob1);
+  top: -60px; right: -40px; animation: blob1 14s ease-in-out infinite;
+}
+.desk-blob-b {
+  position: absolute; border-radius: 50%; filter: blur(70px);
+  width: 240px; height: 240px; background: var(--blob2);
+  bottom: -40px; left: 40px; animation: blob2 18s ease-in-out infinite 2s;
+}
+.desk-main-stack {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; height: 100%;
+}
+.desk-header {
+  background: linear-gradient(135deg, var(--hdr-a) 0%, var(--hdr-b) 40%, var(--hdr-a) 70%, var(--hdr-c) 100%);
+  background-size: 300% 300%; animation: headerGrad 8s ease-in-out infinite 1s;
+  padding: 32px 36px 28px; flex-shrink: 0;
+}
+.desk-head-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.desk-date {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--date-c); margin-bottom: 8px;
+}
+.desk-greeting {
+  font-family: var(--head, 'Playfair Display', Georgia, serif);
+  font-style: var(--head-style, italic); font-size: 50px; color: var(--greeting); line-height: 0.96; letter-spacing: -0.02em;
+}
+.desk-sub {
+  font-family: var(--body, 'Spectral', Georgia, serif);
+  font-size: 15px; color: var(--sub); margin-top: 8px;
+}
+.desk-search {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--cap-bg); border: 1px solid var(--cap-bdr);
+  border-radius: 6px; padding: 10px 16px;
+  color: var(--cap-ph);
+  font-family: var(--body, 'Spectral', Georgia, serif); font-size: 14px;
+  min-width: 200px; align-self: flex-start; margin-top: 6px;
+}
+.desk-cap-wrap { padding: 0 36px; margin-top: -22px; position: relative; z-index: 10; flex-shrink: 0; }
+.desk-capture {
+  background: var(--cap-bg); border: 1px solid var(--cap-bdr);
+  border-radius: 8px; padding: 13px 18px;
+  display: flex; align-items: center; gap: 12px;
+  color: var(--cap-ph);
+  font-family: var(--body, 'Spectral', Georgia, serif); font-size: 15px;
+  box-shadow: var(--cap-shadow);
+}
+.desk-body { flex: 1; overflow: hidden; padding: 8px 36px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 28px; }
+.desk-col { display: flex; flex-direction: column; }
+.desk-sec-row { display: flex; align-items: center; gap: 8px; margin: 20px 0 10px; }
+.desk-sec-num {
+  font-family: 'DM Mono', monospace; font-size: 11px; flex-shrink: 0;
+}
+.desk-sec-txt {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.12em; white-space: nowrap;
+}
+.desk-sec-line { flex: 1; height: 1px; background: var(--sec-line); }
+.desk-sec-num.ov, .desk-sec-txt.ov { color: var(--sec-ov); }
+.desk-sec-num.td, .desk-sec-txt.td { color: var(--sec-td); }
+.desk-sec-num.em, .desk-sec-txt.em { color: var(--sec-em); }
+.desk-card {
+  background: var(--card-bg); border: 1px solid var(--card-bdr);
+  border-radius: 6px; padding: 11px 13px;
+  display: flex; align-items: flex-start;
+  margin-bottom: 8px;
+  animation: slideUp .5s cubic-bezier(.22,1,.36,1) both;
+  box-shadow: var(--card-shadow);
+}
+.desk-card.t-ov {
+  animation: slideUp .5s cubic-bezier(.22,1,.36,1) both,
+             overdueGlow 3s ease-in-out infinite .6s;
+}
+.desk-card .type-bar { margin-right: 11px; }
+.desk-card .ib { margin-right: 10px; }
+.desk-card .card-title { font-size: 15px; }
+.desk-card .card-meta  { font-size: 13px; }
+
+/* Right panel */
+.desk-right {
+  width: 250px; flex-shrink: 0;
+  background: var(--card-bg); border-left: 1px solid var(--card-bdr);
+  padding: 22px 16px;
+  display: flex; flex-direction: column; gap: 20px;
+  position: relative; z-index: 2; overflow: hidden;
+}
+.panel-title {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.14em; color: var(--card-meta);
+  margin-bottom: 8px;
+}
+.mini-card {
+  background: var(--bg); border: 1px solid var(--sec-line);
+  border-radius: 5px; padding: 10px 12px;
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 6px; box-shadow: var(--card-shadow);
+}
+.mini-card .ib { width: 30px; height: 30px; border-radius: 4px; margin-right: 0; }
+.mini-card .card-content .card-title { font-size: 13px; }
+.mini-card .card-content .card-meta  { font-size: 11px; }
+.panel-note {
+  font-family: var(--body, 'Spectral', Georgia, serif);
+  font-style: italic; font-size: 13px; color: var(--card-meta);
+  background: var(--bg); border: 1px solid var(--sec-line);
+  border-radius: 5px; padding: 12px 14px; line-height: 1.55;
+}
+.panel-note-label {
+  font-family: 'DM Mono', monospace; font-size: 9px;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--sec-em); margin-bottom: 6px;
+}
+</style>
+</head>
+<body>
+
+<!-- Page header -->
+<div style="text-align:center">
+  <div class="page-eyebrow">Scatterbrain · Design Exploration · 2026</div>
+  <div class="page-heading">Body font · dark / light mode · responsive layouts</div>
+</div>
+
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION 1 â€” BODY FONT EXPLORATION
+     DM Serif Display heading locked · Lora / Spectral / Figtree body
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="section-tag">01 / Body Font · Lora · Spectral · Figtree · dark mode</div>
+
+<div class="row">
+
+  <!-- â”€â”€ LORA â”€â”€ -->
+  <div class="col">
+    <div class="col-label">Playfair Display</div>
+    <div class="col-sub">Warm book serif · ink-on-paper weight · humanist curves</div>
+    <div class="phone dark bf-v1">
+      <div class="ph-bg"></div>
+      <div class="blob-wrap">
+        <div class="blob blob-a"></div>
+        <div class="blob blob-b"></div>
+        <div class="blob blob-c"></div>
+      </div>
+      <div class="ph-stack">
+        <div class="ph-header">
+          <div class="ph-date">Wed, Jun 25</div>
+          <div class="ph-head-row">
+            <div>
+              <div class="ph-greeting">Good<br>morning.</div>
+              <div class="ph-sub">3 things need attention</div>
+            </div>
+            <div class="ph-avatar">DR</div>
+          </div>
+        </div>
+        <div class="ph-cap-wrap">
+          <div class="ph-capture">
+            <iconify-icon icon="ph:magnifying-glass-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+            Search or brain dump...
+          </div>
+        </div>
+        <div class="ph-body">
+          <div class="sec-row">
+            <div class="sec-num ov">01 /</div>
+            <iconify-icon icon="ph:alarm-fill" width="12" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt ov">Overdue</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-ov">
+            <div class="type-bar"></div>
+            <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Call the dentist</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+            </div>
+            <div class="chip ov">LATE</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num td">02 /</div>
+            <iconify-icon icon="ph:calendar-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt td">Today</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.12s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Team standup</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+            </div>
+            <div class="chip cal">10:00</div>
+          </div>
+          <div class="card t-rem" style="animation-delay:.22s">
+            <div class="type-bar"></div>
+            <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Pick up dry cleaning</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+            </div>
+            <div class="chip rem">18:00</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num em">03 /</div>
+            <iconify-icon icon="ph:notebook-fill" width="12" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt em">Notes</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-note" style="animation-delay:.32s">
+            <div class="type-bar"></div>
+            <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Grocery ideas</div>
+              <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+            </div>
+            <div class="chip em">NOTE</div>
+          </div>
+        </div>
+        <div class="ph-nav-outer">
+          <div class="ph-nav">
+            <div class="ph-tab on"><iconify-icon icon="ph:house-fill" width="28"></iconify-icon>Home</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:calendar-fill" width="28"></iconify-icon>Cal</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:bell-fill" width="28"></iconify-icon>Remind</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:notebook-fill" width="28"></iconify-icon>Notes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ SPECTRAL â”€â”€ -->
+  <div class="col">
+    <div class="col-label">Bodoni Moda</div>
+    <div class="col-sub">Editorial serif · refined thin strokes · high contrast letterforms</div>
+    <div class="phone dark bf-v2">
+      <div class="ph-bg"></div>
+      <div class="blob-wrap">
+        <div class="blob blob-a" style="animation-delay:3s"></div>
+        <div class="blob blob-b" style="animation-delay:6s"></div>
+        <div class="blob blob-c" style="animation-delay:1s"></div>
+      </div>
+      <div class="ph-stack">
+        <div class="ph-header">
+          <div class="ph-date">Wed, Jun 25</div>
+          <div class="ph-head-row">
+            <div>
+              <div class="ph-greeting">Good<br>morning.</div>
+              <div class="ph-sub">3 things need attention</div>
+            </div>
+            <div class="ph-avatar">DR</div>
+          </div>
+        </div>
+        <div class="ph-cap-wrap">
+          <div class="ph-capture">
+            <iconify-icon icon="ph:magnifying-glass-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+            Search or brain dump...
+          </div>
+        </div>
+        <div class="ph-body">
+          <div class="sec-row">
+            <div class="sec-num ov">01 /</div>
+            <iconify-icon icon="ph:alarm-fill" width="12" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt ov">Overdue</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-ov">
+            <div class="type-bar"></div>
+            <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Call the dentist</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+            </div>
+            <div class="chip ov">LATE</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num td">02 /</div>
+            <iconify-icon icon="ph:calendar-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt td">Today</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.12s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Team standup</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+            </div>
+            <div class="chip cal">10:00</div>
+          </div>
+          <div class="card t-rem" style="animation-delay:.22s">
+            <div class="type-bar"></div>
+            <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Pick up dry cleaning</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+            </div>
+            <div class="chip rem">18:00</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num em">03 /</div>
+            <iconify-icon icon="ph:notebook-fill" width="12" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt em">Notes</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-note" style="animation-delay:.32s">
+            <div class="type-bar"></div>
+            <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Grocery ideas</div>
+              <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+            </div>
+            <div class="chip em">NOTE</div>
+          </div>
+        </div>
+        <div class="ph-nav-outer">
+          <div class="ph-nav">
+            <div class="ph-tab on"><iconify-icon icon="ph:house-fill" width="28"></iconify-icon>Home</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:calendar-fill" width="28"></iconify-icon>Cal</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:bell-fill" width="28"></iconify-icon>Remind</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:notebook-fill" width="28"></iconify-icon>Notes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ FIGTREE â”€â”€ -->
+  <div class="col">
+    <div class="col-label">Big Shoulders Display</div>
+    <div class="col-sub">Humanist rounded sans · friendly precision · open apertures</div>
+    <div class="phone dark bf-v3">
+      <div class="ph-bg"></div>
+      <div class="blob-wrap">
+        <div class="blob blob-a" style="animation-delay:6s"></div>
+        <div class="blob blob-b" style="animation-delay:1s"></div>
+        <div class="blob blob-c" style="animation-delay:8s"></div>
+      </div>
+      <div class="ph-stack">
+        <div class="ph-header">
+          <div class="ph-date">Wed, Jun 25</div>
+          <div class="ph-head-row">
+            <div>
+              <div class="ph-greeting">Good<br>morning.</div>
+              <div class="ph-sub">3 things need attention</div>
+            </div>
+            <div class="ph-avatar">DR</div>
+          </div>
+        </div>
+        <div class="ph-cap-wrap">
+          <div class="ph-capture">
+            <iconify-icon icon="ph:magnifying-glass-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+            Search or brain dump...
+          </div>
+        </div>
+        <div class="ph-body">
+          <div class="sec-row">
+            <div class="sec-num ov">01 /</div>
+            <iconify-icon icon="ph:alarm-fill" width="12" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt ov">Overdue</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-ov">
+            <div class="type-bar"></div>
+            <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Call the dentist</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+            </div>
+            <div class="chip ov">LATE</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num td">02 /</div>
+            <iconify-icon icon="ph:calendar-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt td">Today</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.12s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Team standup</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+            </div>
+            <div class="chip cal">10:00</div>
+          </div>
+          <div class="card t-rem" style="animation-delay:.22s">
+            <div class="type-bar"></div>
+            <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Pick up dry cleaning</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+            </div>
+            <div class="chip rem">18:00</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num em">03 /</div>
+            <iconify-icon icon="ph:notebook-fill" width="12" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt em">Notes</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-note" style="animation-delay:.32s">
+            <div class="type-bar"></div>
+            <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Grocery ideas</div>
+              <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+            </div>
+            <div class="chip em">NOTE</div>
+          </div>
+        </div>
+        <div class="ph-nav-outer">
+          <div class="ph-nav">
+            <div class="ph-tab on"><iconify-icon icon="ph:house-fill" width="28"></iconify-icon>Home</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:calendar-fill" width="28"></iconify-icon>Cal</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:bell-fill" width="28"></iconify-icon>Remind</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:notebook-fill" width="28"></iconify-icon>Notes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /row section 1 -->
+
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION 2 â€” DARK Ã— LIGHT MODE
+     Spectral body font · same design language
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="section-tag">02 / Dark Ã— Light Mode · Spectral body font</div>
+
+<div class="row">
+
+  <!-- â”€â”€ DARK â”€â”€ -->
+  <div class="col">
+    <div class="col-label">Dark Mode</div>
+    <div class="col-sub">Midnight slate · cool blue-black · neon type accents</div>
+    <div class="phone dark bf-v1">
+      <div class="ph-bg"></div>
+      <div class="blob-wrap">
+        <div class="blob blob-a" style="animation-delay:2s"></div>
+        <div class="blob blob-b" style="animation-delay:8s"></div>
+        <div class="blob blob-c" style="animation-delay:4s"></div>
+      </div>
+      <div class="ph-stack">
+        <div class="ph-header">
+          <div class="ph-date">Wed, Jun 25</div>
+          <div class="ph-head-row">
+            <div>
+              <div class="ph-greeting">Good<br>morning.</div>
+              <div class="ph-sub">4 things need attention</div>
+            </div>
+            <div class="ph-avatar">DR</div>
+          </div>
+        </div>
+        <div class="ph-cap-wrap">
+          <div class="ph-capture">
+            <iconify-icon icon="ph:magnifying-glass-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+            Search or brain dump...
+          </div>
+        </div>
+        <div class="ph-body">
+          <div class="sec-row">
+            <div class="sec-num ov">01 /</div>
+            <iconify-icon icon="ph:alarm-fill" width="12" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt ov">Overdue</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-ov">
+            <div class="type-bar"></div>
+            <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Call the dentist</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+            </div>
+            <div class="chip ov">LATE</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num td">02 /</div>
+            <iconify-icon icon="ph:calendar-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt td">Today</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.1s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Team standup</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+            </div>
+            <div class="chip cal">10:00</div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.18s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:users-three-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Design review</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 2:00 PM</div>
+            </div>
+            <div class="chip cal">14:00</div>
+          </div>
+          <div class="card t-rem" style="animation-delay:.26s">
+            <div class="type-bar"></div>
+            <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Pick up dry cleaning</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+            </div>
+            <div class="chip rem">18:00</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num em">03 /</div>
+            <iconify-icon icon="ph:notebook-fill" width="12" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt em">Notes</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-note" style="animation-delay:.34s">
+            <div class="type-bar"></div>
+            <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Grocery ideas</div>
+              <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+            </div>
+            <div class="chip em">NOTE</div>
+          </div>
+        </div>
+        <div class="ph-nav-outer">
+          <div class="ph-nav">
+            <div class="ph-tab on"><iconify-icon icon="ph:house-fill" width="28"></iconify-icon>Home</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:calendar-fill" width="28"></iconify-icon>Cal</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:bell-fill" width="28"></iconify-icon>Remind</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:notebook-fill" width="28"></iconify-icon>Notes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ LIGHT â”€â”€ -->
+  <div class="col">
+    <div class="col-label">Light Mode</div>
+    <div class="col-sub">Warm lavender white · soft gradient hero · tonal type accents</div>
+    <div class="phone light bf-v1">
+      <div class="ph-bg"></div>
+      <div class="blob-wrap">
+        <div class="blob blob-a" style="animation-delay:4s"></div>
+        <div class="blob blob-b" style="animation-delay:9s"></div>
+        <div class="blob blob-c" style="animation-delay:2s"></div>
+      </div>
+      <div class="ph-stack">
+        <div class="ph-header">
+          <div class="ph-date">Wed, Jun 25</div>
+          <div class="ph-head-row">
+            <div>
+              <div class="ph-greeting">Good<br>morning.</div>
+              <div class="ph-sub">4 things need attention</div>
+            </div>
+            <div class="ph-avatar">DR</div>
+          </div>
+        </div>
+        <div class="ph-cap-wrap">
+          <div class="ph-capture">
+            <iconify-icon icon="ph:magnifying-glass-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+            Search or brain dump...
+          </div>
+        </div>
+        <div class="ph-body">
+          <div class="sec-row">
+            <div class="sec-num ov">01 /</div>
+            <iconify-icon icon="ph:alarm-fill" width="12" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt ov">Overdue</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-ov">
+            <div class="type-bar"></div>
+            <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Call the dentist</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+            </div>
+            <div class="chip ov">LATE</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num td">02 /</div>
+            <iconify-icon icon="ph:calendar-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt td">Today</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.1s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Team standup</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+            </div>
+            <div class="chip cal">10:00</div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.18s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:users-three-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Design review</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 2:00 PM</div>
+            </div>
+            <div class="chip cal">14:00</div>
+          </div>
+          <div class="card t-rem" style="animation-delay:.26s">
+            <div class="type-bar"></div>
+            <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Pick up dry cleaning</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+            </div>
+            <div class="chip rem">18:00</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num em">03 /</div>
+            <iconify-icon icon="ph:notebook-fill" width="12" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt em">Notes</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-note" style="animation-delay:.34s">
+            <div class="type-bar"></div>
+            <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Grocery ideas</div>
+              <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+            </div>
+            <div class="chip em">NOTE</div>
+          </div>
+        </div>
+        <div class="ph-nav-outer">
+          <div class="ph-nav">
+            <div class="ph-tab on"><iconify-icon icon="ph:house-fill" width="28"></iconify-icon>Home</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:calendar-fill" width="28"></iconify-icon>Cal</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:bell-fill" width="28"></iconify-icon>Remind</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:notebook-fill" width="28"></iconify-icon>Notes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /row section 2 -->
+
+
+<!-- â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     SECTION 3 â€” RESPONSIVE LAYOUTS
+     Mobile · Tablet · Desktop · dark mode · Spectral
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• -->
+<div class="section-tag">03 / Dark Mode · Mobile · Tablet · Desktop</div>
+
+<div class="row" style="align-items:flex-start">
+
+  <!-- â”€â”€ MOBILE â”€â”€ -->
+  <div class="col">
+    <div class="col-label">Mobile · 390px</div>
+    <div class="col-sub">Single column · floating capture · bottom nav</div>
+    <div class="phone dark bf-v2">
+      <div class="ph-bg"></div>
+      <div class="blob-wrap">
+        <div class="blob blob-a" style="animation-delay:5s"></div>
+        <div class="blob blob-b" style="animation-delay:2s"></div>
+        <div class="blob blob-c" style="animation-delay:9s"></div>
+      </div>
+      <div class="ph-stack">
+        <div class="ph-header">
+          <div class="ph-date">Wed, Jun 25</div>
+          <div class="ph-head-row">
+            <div>
+              <div class="ph-greeting">Good<br>morning.</div>
+              <div class="ph-sub">4 things need attention</div>
+            </div>
+            <div class="ph-avatar">DR</div>
+          </div>
+        </div>
+        <div class="ph-cap-wrap">
+          <div class="ph-capture">
+            <iconify-icon icon="ph:magnifying-glass-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+            Search or brain dump...
+          </div>
+        </div>
+        <div class="ph-body">
+          <div class="sec-row">
+            <div class="sec-num ov">01 /</div>
+            <iconify-icon icon="ph:alarm-fill" width="12" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt ov">Overdue</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-ov">
+            <div class="type-bar"></div>
+            <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Call the dentist</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+            </div>
+            <div class="chip ov">LATE</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num td">02 /</div>
+            <iconify-icon icon="ph:calendar-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt td">Today</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.1s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Team standup</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+            </div>
+            <div class="chip cal">10:00</div>
+          </div>
+          <div class="card t-rem" style="animation-delay:.2s">
+            <div class="type-bar"></div>
+            <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Pick up dry cleaning</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+            </div>
+            <div class="chip rem">18:00</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num em">03 /</div>
+            <iconify-icon icon="ph:notebook-fill" width="12" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt em">Notes</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-note" style="animation-delay:.3s">
+            <div class="type-bar"></div>
+            <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Grocery ideas</div>
+              <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+            </div>
+            <div class="chip em">NOTE</div>
+          </div>
+        </div>
+        <div class="ph-nav-outer">
+          <div class="ph-nav">
+            <div class="ph-tab on"><iconify-icon icon="ph:house-fill" width="28"></iconify-icon>Home</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:calendar-fill" width="28"></iconify-icon>Cal</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:bell-fill" width="28"></iconify-icon>Remind</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:notebook-fill" width="28"></iconify-icon>Notes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ TABLET â”€â”€ -->
+  <div class="col">
+    <div class="col-label">Tablet · 768px</div>
+    <div class="col-sub">2-column card grid · wider header · spacious capture bar</div>
+    <div class="tablet dark bf-v1">
+      <div class="ph-bg"></div>
+      <div class="blob-wrap">
+        <div class="blob blob-a" style="width:300px;height:300px;animation-delay:7s"></div>
+        <div class="blob blob-b" style="width:240px;height:240px;animation-delay:3s"></div>
+        <div class="blob blob-c" style="width:200px;height:200px;animation-delay:11s"></div>
+      </div>
+      <div class="tab-stack">
+        <div class="tab-header">
+          <div class="tab-date">Wed, Jun 25</div>
+          <div class="tab-head-row">
+            <div>
+              <div class="tab-greeting">Good morning.</div>
+              <div class="tab-sub">4 things need your attention today</div>
+            </div>
+            <div class="tab-avatar">DR</div>
+          </div>
+        </div>
+        <div class="tab-cap-wrap">
+          <div class="tab-capture">
+            <iconify-icon icon="ph:magnifying-glass-fill" width="18" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+            Search or brain dump something...
+          </div>
+        </div>
+        <div class="tab-body">
+          <div class="tab-sec-row">
+            <div class="tab-sec-num ov">01 /</div>
+            <iconify-icon icon="ph:alarm-fill" width="13" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+            <div class="tab-sec-txt ov">Overdue</div>
+            <div class="tab-sec-line"></div>
+          </div>
+          <div class="tab-grid">
+            <div class="tab-card t-ov tab-full">
+              <div class="type-bar"></div>
+              <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Call the dentist</div>
+                <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+              </div>
+              <div class="chip ov">LATE</div>
+            </div>
+          </div>
+
+          <div class="tab-sec-row">
+            <div class="tab-sec-num td">02 /</div>
+            <iconify-icon icon="ph:calendar-fill" width="13" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+            <div class="tab-sec-txt td">Today</div>
+            <div class="tab-sec-line"></div>
+          </div>
+          <div class="tab-grid">
+            <div class="tab-card t-cal" style="animation-delay:.1s">
+              <div class="type-bar"></div>
+              <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Team standup</div>
+                <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+              </div>
+              <div class="chip cal">10:00</div>
+            </div>
+            <div class="tab-card t-cal" style="animation-delay:.18s">
+              <div class="type-bar"></div>
+              <div class="ib ib-cal"><iconify-icon icon="ph:users-three-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Design review</div>
+                <div class="card-meta"><span class="type-label">Calendar</span> · 2:00 PM</div>
+              </div>
+              <div class="chip cal">14:00</div>
+            </div>
+            <div class="tab-card t-rem" style="animation-delay:.26s">
+              <div class="type-bar"></div>
+              <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Pick up dry cleaning</div>
+                <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+              </div>
+              <div class="chip rem">18:00</div>
+            </div>
+            <div class="tab-card t-rem" style="animation-delay:.34s">
+              <div class="type-bar"></div>
+              <div class="ib ib-rem"><iconify-icon icon="ph:airplane-takeoff-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Book NYC flight</div>
+                <div class="card-meta"><span class="type-label">Reminder</span> · by tomorrow</div>
+              </div>
+              <div class="chip rem">REM</div>
+            </div>
+          </div>
+
+          <div class="tab-sec-row">
+            <div class="tab-sec-num em">03 /</div>
+            <iconify-icon icon="ph:notebook-fill" width="13" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+            <div class="tab-sec-txt em">Notes</div>
+            <div class="tab-sec-line"></div>
+          </div>
+          <div class="tab-grid">
+            <div class="tab-card t-note" style="animation-delay:.42s">
+              <div class="type-bar"></div>
+              <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Grocery ideas</div>
+                <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+              </div>
+              <div class="chip em">NOTE</div>
+            </div>
+            <div class="tab-card t-note" style="animation-delay:.5s">
+              <div class="type-bar"></div>
+              <div class="ib ib-note"><iconify-icon icon="ph:file-text-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Q3 planning notes</div>
+                <div class="card-meta"><span class="type-label">Note</span> · edited 3 days ago</div>
+              </div>
+              <div class="chip em">NOTE</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-nav-outer">
+          <div class="tab-nav">
+            <div class="tab-tab on"><iconify-icon icon="ph:house-fill" width="28"></iconify-icon>Home</div>
+            <div class="tab-tab off"><iconify-icon icon="ph:calendar-fill" width="28"></iconify-icon>Calendar</div>
+            <div class="tab-tab off"><iconify-icon icon="ph:bell-fill" width="28"></iconify-icon>Reminders</div>
+            <div class="tab-tab off"><iconify-icon icon="ph:notebook-fill" width="28"></iconify-icon>Notes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- â”€â”€ DESKTOP â”€â”€ -->
+  <div class="col">
+    <div class="col-label">Desktop · 1220px</div>
+    <div class="col-sub">Sidebar nav · 2-column feed · right panel</div>
+    <div class="desktop dark bf-v1">
+      <!-- Sidebar -->
+      <div class="desk-sidebar">
+        <div class="desk-logo">Scatterbrain</div>
+        <div class="desk-nav-item on">
+          <iconify-icon icon="ph:house-fill" width="18"></iconify-icon>
+          Home
+        </div>
+        <div class="desk-nav-item off">
+          <iconify-icon icon="ph:calendar-fill" width="18"></iconify-icon>
+          Calendar
+        </div>
+        <div class="desk-nav-item off">
+          <iconify-icon icon="ph:bell-fill" width="18"></iconify-icon>
+          Reminders
+        </div>
+        <div class="desk-nav-item off">
+          <iconify-icon icon="ph:notebook-fill" width="18"></iconify-icon>
+          Notes
+        </div>
+        <div class="desk-nav-item off" style="margin-top:8px">
+          <iconify-icon icon="ph:gear-fill" width="18"></iconify-icon>
+          Settings
+        </div>
+        <div class="desk-sidebar-btm">
+          <div class="desk-avatar">DR</div>
+          <div class="desk-user">
+            <div class="desk-uname">Diana Ruth</div>
+            <div class="desk-umail">dianaruth40</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <div class="desk-main">
+        <div class="desk-main-bg"></div>
+        <div class="desk-blob-wrap">
+          <div class="desk-blob-a"></div>
+          <div class="desk-blob-b"></div>
+        </div>
+        <div class="desk-main-stack">
+          <div class="desk-header">
+            <div class="desk-date">Wednesday, June 25</div>
+            <div class="desk-head-row">
+              <div>
+                <div class="desk-greeting">Good morning, Diana.</div>
+                <div class="desk-sub">4 things need your attention today</div>
+              </div>
+              <div class="desk-search">
+                <iconify-icon icon="ph:magnifying-glass-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+                Search or brain dump...
+              </div>
+            </div>
+          </div>
+          <div class="desk-cap-wrap">
+            <div class="desk-capture">
+              <iconify-icon icon="ph:lightning-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+              Quick capture â€” what's on your mind?
+            </div>
+          </div>
+          <div class="desk-body">
+            <!-- Left column -->
+            <div class="desk-col">
+              <div class="desk-sec-row">
+                <div class="desk-sec-num ov">01 /</div>
+                <iconify-icon icon="ph:alarm-fill" width="12" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+                <div class="desk-sec-txt ov">Overdue</div>
+                <div class="desk-sec-line"></div>
+              </div>
+              <div class="desk-card t-ov">
+                <div class="type-bar"></div>
+                <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Call the dentist</div>
+                  <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+                </div>
+                <div class="chip ov">LATE</div>
+              </div>
+
+              <div class="desk-sec-row">
+                <div class="desk-sec-num td">02 /</div>
+                <iconify-icon icon="ph:calendar-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+                <div class="desk-sec-txt td">Today</div>
+                <div class="desk-sec-line"></div>
+              </div>
+              <div class="desk-card t-cal" style="animation-delay:.1s">
+                <div class="type-bar"></div>
+                <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Team standup</div>
+                  <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+                </div>
+                <div class="chip cal">10:00</div>
+              </div>
+              <div class="desk-card t-cal" style="animation-delay:.18s">
+                <div class="type-bar"></div>
+                <div class="ib ib-cal"><iconify-icon icon="ph:users-three-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Design review</div>
+                  <div class="card-meta"><span class="type-label">Calendar</span> · 2:00 PM</div>
+                </div>
+                <div class="chip cal">14:00</div>
+              </div>
+              <div class="desk-card t-rem" style="animation-delay:.26s">
+                <div class="type-bar"></div>
+                <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Pick up dry cleaning</div>
+                  <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+                </div>
+                <div class="chip rem">18:00</div>
+              </div>
+            </div>
+
+            <!-- Right column -->
+            <div class="desk-col">
+              <div class="desk-sec-row">
+                <div class="desk-sec-num em">03 /</div>
+                <iconify-icon icon="ph:notebook-fill" width="12" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+                <div class="desk-sec-txt em">Notes</div>
+                <div class="desk-sec-line"></div>
+              </div>
+              <div class="desk-card t-note" style="animation-delay:.34s">
+                <div class="type-bar"></div>
+                <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Grocery ideas</div>
+                  <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+                </div>
+                <div class="chip em">NOTE</div>
+              </div>
+              <div class="desk-card t-note" style="animation-delay:.42s">
+                <div class="type-bar"></div>
+                <div class="ib ib-note"><iconify-icon icon="ph:file-text-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Q3 planning notes</div>
+                  <div class="card-meta"><span class="type-label">Note</span> · edited 3 days ago</div>
+                </div>
+                <div class="chip em">NOTE</div>
+              </div>
+
+              <div class="desk-sec-row" style="margin-top:8px">
+                <div class="desk-sec-num td">04 /</div>
+                <iconify-icon icon="ph:bell-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+                <div class="desk-sec-txt td">Reminders</div>
+                <div class="desk-sec-line"></div>
+              </div>
+              <div class="desk-card t-rem" style="animation-delay:.5s">
+                <div class="type-bar"></div>
+                <div class="ib ib-rem"><iconify-icon icon="ph:airplane-takeoff-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Book NYC flight</div>
+                  <div class="card-meta"><span class="type-label">Reminder</span> · by tomorrow</div>
+                </div>
+                <div class="chip rem">REM</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="desk-right">
+        <div>
+          <div class="panel-title">Coming up</div>
+          <div class="mini-card">
+            <div class="ib ib-cal" style="flex-shrink:0"><iconify-icon icon="ph:calendar-fill" width="14"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title" style="font-family:var(--body);font-size:12px;color:var(--card-title)">Flight to NYC</div>
+              <div class="card-meta" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--card-meta)">Thu · 09:00</div>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="ib ib-rem" style="flex-shrink:0"><iconify-icon icon="ph:bell-ringing-fill" width="14"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title" style="font-family:var(--body);font-size:12px;color:var(--card-title)">Renew gym membership</div>
+              <div class="card-meta" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--card-meta)">Fri · end of day</div>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="ib ib-cal" style="flex-shrink:0"><iconify-icon icon="ph:users-three-fill" width="14"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title" style="font-family:var(--body);font-size:12px;color:var(--card-title)">Quarterly planning</div>
+              <div class="card-meta" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--card-meta)">Mon · 10:00</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="panel-title">Recent note</div>
+          <div class="panel-note">
+            <div class="panel-note-label">Note</div>
+            Grocery ideas â€” oat milk, sourdough, cherry tomatoes, tahini, good olive oil...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /row section 3 -->
+
+
+<!-- ════════════════════════════════════════════════════════
+     SECTION 4 — LIGHT MODE · MOBILE · TABLET · DESKTOP
+     ════════════════════════════════════════════════════════ -->
+<div class="section-tag">04 / Light Mode · Mobile · Tablet · Desktop</div>
+
+<div class="row" style="align-items:flex-start">
+
+  <!-- ── LIGHT MOBILE ── -->
+  <div class="col">
+    <div class="col-label">Mobile · 390px</div>
+    <div class="col-sub">Warm lavender white · single column · bottom nav</div>
+    <div class="phone light bf-v1">
+      <div class="ph-bg"></div>
+      <div class="blob-wrap">
+        <div class="blob blob-a" style="animation-delay:4s"></div>
+        <div class="blob blob-b" style="animation-delay:9s"></div>
+        <div class="blob blob-c" style="animation-delay:2s"></div>
+      </div>
+      <div class="ph-stack">
+        <div class="ph-header">
+          <div class="ph-date">Wed, Jun 25</div>
+          <div class="ph-head-row">
+            <div>
+              <div class="ph-greeting">Good<br>morning.</div>
+              <div class="ph-sub">4 things need attention</div>
+            </div>
+            <div class="ph-avatar">DR</div>
+          </div>
+        </div>
+        <div class="ph-cap-wrap">
+          <div class="ph-capture">
+            <iconify-icon icon="ph:magnifying-glass-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+            Search or brain dump...
+          </div>
+        </div>
+        <div class="ph-body">
+          <div class="sec-row">
+            <div class="sec-num ov">01 /</div>
+            <iconify-icon icon="ph:alarm-fill" width="12" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt ov">Overdue</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-ov">
+            <div class="type-bar"></div>
+            <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Call the dentist</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+            </div>
+            <div class="chip ov">LATE</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num td">02 /</div>
+            <iconify-icon icon="ph:calendar-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt td">Today</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.1s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Team standup</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+            </div>
+            <div class="chip cal">10:00</div>
+          </div>
+          <div class="card t-cal" style="animation-delay:.18s">
+            <div class="type-bar"></div>
+            <div class="ib ib-cal"><iconify-icon icon="ph:users-three-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Design review</div>
+              <div class="card-meta"><span class="type-label">Calendar</span> · 2:00 PM</div>
+            </div>
+            <div class="chip cal">14:00</div>
+          </div>
+          <div class="card t-rem" style="animation-delay:.26s">
+            <div class="type-bar"></div>
+            <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Pick up dry cleaning</div>
+              <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+            </div>
+            <div class="chip rem">18:00</div>
+          </div>
+          <div class="sec-row">
+            <div class="sec-num em">03 /</div>
+            <iconify-icon icon="ph:notebook-fill" width="12" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+            <div class="sec-txt em">Notes</div>
+            <div class="sec-line"></div>
+          </div>
+          <div class="card t-note" style="animation-delay:.34s">
+            <div class="type-bar"></div>
+            <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="17"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title">Grocery ideas</div>
+              <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+            </div>
+            <div class="chip em">NOTE</div>
+          </div>
+        </div>
+        <div class="ph-nav-outer">
+          <div class="ph-nav">
+            <div class="ph-tab on"><iconify-icon icon="ph:house-fill" width="28"></iconify-icon>Home</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:calendar-fill" width="28"></iconify-icon>Cal</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:bell-fill" width="28"></iconify-icon>Remind</div>
+            <div class="ph-tab off"><iconify-icon icon="ph:notebook-fill" width="28"></iconify-icon>Notes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LIGHT TABLET ── -->
+  <div class="col">
+    <div class="col-label">Tablet · 768px</div>
+    <div class="col-sub">Warm white · 2-column card grid · spacious layout</div>
+    <div class="tablet light bf-v1">
+      <div class="ph-bg"></div>
+      <div class="blob-wrap">
+        <div class="blob blob-a" style="width:300px;height:300px;animation-delay:6s"></div>
+        <div class="blob blob-b" style="width:240px;height:240px;animation-delay:2s"></div>
+        <div class="blob blob-c" style="width:200px;height:200px;animation-delay:10s"></div>
+      </div>
+      <div class="tab-stack">
+        <div class="tab-header">
+          <div class="tab-date">Wed, Jun 25</div>
+          <div class="tab-head-row">
+            <div>
+              <div class="tab-greeting">Good morning.</div>
+              <div class="tab-sub">4 things need your attention today</div>
+            </div>
+            <div class="tab-avatar">DR</div>
+          </div>
+        </div>
+        <div class="tab-cap-wrap">
+          <div class="tab-capture">
+            <iconify-icon icon="ph:magnifying-glass-fill" width="18" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+            Search or brain dump something...
+          </div>
+        </div>
+        <div class="tab-body">
+          <div class="tab-sec-row">
+            <div class="tab-sec-num ov">01 /</div>
+            <iconify-icon icon="ph:alarm-fill" width="13" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+            <div class="tab-sec-txt ov">Overdue</div>
+            <div class="tab-sec-line"></div>
+          </div>
+          <div class="tab-grid">
+            <div class="tab-card t-ov tab-full">
+              <div class="type-bar"></div>
+              <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Call the dentist</div>
+                <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+              </div>
+              <div class="chip ov">LATE</div>
+            </div>
+          </div>
+          <div class="tab-sec-row">
+            <div class="tab-sec-num td">02 /</div>
+            <iconify-icon icon="ph:calendar-fill" width="13" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+            <div class="tab-sec-txt td">Today</div>
+            <div class="tab-sec-line"></div>
+          </div>
+          <div class="tab-grid">
+            <div class="tab-card t-cal" style="animation-delay:.1s">
+              <div class="type-bar"></div>
+              <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Team standup</div>
+                <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+              </div>
+              <div class="chip cal">10:00</div>
+            </div>
+            <div class="tab-card t-cal" style="animation-delay:.18s">
+              <div class="type-bar"></div>
+              <div class="ib ib-cal"><iconify-icon icon="ph:users-three-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Design review</div>
+                <div class="card-meta"><span class="type-label">Calendar</span> · 2:00 PM</div>
+              </div>
+              <div class="chip cal">14:00</div>
+            </div>
+            <div class="tab-card t-rem" style="animation-delay:.26s">
+              <div class="type-bar"></div>
+              <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Pick up dry cleaning</div>
+                <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+              </div>
+              <div class="chip rem">18:00</div>
+            </div>
+            <div class="tab-card t-rem" style="animation-delay:.34s">
+              <div class="type-bar"></div>
+              <div class="ib ib-rem"><iconify-icon icon="ph:airplane-takeoff-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Book NYC flight</div>
+                <div class="card-meta"><span class="type-label">Reminder</span> · by tomorrow</div>
+              </div>
+              <div class="chip rem">REM</div>
+            </div>
+          </div>
+          <div class="tab-sec-row">
+            <div class="tab-sec-num em">03 /</div>
+            <iconify-icon icon="ph:notebook-fill" width="13" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+            <div class="tab-sec-txt em">Notes</div>
+            <div class="tab-sec-line"></div>
+          </div>
+          <div class="tab-grid">
+            <div class="tab-card t-note" style="animation-delay:.42s">
+              <div class="type-bar"></div>
+              <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Grocery ideas</div>
+                <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+              </div>
+              <div class="chip em">NOTE</div>
+            </div>
+            <div class="tab-card t-note" style="animation-delay:.5s">
+              <div class="type-bar"></div>
+              <div class="ib ib-note"><iconify-icon icon="ph:file-text-fill" width="19"></iconify-icon></div>
+              <div class="card-content">
+                <div class="card-title">Q3 planning notes</div>
+                <div class="card-meta"><span class="type-label">Note</span> · edited 3 days ago</div>
+              </div>
+              <div class="chip em">NOTE</div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-nav-outer">
+          <div class="tab-nav">
+            <div class="tab-tab on"><iconify-icon icon="ph:house-fill" width="28"></iconify-icon>Home</div>
+            <div class="tab-tab off"><iconify-icon icon="ph:calendar-fill" width="28"></iconify-icon>Calendar</div>
+            <div class="tab-tab off"><iconify-icon icon="ph:bell-fill" width="28"></iconify-icon>Reminders</div>
+            <div class="tab-tab off"><iconify-icon icon="ph:notebook-fill" width="28"></iconify-icon>Notes</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LIGHT DESKTOP ── -->
+  <div class="col">
+    <div class="col-label">Desktop · 1220px</div>
+    <div class="col-sub">Warm white · sidebar nav · 2-column feed · right panel</div>
+    <div class="desktop light bf-v1">
+      <div class="desk-sidebar">
+        <div class="desk-logo">Scatterbrain</div>
+        <div class="desk-nav-item on"><iconify-icon icon="ph:house-fill" width="18"></iconify-icon>Home</div>
+        <div class="desk-nav-item off"><iconify-icon icon="ph:calendar-fill" width="18"></iconify-icon>Calendar</div>
+        <div class="desk-nav-item off"><iconify-icon icon="ph:bell-fill" width="18"></iconify-icon>Reminders</div>
+        <div class="desk-nav-item off"><iconify-icon icon="ph:notebook-fill" width="18"></iconify-icon>Notes</div>
+        <div class="desk-nav-item off" style="margin-top:8px"><iconify-icon icon="ph:gear-fill" width="18"></iconify-icon>Settings</div>
+        <div class="desk-sidebar-btm">
+          <div class="desk-avatar">DR</div>
+          <div class="desk-user">
+            <div class="desk-uname">Diana Ruth</div>
+            <div class="desk-umail">dianaruth40</div>
+          </div>
+        </div>
+      </div>
+      <div class="desk-main">
+        <div class="desk-main-bg"></div>
+        <div class="desk-blob-wrap">
+          <div class="desk-blob-a" style="animation-delay:5s"></div>
+          <div class="desk-blob-b" style="animation-delay:3s"></div>
+        </div>
+        <div class="desk-main-stack">
+          <div class="desk-header">
+            <div class="desk-date">Wednesday, June 25</div>
+            <div class="desk-head-row">
+              <div>
+                <div class="desk-greeting">Good morning, Diana.</div>
+                <div class="desk-sub">4 things need your attention today</div>
+              </div>
+              <div class="desk-search">
+                <iconify-icon icon="ph:magnifying-glass-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+                Search or brain dump...
+              </div>
+            </div>
+          </div>
+          <div class="desk-cap-wrap">
+            <div class="desk-capture">
+              <iconify-icon icon="ph:lightning-fill" width="16" style="color:var(--input-ico);flex-shrink:0"></iconify-icon>
+              Quick capture — what's on your mind?
+            </div>
+          </div>
+          <div class="desk-body">
+            <div class="desk-col">
+              <div class="desk-sec-row">
+                <div class="desk-sec-num ov">01 /</div>
+                <iconify-icon icon="ph:alarm-fill" width="12" style="color:var(--sec-ov);flex-shrink:0"></iconify-icon>
+                <div class="desk-sec-txt ov">Overdue</div>
+                <div class="desk-sec-line"></div>
+              </div>
+              <div class="desk-card t-ov">
+                <div class="type-bar"></div>
+                <div class="ib ib-ov"><iconify-icon icon="ph:bell-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Call the dentist</div>
+                  <div class="card-meta"><span class="type-label">Reminder</span> · 2 days overdue</div>
+                </div>
+                <div class="chip ov">LATE</div>
+              </div>
+              <div class="desk-sec-row">
+                <div class="desk-sec-num td">02 /</div>
+                <iconify-icon icon="ph:calendar-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+                <div class="desk-sec-txt td">Today</div>
+                <div class="desk-sec-line"></div>
+              </div>
+              <div class="desk-card t-cal" style="animation-delay:.1s">
+                <div class="type-bar"></div>
+                <div class="ib ib-cal"><iconify-icon icon="ph:calendar-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Team standup</div>
+                  <div class="card-meta"><span class="type-label">Calendar</span> · 10:00 AM</div>
+                </div>
+                <div class="chip cal">10:00</div>
+              </div>
+              <div class="desk-card t-cal" style="animation-delay:.18s">
+                <div class="type-bar"></div>
+                <div class="ib ib-cal"><iconify-icon icon="ph:users-three-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Design review</div>
+                  <div class="card-meta"><span class="type-label">Calendar</span> · 2:00 PM</div>
+                </div>
+                <div class="chip cal">14:00</div>
+              </div>
+              <div class="desk-card t-rem" style="animation-delay:.26s">
+                <div class="type-bar"></div>
+                <div class="ib ib-rem"><iconify-icon icon="ph:bell-ringing-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Pick up dry cleaning</div>
+                  <div class="card-meta"><span class="type-label">Reminder</span> · 6:00 PM</div>
+                </div>
+                <div class="chip rem">18:00</div>
+              </div>
+            </div>
+            <div class="desk-col">
+              <div class="desk-sec-row">
+                <div class="desk-sec-num em">03 /</div>
+                <iconify-icon icon="ph:notebook-fill" width="12" style="color:var(--sec-em);flex-shrink:0"></iconify-icon>
+                <div class="desk-sec-txt em">Notes</div>
+                <div class="desk-sec-line"></div>
+              </div>
+              <div class="desk-card t-note" style="animation-delay:.34s">
+                <div class="type-bar"></div>
+                <div class="ib ib-note"><iconify-icon icon="ph:notebook-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Grocery ideas</div>
+                  <div class="card-meta"><span class="type-label">Note</span> · edited yesterday</div>
+                </div>
+                <div class="chip em">NOTE</div>
+              </div>
+              <div class="desk-card t-note" style="animation-delay:.42s">
+                <div class="type-bar"></div>
+                <div class="ib ib-note"><iconify-icon icon="ph:file-text-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Q3 planning notes</div>
+                  <div class="card-meta"><span class="type-label">Note</span> · edited 3 days ago</div>
+                </div>
+                <div class="chip em">NOTE</div>
+              </div>
+              <div class="desk-sec-row" style="margin-top:8px">
+                <div class="desk-sec-num td">04 /</div>
+                <iconify-icon icon="ph:bell-fill" width="12" style="color:var(--sec-td);flex-shrink:0"></iconify-icon>
+                <div class="desk-sec-txt td">Reminders</div>
+                <div class="desk-sec-line"></div>
+              </div>
+              <div class="desk-card t-rem" style="animation-delay:.5s">
+                <div class="type-bar"></div>
+                <div class="ib ib-rem"><iconify-icon icon="ph:airplane-takeoff-fill" width="16"></iconify-icon></div>
+                <div class="card-content">
+                  <div class="card-title">Book NYC flight</div>
+                  <div class="card-meta"><span class="type-label">Reminder</span> · by tomorrow</div>
+                </div>
+                <div class="chip rem">REM</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="desk-right">
+        <div>
+          <div class="panel-title">Coming up</div>
+          <div class="mini-card">
+            <div class="ib ib-cal" style="flex-shrink:0"><iconify-icon icon="ph:calendar-fill" width="14"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title" style="font-family:var(--body);font-size:12px;color:var(--card-title)">Flight to NYC</div>
+              <div class="card-meta" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--card-meta)">Thu · 09:00</div>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="ib ib-rem" style="flex-shrink:0"><iconify-icon icon="ph:bell-ringing-fill" width="14"></iconify-icon></div>
+            <div class="card-content">
+              <div class="card-title" style="font-family:var(--body);font-size:12px;color:var(--card-title)">Renew gym membership</div>
+              <div class="card-meta" style="font-family:'DM Mono',monospace;font-size:10px;color:var(--card-meta)">Fri · end of day</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="panel-title">Recent note</div>
+          <div class="panel-note">
+            <div class="panel-note-label">Note</div>
+            Grocery ideas — oat milk, sourdough, cherry tomatoes, tahini, good olive oil...
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /row section 4 -->
+</body>
+</html>

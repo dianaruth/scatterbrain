@@ -27,20 +27,15 @@ approved.
 
 ## Files
 - `mockups/tokens.css` — shared design tokens + base component styles.
-<<<<<<< HEAD
 - `mockups/index.html` — six-screen mockup page (initial).
 - `mockups/keep.html` — **the approved direction**: full Keep theme, all screens + states, Bricolage
   Grotesque + Solar icons (see Decisions).
 - `mockups/lab.html` — font + icon comparison lab (Iconify-driven); reusable for future exploration.
 - `mockups/variants.html`, `mockups/themes.html` — earlier exploration (variants + theme picker).
-=======
-- `mockups/index.html` — six-screen mockup page.
->>>>>>> main
 
 ## Decisions
 - HTML mockups first (vs building real Expo screens) → fastest iteration, minimal throwaway.
 - Token-driven CSS → approved look ports cleanly into `theme/`; global restyles stay cheap.
-<<<<<<< HEAD
 - Review by the user opening the mockup HTML directly (Playwright renders via `page.goto('file://…')`
   inside `browser_run_code_unsafe`; the plain `browser_navigate` blocks `file://`. No local server.)
 - **Typography (approved 2026-06-25 · supersedes prior):** **Playfair Display** italic weight 400 for
@@ -60,10 +55,6 @@ approved.
 - **Light + dark modes (both approved):** dark = deep midnight slate; light = warm lavender white.
   Canonical renders: `section4-light.png` (light mode) · `composite-dark-light.png` (both modes
   side by side, all three breakpoints).
-=======
-- Review by the user opening `mockups/index.html` directly (file:// blocked for Playwright; no local
-  server run per user preference).
->>>>>>> main
 
 ## Verification
 - User opens `mockups/index.html` in a browser and reviews all six screens (light; dark via
@@ -71,7 +62,6 @@ approved.
 - Approval of visual direction = exit criteria for this phase.
 
 ## Outcome
-<<<<<<< HEAD
 **Approved (final direction 2026-06-25).** Visual language: **Playfair Display** italic heading +
 **Plus Jakarta Sans** body + **DM Mono** mono + **Phosphor fill** icons. Dark editorial midnight-
 slate palette with warm lavender-white light mode. Sharp corners, animated blobs, floating capture
@@ -84,14 +74,10 @@ is unblocked.
 > Prior approved direction (Bricolage Grotesque + Manrope + Solar bold-duotone, 2026-06-02) was
 > superseded after further iteration. The keep.html/keep.png files remain for reference but are no
 > longer the canonical direction.
-=======
-_(pending approval / iteration)_
->>>>>>> main
 
 ## Changelog
 - 2026-05-30 — created mockups (`tokens.css`, `index.html`) for all six screens incl. notes/checklist
   affordances; awaiting user review + any Dribbble references.
-<<<<<<< HEAD
 - 2026-05-31 — first review round. Rendered light + dark via Playwright. Refined per feedback:
   (1) dark-mode contrast — header/avatar now use dedicated deep-plum tokens (`--header-bg` etc.) that
   don't flip light in dark mode; surface deepened slightly. (2) icons — replaced Unicode glyph
@@ -117,12 +103,6 @@ _(pending approval / iteration)_
   Reminders (all complete), and an empty calendar day, using spec §8 copy verbatim. (4) **Brain Dump
   guards** — "Save it before you forget?" dismiss confirmation + "Caught it." save toast (spec §7).
   Onboarding/sign-in intentionally deferred. Rendered + reviewed via Playwright (`keep.png`).
-- 2026-06-25 — **direction re-approved with new visual identity.** Extended exploration in
-  `directions.html`: iterated through 6+ heading/body font combos; user rejected all "AI-forward"
-  options. Settled on Playfair Display italic + Plus Jakarta Sans + DM Mono. Swapped Solar icons
-  for Phosphor fill. Sharpened all corner radii. Added full responsive coverage (mobile/tablet/
-  desktop) in both dark and light modes. Final composite render in `composite-dark-light.png`.
-  This supersedes the 2026-06-02 Bricolage Grotesque direction.
 - 2026-06-02 — **look-and-feel iteration to approval.** User feedback: too basic/boxy/no personality.
   Iterated `keep.html`: (1) dropped the flat dark header for big **Bricolage Grotesque** headlines on a
   soft **gradient hero wash**; (2) added **elevation** (cards, FAB, nav, header buttons), **gradient**
@@ -130,5 +110,9 @@ _(pending approval / iteration)_
   colors; (4) explored fonts + icon sets in a new `lab.html` (Iconify) and **swapped icons to Solar
   bold-duotone** and the display font to **Bricolage Grotesque** (body stays Manrope). **User approved
   the visual direction.** Canonical render refreshed (`keep.png`).
-=======
->>>>>>> main
+- 2026-06-25 — **direction re-approved with new visual identity.** Extended exploration in
+  `directions.html`: iterated through 6+ heading/body font combos; user rejected all "AI-forward"
+  options. Settled on Playfair Display italic + Plus Jakarta Sans + DM Mono. Swapped Solar icons
+  for Phosphor fill. Sharpened all corner radii. Added full responsive coverage (mobile/tablet/
+  desktop) in both dark and light modes. Final composite render in `composite-dark-light.png`.
+  This supersedes the 2026-06-02 Bricolage Grotesque direction.

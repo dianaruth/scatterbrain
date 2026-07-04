@@ -1,29 +1,23 @@
+import { Bell, Calendar, House, Notebook } from 'phosphor-react-native';
 import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
 
-import { colors } from '@/theme/tokens';
-
-type TabIconProps = { label: string; focused: boolean };
-
-function TabIcon({ label, focused }: TabIconProps) {
-  return (
-    <Text style={{ fontSize: 18, opacity: focused ? 1 : 0.45 }}>{label}</Text>
-  );
-}
+import { useTheme } from '@/theme/ThemeProvider';
 
 export default function TabLayout() {
+  const { colors, fonts } = useTheme();
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.dark.nav,
-          borderTopColor: colors.dark.navBorder,
+          backgroundColor: colors.nav,
+          borderTopColor: colors.navBorder,
         },
-        tabBarActiveTintColor: colors.dark.navActive,
-        tabBarInactiveTintColor: colors.dark.navInactive,
+        tabBarActiveTintColor: colors.navActive,
+        tabBarInactiveTintColor: colors.navInactive,
         tabBarLabelStyle: {
-          fontFamily: 'PlusJakartaSans_500Medium',
+          fontFamily: fonts.bodyMedium,
           fontSize: 9,
           letterSpacing: 0.3,
         },
@@ -33,28 +27,36 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Home',
-          tabBarIcon: ({ focused }) => <TabIcon label="⌂" focused={focused} />,
+          tabBarIcon: ({ focused }) => (
+            <House size={24} color={focused ? colors.navActive : colors.navInactive} weight="fill" />
+          ),
         }}
       />
       <Tabs.Screen
         name="calendar"
         options={{
           title: 'Cal',
-          tabBarIcon: ({ focused }) => <TabIcon label="◫" focused={focused} />,
+          tabBarIcon: ({ focused }) => (
+            <Calendar size={24} color={focused ? colors.navActive : colors.navInactive} weight="fill" />
+          ),
         }}
       />
       <Tabs.Screen
         name="reminders"
         options={{
           title: 'Remind',
-          tabBarIcon: ({ focused }) => <TabIcon label="◎" focused={focused} />,
+          tabBarIcon: ({ focused }) => (
+            <Bell size={24} color={focused ? colors.navActive : colors.navInactive} weight="fill" />
+          ),
         }}
       />
       <Tabs.Screen
         name="notes"
         options={{
           title: 'Notes',
-          tabBarIcon: ({ focused }) => <TabIcon label="◻" focused={focused} />,
+          tabBarIcon: ({ focused }) => (
+            <Notebook size={24} color={focused ? colors.navActive : colors.navInactive} weight="fill" />
+          ),
         }}
       />
     </Tabs>

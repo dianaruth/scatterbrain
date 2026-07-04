@@ -1,10 +1,10 @@
 // Design tokens ported from mockups/directions.html — the approved visual contract.
-// Full theme system (ThemeProvider, useTheme hook) ships in SB-3.
 
 // ─── Typography ──────────────────────────────────────────────────────────────
 
 export const fonts = {
   heading: 'PlayfairDisplay_400Regular_Italic',
+  headingBold: 'PlayfairDisplay_700Bold_Italic',
   bodyRegular: 'PlusJakartaSans_400Regular',
   bodyMedium: 'PlusJakartaSans_500Medium',
   bodySemiBold: 'PlusJakartaSans_600SemiBold',

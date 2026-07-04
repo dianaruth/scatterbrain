@@ -1,16 +1,19 @@
 import { Bell, Calendar, House, Notebook } from 'phosphor-react-native';
 import { Tabs } from 'expo-router';
 
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useTheme } from '@/theme/ThemeProvider';
 
 export default function TabLayout() {
   const { colors, fonts } = useTheme();
+  const bp = useBreakpoint();
 
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
+          display: bp === 'desktop' ? 'none' : 'flex',
           backgroundColor: colors.nav,
           borderTopColor: colors.navBorder,
         },

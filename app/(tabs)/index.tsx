@@ -11,7 +11,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CaptureBar } from '@/components/CaptureBar';
 import { ItemCard } from '@/components/ItemCard';
+import { Logo } from '@/components/Logo';
 import { SectionDivider } from '@/components/SectionDivider';
+import { useBreakpoint } from '@/hooks/useBreakpoint';
 import { useTheme } from '@/theme/ThemeProvider';
 
 type SampleItem = {
@@ -32,9 +34,42 @@ type Section = {
   items: SampleItem[];
 };
 
+function toRows<T>(items: T[]): [T, T | null][] {
+  const rows: [T, T | null][] = [];
+  for (let i = 0; i < items.length; i += 2) {
+    rows.push([items[i]!, items[i + 1] ?? null]);
+  }
+  return rows;
+}
+
+function renderSection(section: Section): React.ReactNode {
+  return (
+    <View key={section.num}>
+      <SectionDivider
+        num={section.num}
+        label={section.label}
+        icon={section.sectionIcon}
+        color={section.sectionColor}
+      />
+      {section.items.map((item) => (
+        <ItemCard
+          key={item.id}
+          type={item.type}
+          title={item.title}
+          typeLabel={item.typeLabel}
+          meta={item.meta}
+          chip={item.chip}
+          icon={item.icon}
+        />
+      ))}
+    </View>
+  );
+}
+
 export default function TodayScreen() {
   const { colors, fonts, typeColors } = useTheme();
   const insets = useSafeAreaInsets();
+  const bp = useBreakpoint();
 
   const sections: Section[] = [
     {
@@ -99,6 +134,15 @@ export default function TodayScreen() {
     },
   ];
 
+  const hdrPx = bp === 'mobile' ? 24 : 36;
+  const greetingSize = bp === 'tablet' ? 58 : 48;
+  const captureMx = bp === 'mobile' ? 20 : bp === 'tablet' ? 28 : 36;
+  const captureMt = bp === 'tablet' ? -26 : -22;
+
+  const overdueSec = sections[0];
+  const todaySec = sections[1];
+  const notesSec = sections[2];
+
   return (
     <View style={[styles.screen, { backgroundColor: colors.bg }]}>
       <ScrollView
@@ -111,12 +155,18 @@ export default function TodayScreen() {
           colors={colors.headerGradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={[styles.header, { paddingTop: insets.top + 16 }]}
+          style={[styles.header, { paddingTop: insets.top + 16, paddingHorizontal: hdrPx }]}
         >
           <View style={styles.headerTop}>
-            <Text style={[styles.dateText, { color: colors.subText, fontFamily: fonts.mono }]}>
-              {new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase()}
-            </Text>
+            {bp === 'desktop' ? (
+              <Text style={[styles.dateText, { color: colors.subText, fontFamily: fonts.mono }]}>
+                {new Date()
+                  .toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+                  .toUpperCase()}
+              </Text>
+            ) : (
+              <Logo size="sm" />
+            )}
             <View style={styles.avatar}>
               <LinearGradient
                 colors={colors.avatarGradient}
@@ -128,7 +178,19 @@ export default function TodayScreen() {
               </LinearGradient>
             </View>
           </View>
-          <Text style={[styles.greeting, { color: colors.greeting, fontFamily: fonts.headingBold }]}>
+          {bp !== 'desktop' && (
+            <Text style={[styles.dateText, { color: colors.subText, fontFamily: fonts.mono, marginBottom: 6 }]}>
+              {new Date()
+                .toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+                .toUpperCase()}
+            </Text>
+          )}
+          <Text
+            style={[
+              styles.greeting,
+              { color: colors.greeting, fontFamily: fonts.headingBold, fontSize: greetingSize },
+            ]}
+          >
             {'Good\nmorning.'}
           </Text>
           <Text style={[styles.subtitle, { color: colors.subText, fontFamily: fonts.bodyRegular }]}>
@@ -137,31 +199,96 @@ export default function TodayScreen() {
         </LinearGradient>
 
         {/* Floating capture bar */}
-        <CaptureBar />
+        <CaptureBar marginHorizontal={captureMx} marginTop={captureMt} />
 
-        {/* Content */}
-        <View style={styles.body}>
-          {sections.map((section) => (
-            <View key={section.num}>
-              <SectionDivider
-                num={section.num}
-                label={section.label}
-                icon={section.sectionIcon}
-                color={section.sectionColor}
-              />
-              {section.items.map((item) => (
-                <ItemCard
-                  key={item.id}
-                  type={item.type}
-                  title={item.title}
-                  typeLabel={item.typeLabel}
-                  meta={item.meta}
-                  chip={item.chip}
-                  icon={item.icon}
-                />
-              ))}
+        {/* Body */}
+        <View style={[styles.body, { paddingHorizontal: hdrPx }]}>
+          {bp === 'desktop' ? (
+            <View style={styles.desktopColumns}>
+              <View style={styles.desktopCol}>
+                {overdueSec !== undefined && renderSection(overdueSec)}
+                {todaySec !== undefined && renderSection(todaySec)}
+              </View>
+              <View style={styles.desktopCol}>
+                {notesSec !== undefined && renderSection(notesSec)}
+              </View>
             </View>
-          ))}
+          ) : bp === 'tablet' ? (
+            sections.map((section) => (
+              <View key={section.num}>
+                <SectionDivider
+                  num={section.num}
+                  label={section.label}
+                  icon={section.sectionIcon}
+                  color={section.sectionColor}
+                />
+                {section.label === 'Overdue' ? (
+                  section.items.map((item) => (
+                    <ItemCard
+                      key={item.id}
+                      type={item.type}
+                      title={item.title}
+                      typeLabel={item.typeLabel}
+                      meta={item.meta}
+                      chip={item.chip}
+                      icon={item.icon}
+                    />
+                  ))
+                ) : (
+                  toRows(section.items).map(([a, b], i) => (
+                    <View key={i} style={styles.tabletRow}>
+                      <View style={styles.tabletCell}>
+                        <ItemCard
+                          type={a.type}
+                          title={a.title}
+                          typeLabel={a.typeLabel}
+                          meta={a.meta}
+                          chip={a.chip}
+                          icon={a.icon}
+                        />
+                      </View>
+                      {b !== null ? (
+                        <View style={styles.tabletCell}>
+                          <ItemCard
+                            type={b.type}
+                            title={b.title}
+                            typeLabel={b.typeLabel}
+                            meta={b.meta}
+                            chip={b.chip}
+                            icon={b.icon}
+                          />
+                        </View>
+                      ) : (
+                        <View style={styles.tabletCell} />
+                      )}
+                    </View>
+                  ))
+                )}
+              </View>
+            ))
+          ) : (
+            sections.map((section) => (
+              <View key={section.num}>
+                <SectionDivider
+                  num={section.num}
+                  label={section.label}
+                  icon={section.sectionIcon}
+                  color={section.sectionColor}
+                />
+                {section.items.map((item) => (
+                  <ItemCard
+                    key={item.id}
+                    type={item.type}
+                    title={item.title}
+                    typeLabel={item.typeLabel}
+                    meta={item.meta}
+                    chip={item.chip}
+                    icon={item.icon}
+                  />
+                ))}
+              </View>
+            ))
+          )}
           <View style={styles.bottomPad} />
         </View>
       </ScrollView>
@@ -180,7 +307,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   header: {
-    paddingHorizontal: 24,
     paddingBottom: 28,
   },
   headerTop: {
@@ -209,7 +335,6 @@ const styles = StyleSheet.create({
     color: '#EAF0FF',
   },
   greeting: {
-    fontSize: 48,
     lineHeight: 46,
     letterSpacing: -1,
     marginBottom: 10,
@@ -218,8 +343,21 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   body: {
-    paddingHorizontal: 20,
     paddingTop: 28,
+  },
+  desktopColumns: {
+    flexDirection: 'row',
+    gap: 28,
+  },
+  desktopCol: {
+    flex: 1,
+  },
+  tabletRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  tabletCell: {
+    flex: 1,
   },
   bottomPad: {
     height: 20,

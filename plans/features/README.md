@@ -22,7 +22,7 @@ order. The high-level roadmap lives in the master plan
 | SB-1 | 00 | UI mockups (look-and-feel gate) | Done | [00-ui-mockups.md](./00-ui-mockups.md) |
 | SB-2 | 01 | Scaffold + CI/CD | Done | [01-scaffold-ci.md](./01-scaffold-ci.md) |
 | SB-3 | 02 | Theme + static Today | Done | [02-theme-today.md](./02-theme-today.md) |
-| SB-12 | 03 | Responsive layouts (tablet + desktop) | Planned | _tbd_ |
+| SB-12 | 03 | Responsive layouts (tablet + desktop) | Done | [03-responsive-layouts.md](./03-responsive-layouts.md) |
 | SB-4 | 04 | Local data layer (SQLite + store) | Planned | _tbd_ |
 | SB-5 | 04 | Brain Dump + parser + dictation | Planned | _tbd_ |
 | SB-6 | 05 | Supabase sync + auth | Planned | _tbd_ |

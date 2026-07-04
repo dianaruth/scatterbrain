@@ -3,11 +3,16 @@ import { StyleSheet, TextInput, View } from 'react-native';
 
 import { useTheme } from '@/theme/ThemeProvider';
 
-export function CaptureBar() {
+type Props = {
+  marginHorizontal?: number;
+  marginTop?: number;
+};
+
+export function CaptureBar({ marginHorizontal = 20, marginTop = -22 }: Props) {
   const { colors, radii } = useTheme();
 
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, { marginHorizontal, marginTop }]}>
       <View
         style={[
           styles.bar,
@@ -31,8 +36,6 @@ export function CaptureBar() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: -22,
-    marginHorizontal: 20,
     zIndex: 10,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 10 },

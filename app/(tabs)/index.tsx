@@ -6,7 +6,7 @@ import {
   Calendar,
   Notebook,
 } from 'phosphor-react-native';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CaptureBar } from '@/components/CaptureBar';
@@ -33,6 +33,9 @@ type Section = {
   sectionColor: string;
   items: SampleItem[];
 };
+
+const CONTENT_MAX = 720;
+const DESKTOP_TWO_COL_MIN = 1150;
 
 function toRows<T>(items: T[]): [T, T | null][] {
   const rows: [T, T | null][] = [];
@@ -70,6 +73,8 @@ export default function TodayScreen() {
   const { colors, fonts, typeColors } = useTheme();
   const insets = useSafeAreaInsets();
   const bp = useBreakpoint();
+  const { width } = useWindowDimensions();
+  const wideColumns = width >= DESKTOP_TWO_COL_MIN;
 
   const sections: Section[] = [
     {
@@ -155,55 +160,59 @@ export default function TodayScreen() {
           colors={colors.headerGradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={[styles.header, { paddingTop: insets.top + 16, paddingHorizontal: hdrPx }]}
+          style={[styles.header, { paddingTop: insets.top + 16 }]}
         >
-          <View style={styles.headerTop}>
-            {bp === 'desktop' ? (
-              <Text style={[styles.dateText, { color: colors.subText, fontFamily: fonts.mono }]}>
+          <View style={[styles.headerInner, { paddingHorizontal: hdrPx }]}>
+            <View style={styles.headerTop}>
+              {bp === 'desktop' ? (
+                <Text style={[styles.dateText, { color: colors.subText, fontFamily: fonts.mono }]}>
+                  {new Date()
+                    .toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+                    .toUpperCase()}
+                </Text>
+              ) : (
+                <Logo size="sm" />
+              )}
+              <View style={styles.avatar}>
+                <LinearGradient
+                  colors={colors.avatarGradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={[styles.avatarGrad, { borderRadius: 6 }]}
+                >
+                  <Text style={[styles.avatarText, { fontFamily: fonts.mono }]}>DR</Text>
+                </LinearGradient>
+              </View>
+            </View>
+            {bp !== 'desktop' && (
+              <Text style={[styles.dateText, { color: colors.subText, fontFamily: fonts.mono, marginBottom: 6 }]}>
                 {new Date()
                   .toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
                   .toUpperCase()}
               </Text>
-            ) : (
-              <Logo size="sm" />
             )}
-            <View style={styles.avatar}>
-              <LinearGradient
-                colors={colors.avatarGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={[styles.avatarGrad, { borderRadius: 6 }]}
-              >
-                <Text style={[styles.avatarText, { fontFamily: fonts.mono }]}>DR</Text>
-              </LinearGradient>
-            </View>
-          </View>
-          {bp !== 'desktop' && (
-            <Text style={[styles.dateText, { color: colors.subText, fontFamily: fonts.mono, marginBottom: 6 }]}>
-              {new Date()
-                .toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-                .toUpperCase()}
+            <Text
+              style={[
+                styles.greeting,
+                { color: colors.greeting, fontFamily: fonts.headingBold, fontSize: greetingSize },
+              ]}
+            >
+              {'Good\nmorning.'}
             </Text>
-          )}
-          <Text
-            style={[
-              styles.greeting,
-              { color: colors.greeting, fontFamily: fonts.headingBold, fontSize: greetingSize },
-            ]}
-          >
-            {'Good\nmorning.'}
-          </Text>
-          <Text style={[styles.subtitle, { color: colors.subText, fontFamily: fonts.bodyRegular }]}>
-            3 things need attention
-          </Text>
+            <Text style={[styles.subtitle, { color: colors.subText, fontFamily: fonts.bodyRegular }]}>
+              3 things need attention
+            </Text>
+          </View>
         </LinearGradient>
 
         {/* Floating capture bar */}
-        <CaptureBar marginHorizontal={captureMx} marginTop={captureMt} />
+        <View style={[styles.captureWrap, { paddingHorizontal: captureMx }]}>
+          <CaptureBar marginHorizontal={0} marginTop={captureMt} />
+        </View>
 
         {/* Body */}
         <View style={[styles.body, { paddingHorizontal: hdrPx }]}>
-          {bp === 'desktop' ? (
+          {bp === 'desktop' && wideColumns ? (
             <View style={styles.desktopColumns}>
               <View style={styles.desktopCol}>
                 {overdueSec !== undefined && renderSection(overdueSec)}
@@ -309,6 +318,11 @@ const styles = StyleSheet.create({
   header: {
     paddingBottom: 28,
   },
+  headerInner: {
+    width: '100%',
+    maxWidth: CONTENT_MAX,
+    alignSelf: 'center',
+  },
   headerTop: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -342,8 +356,16 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
   },
+  captureWrap: {
+    width: '100%',
+    maxWidth: CONTENT_MAX,
+    alignSelf: 'center',
+  },
   body: {
     paddingTop: 28,
+    width: '100%',
+    maxWidth: CONTENT_MAX,
+    alignSelf: 'center',
   },
   desktopColumns: {
     flexDirection: 'row',

@@ -82,8 +82,11 @@ export function Sidebar() {
           <Text style={[styles.userName, { color: colors.textPrimary, fontFamily: fonts.bodySemiBold }]}>
             Diana Ruth
           </Text>
-          <Text style={[styles.userEmail, { color: colors.textMuted, fontFamily: fonts.bodyRegular }]}>
-            dianaruth40@gmail.com
+          <Text
+            style={[styles.userEmail, { color: colors.textMuted, fontFamily: fonts.bodyRegular }]}
+            numberOfLines={1}
+          >
+            dianaruth40
           </Text>
         </View>
       </View>

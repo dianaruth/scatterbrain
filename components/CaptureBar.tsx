@@ -12,7 +12,7 @@ export function CaptureBar({ marginHorizontal = 20, marginTop = -22 }: Props) {
   const { colors, radii } = useTheme();
 
   return (
-    <View style={[styles.wrapper, { marginHorizontal, marginTop }]}>
+    <View style={[styles.wrapper, { marginHorizontal, marginTop, borderRadius: radii.captureBar }]}>
       <View
         style={[
           styles.bar,

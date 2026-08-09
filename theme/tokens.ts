@@ -8,7 +8,7 @@ export const fonts = {
   bodyRegular: 'PlusJakartaSans_400Regular',
   bodyMedium: 'PlusJakartaSans_500Medium',
   bodySemiBold: 'PlusJakartaSans_600SemiBold',
-  mono: 'DMMonoRegular',
+  mono: 'DMMono_400Regular',
 } as const;
 
 export const fontSizes = {

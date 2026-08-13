@@ -23,7 +23,7 @@ order. The high-level roadmap lives in the master plan
 | SB-2 | 01 | Scaffold + CI/CD | Done | [01-scaffold-ci.md](./01-scaffold-ci.md) |
 | SB-3 | 02 | Theme + static Today | Done | [02-theme-today.md](./02-theme-today.md) |
 | SB-12 | 03 | Responsive layouts (tablet + desktop) | Done | [03-responsive-layouts.md](./03-responsive-layouts.md) |
-| SB-4 | 04 | Local data layer (SQLite + store) | Planned | _tbd_ |
+| SB-4 | 04 | Local data layer (in-memory store) | Done | [04-local-data-layer.md](./04-local-data-layer.md) |
 | SB-5 | 04 | Brain Dump + parser + dictation | Planned | _tbd_ |
 | SB-6 | 05 | Supabase sync + auth | Planned | _tbd_ |
 | SB-7 | 06 | Notifications + resurfacing | Planned | _tbd_ |

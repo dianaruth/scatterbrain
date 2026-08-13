@@ -1,11 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import {
-  Alarm,
-  Bell,
-  BellRinging,
-  Calendar,
-  Notebook,
-} from 'phosphor-react-native';
+import { Alarm, Bell, BellRinging, Calendar, Notebook } from 'phosphor-react-native';
 import { ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -14,24 +8,15 @@ import { ItemCard } from '@/components/ItemCard';
 import { Logo } from '@/components/Logo';
 import { SectionDivider } from '@/components/SectionDivider';
 import { useBreakpoint } from '@/hooks/useBreakpoint';
+import { useAttentionCount, useTodaySections } from '@/store';
+import type { ItemType, TodaySection } from '@/store';
 import { useTheme } from '@/theme/ThemeProvider';
 
-type SampleItem = {
-  id: string;
-  type: 'overdue' | 'calendar' | 'reminder' | 'note';
-  title: string;
-  typeLabel: string;
-  meta: string;
-  chip: string;
-  icon: React.ReactNode;
-};
+type ThemeTypeColors = ReturnType<typeof useTheme>['typeColors'];
 
-type Section = {
-  num: string;
-  label: string;
+type RenderSection = TodaySection & {
   sectionIcon: React.ReactNode;
   sectionColor: string;
-  items: SampleItem[];
 };
 
 const CONTENT_MAX = 720;
@@ -45,7 +30,20 @@ function toRows<T>(items: T[]): [T, T | null][] {
   return rows;
 }
 
-function renderSection(section: Section): React.ReactNode {
+function iconForType(type: ItemType, typeColors: ThemeTypeColors): React.ReactNode {
+  switch (type) {
+    case 'overdue':
+      return <Bell size={17} color={typeColors.overdue.accent} weight="fill" />;
+    case 'calendar':
+      return <Calendar size={17} color={typeColors.calendar.accent} weight="fill" />;
+    case 'reminder':
+      return <BellRinging size={17} color={typeColors.reminder.accent} weight="fill" />;
+    case 'note':
+      return <Notebook size={17} color={typeColors.note.accent} weight="fill" />;
+  }
+}
+
+function renderSection(section: RenderSection, typeColors: ThemeTypeColors): React.ReactNode {
   return (
     <View key={section.num}>
       <SectionDivider
@@ -62,7 +60,7 @@ function renderSection(section: Section): React.ReactNode {
           typeLabel={item.typeLabel}
           meta={item.meta}
           chip={item.chip}
-          icon={item.icon}
+          icon={iconForType(item.type, typeColors)}
         />
       ))}
     </View>
@@ -76,66 +74,25 @@ export default function TodayScreen() {
   const { width } = useWindowDimensions();
   const wideColumns = width >= DESKTOP_TWO_COL_MIN;
 
-  const sections: Section[] = [
+  const now = new Date();
+  const [overdueSection, todaySection, notesSection] = useTodaySections(now);
+  const attentionCount = useAttentionCount(now);
+
+  const sections: [RenderSection, RenderSection, RenderSection] = [
     {
-      num: '01',
-      label: 'Overdue',
+      ...overdueSection,
       sectionIcon: <Alarm size={12} color={typeColors.overdue.accent} weight="fill" />,
       sectionColor: colors.sectionOverdueAccent,
-      items: [
-        {
-          id: '1',
-          type: 'overdue',
-          title: 'Call the dentist',
-          typeLabel: 'Reminder',
-          meta: '2 days overdue',
-          chip: 'LATE',
-          icon: <Bell size={17} color={typeColors.overdue.accent} weight="fill" />,
-        },
-      ],
     },
     {
-      num: '02',
-      label: 'Today',
+      ...todaySection,
       sectionIcon: <Calendar size={12} color={colors.sectionTodayAccent} weight="fill" />,
       sectionColor: colors.sectionTodayAccent,
-      items: [
-        {
-          id: '2',
-          type: 'calendar',
-          title: 'Team standup',
-          typeLabel: 'Calendar',
-          meta: '10:00 AM',
-          chip: '10:00',
-          icon: <Calendar size={17} color={typeColors.calendar.accent} weight="fill" />,
-        },
-        {
-          id: '3',
-          type: 'reminder',
-          title: 'Pick up dry cleaning',
-          typeLabel: 'Reminder',
-          meta: '6:00 PM',
-          chip: '18:00',
-          icon: <BellRinging size={17} color={typeColors.reminder.accent} weight="fill" />,
-        },
-      ],
     },
     {
-      num: '03',
-      label: 'Notes',
+      ...notesSection,
       sectionIcon: <Notebook size={12} color={colors.sectionEmptyAccent} weight="fill" />,
       sectionColor: colors.sectionEmptyAccent,
-      items: [
-        {
-          id: '4',
-          type: 'note',
-          title: 'Grocery ideas',
-          typeLabel: 'Note',
-          meta: 'edited yesterday',
-          chip: 'NOTE',
-          icon: <Notebook size={17} color={typeColors.note.accent} weight="fill" />,
-        },
-      ],
     },
   ];
 
@@ -144,9 +101,7 @@ export default function TodayScreen() {
   const captureMx = bp === 'mobile' ? 20 : bp === 'tablet' ? 28 : 36;
   const captureMt = bp === 'tablet' ? -26 : -22;
 
-  const overdueSec = sections[0];
-  const todaySec = sections[1];
-  const notesSec = sections[2];
+  const [overdueSec, todaySec, notesSec] = sections;
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.bg }]}>
@@ -167,7 +122,11 @@ export default function TodayScreen() {
               {bp === 'desktop' ? (
                 <Text style={[styles.dateText, { color: colors.subText, fontFamily: fonts.mono }]}>
                   {new Date()
-                    .toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+                    .toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                    })
                     .toUpperCase()}
                 </Text>
               ) : (
@@ -185,7 +144,12 @@ export default function TodayScreen() {
               </View>
             </View>
             {bp !== 'desktop' && (
-              <Text style={[styles.dateText, { color: colors.subText, fontFamily: fonts.mono, marginBottom: 6 }]}>
+              <Text
+                style={[
+                  styles.dateText,
+                  { color: colors.subText, fontFamily: fonts.mono, marginBottom: 6 },
+                ]}
+              >
                 {new Date()
                   .toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
                   .toUpperCase()}
@@ -199,8 +163,12 @@ export default function TodayScreen() {
             >
               {'Good\nmorning.'}
             </Text>
-            <Text style={[styles.subtitle, { color: colors.subText, fontFamily: fonts.bodyRegular }]}>
-              3 things need attention
+            <Text
+              style={[styles.subtitle, { color: colors.subText, fontFamily: fonts.bodyRegular }]}
+            >
+              {attentionCount === 1
+                ? '1 thing needs attention'
+                : `${attentionCount} things need attention`}
             </Text>
           </View>
         </LinearGradient>
@@ -215,12 +183,10 @@ export default function TodayScreen() {
           {bp === 'desktop' && wideColumns ? (
             <View style={styles.desktopColumns}>
               <View style={styles.desktopCol}>
-                {overdueSec !== undefined && renderSection(overdueSec)}
-                {todaySec !== undefined && renderSection(todaySec)}
+                {renderSection(overdueSec, typeColors)}
+                {renderSection(todaySec, typeColors)}
               </View>
-              <View style={styles.desktopCol}>
-                {notesSec !== undefined && renderSection(notesSec)}
-              </View>
+              <View style={styles.desktopCol}>{renderSection(notesSec, typeColors)}</View>
             </View>
           ) : bp === 'tablet' ? (
             sections.map((section) => (
@@ -231,48 +197,46 @@ export default function TodayScreen() {
                   icon={section.sectionIcon}
                   color={section.sectionColor}
                 />
-                {section.label === 'Overdue' ? (
-                  section.items.map((item) => (
-                    <ItemCard
-                      key={item.id}
-                      type={item.type}
-                      title={item.title}
-                      typeLabel={item.typeLabel}
-                      meta={item.meta}
-                      chip={item.chip}
-                      icon={item.icon}
-                    />
-                  ))
-                ) : (
-                  toRows(section.items).map(([a, b], i) => (
-                    <View key={i} style={styles.tabletRow}>
-                      <View style={styles.tabletCell}>
-                        <ItemCard
-                          type={a.type}
-                          title={a.title}
-                          typeLabel={a.typeLabel}
-                          meta={a.meta}
-                          chip={a.chip}
-                          icon={a.icon}
-                        />
-                      </View>
-                      {b !== null ? (
+                {section.label === 'Overdue'
+                  ? section.items.map((item) => (
+                      <ItemCard
+                        key={item.id}
+                        type={item.type}
+                        title={item.title}
+                        typeLabel={item.typeLabel}
+                        meta={item.meta}
+                        chip={item.chip}
+                        icon={iconForType(item.type, typeColors)}
+                      />
+                    ))
+                  : toRows(section.items).map(([a, b], i) => (
+                      <View key={i} style={styles.tabletRow}>
                         <View style={styles.tabletCell}>
                           <ItemCard
-                            type={b.type}
-                            title={b.title}
-                            typeLabel={b.typeLabel}
-                            meta={b.meta}
-                            chip={b.chip}
-                            icon={b.icon}
+                            type={a.type}
+                            title={a.title}
+                            typeLabel={a.typeLabel}
+                            meta={a.meta}
+                            chip={a.chip}
+                            icon={iconForType(a.type, typeColors)}
                           />
                         </View>
-                      ) : (
-                        <View style={styles.tabletCell} />
-                      )}
-                    </View>
-                  ))
-                )}
+                        {b !== null ? (
+                          <View style={styles.tabletCell}>
+                            <ItemCard
+                              type={b.type}
+                              title={b.title}
+                              typeLabel={b.typeLabel}
+                              meta={b.meta}
+                              chip={b.chip}
+                              icon={iconForType(b.type, typeColors)}
+                            />
+                          </View>
+                        ) : (
+                          <View style={styles.tabletCell} />
+                        )}
+                      </View>
+                    ))}
               </View>
             ))
           ) : (
@@ -292,7 +256,7 @@ export default function TodayScreen() {
                     typeLabel={item.typeLabel}
                     meta={item.meta}
                     chip={item.chip}
-                    icon={item.icon}
+                    icon={iconForType(item.type, typeColors)}
                   />
                 ))}
               </View>
